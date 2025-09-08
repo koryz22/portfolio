@@ -1,0 +1,239 @@
+.contact-section {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 2rem;
+  padding-top: 70px;
+  margin-bottom: 6rem;
+}
+
+.contact-content {
+  text-align: left;
+  max-width: 850px;
+  position: relative;
+  padding: 3rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(224, 224, 224, 0.08);
+  border-radius: 30px;
+  backdrop-filter: blur(10px);
+}
+
+.contact-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(circle at 25% 25%, rgba(224, 224, 224, 0.04) 0%, transparent 40%),
+              radial-gradient(circle at 75% 75%, rgba(224, 224, 224, 0.03) 0%, transparent 40%),
+              radial-gradient(circle at 50% 10%, rgba(224, 224, 224, 0.02) 0%, transparent 30%);
+  pointer-events: none;
+  border-radius: 30px;
+}
+
+.contact-content h2 {
+  font-size: 3rem;
+  font-weight: 300;
+  margin-bottom: 2rem;
+  color: white;
+}
+
+.contact-content > p {
+  font-size: 1.2rem;
+  line-height: 1.8;
+  color: #E0E0E0;
+  margin-bottom: 2.5rem;
+  font-weight: 300; 
+}
+
+.contact-form-container {
+  margin-top: 2.5rem;
+  padding: 2.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(224, 224, 224, 0.1);
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+}
+
+.contact-footer {
+  padding: 1.5rem 0;
+  width: 100%;
+  max-width: 850px;
+}
+
+.contact-footer-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.contact-footer-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: rgba(224, 224, 224, 0.7);
+  font-size: 1rem;
+  font-weight: 300;
+  transition: all 0.3s ease;
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
+
+.contact-footer-item:hover {
+  color: rgba(224, 224, 224, 0.9);
+  transform: translateY(-1px);
+}
+
+.footer-icon {
+  font-size: 1.2rem;
+  opacity: 0.8;
+}
+
+.contact-footer-separator {
+  color: rgba(224, 224, 224, 0.3);
+  font-size: 0.8rem;
+  font-weight: 200;
+}
+
+.form-title {
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: white;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-size: 0.9rem;
+  color: #E0E0E0;
+  font-weight: 400;
+}
+
+.form-input,
+.form-textarea {
+  padding: 0.8rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(224, 224, 224, 0.2);
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+  font-weight: 300;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: rgba(224, 224, 224, 0.6);
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: rgba(224, 224, 224, 0.4);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 0 2px rgba(224, 224, 224, 0.1);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 120px;
+  font-family: inherit;
+}
+
+.submit-btn {
+  padding: 1rem 2rem;
+  background: rgba(224, 224, 224, 0.1);
+  border: 1px solid rgba(224, 224, 224, 0.3);
+  border-radius: 8px;
+  color: white;
+  font-size: 1rem;
+  font-weight: 400;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+  align-self: center;
+  margin-top: 1rem;
+}
+
+.submit-btn:hover {
+  background: rgba(224, 224, 224, 0.2);
+  border-color: rgba(224, 224, 224, 0.5);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(224, 224, 224, 0.1);
+}
+
+.contact-item p {
+  font-size: 1rem;
+  color: #E0E0E0;
+  font-weight: 300;
+}
+
+.contact-description {
+  text-align: left;
+}
+
+.chat-icon {
+  margin-left: 10px;
+}
+
+.contact-footer-item:link,
+.contact-footer-item:visited,
+.contact-footer-item:active {
+  color: rgba(224, 224, 224, 0.7);
+  text-decoration: none;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .contact-content h2 {
+    font-size: 2.5rem;
+  }
+  
+  .contact-content > p {
+    font-size: 1rem;
+  }
+  
+  .contact-info {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .contact-form-container {
+    padding: 1.5rem;
+    margin-top: 2rem;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .submit-btn {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.9rem;
+  }
+}
