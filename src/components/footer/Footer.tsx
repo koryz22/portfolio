@@ -9,7 +9,7 @@ const Footer: React.FC = () => {
       <div className="footer-content">
         <div className="copyright">
           {/* <FontAwesomeIcon icon={faCopyright} className="copyright-icon" /> */}
-          <span>© 2025 kory</span>
+          <span>© 2025 - Kory Z.</span>
         </div>
       </div>
     </footer>
