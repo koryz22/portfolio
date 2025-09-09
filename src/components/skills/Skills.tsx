@@ -4,30 +4,21 @@ import './Skills.css';
 interface SkillCategory {
   title: string;
   skills: string[];
-  icon: string;
 }
 
 const Skills: React.FC = () => {
   const skillCategories: SkillCategory[] = [
     {
       title: "Languages",
-      icon: "💻",
-      skills: ["Python", "JavaScript", "TypeScript", "Java", "C++", "C#", "HTML/CSS"]
+      skills: ["Python", "Java", "C++", "C#", "Apex", "JavaScript", "TypeScript", "HTML / CSS"]
     },
     {
       title: "Frameworks",
-      icon: "⚡",
       skills: ["React", "Angular", "Node.js", "Flask", "Express", "Bootstrap"]
     },
     {
-      title: "Tools",
-      icon: "🛠️",
-      skills: ["Git", "AWS", "Azure", "Docker", "Postman", "Figma"]
-    },
-    {
-      title: "Platforms",
-      icon: "☁️",
-      skills: ["Salesforce", "Jira", "Splunk", "Slack", "GitHub", "Vercel"]
+      title: "Tools & Platforms",
+      skills: ["AWS", "Azure", "Git", "Postman", "Splunk", "Salesforce", "Jira"]
     }
   ];
 
@@ -40,7 +31,6 @@ const Skills: React.FC = () => {
           {skillCategories.map((category, categoryIndex) => (
             <div key={categoryIndex} className="skill-category">
               <div className="category-header">
-                <span className="category-icon">{category.icon}</span>
                 <h3 className="category-title">{category.title}</h3>
               </div>
               <div className="skills-list">

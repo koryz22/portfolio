@@ -96,8 +96,8 @@ const Contact: React.FC = () => {
         </h2>
         <div className="contact-divider"></div>
         <p className="contact-description">
-          i'm always eager to connect with new people and discuss new opportunities,
-          feel free to contact me!
+          i'm always eager to connect with new people, discuss interests, and explore new opportunities.
+          feel free to reach out, i'd love to hear from you!
         </p>
         
         <div className="contact-form-container">
@@ -122,7 +122,7 @@ const Contact: React.FC = () => {
                   id="email" 
                   name="email" 
                   className={`form-input ${errors.email ? 'error' : ''}`}
-                  placeholder="email@example.com"
+                  placeholder="Enter your email..."
                   value={formData.email}
                   onChange={handleInputChange}
                 />

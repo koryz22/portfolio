@@ -7,23 +7,23 @@ const Stories: React.FC = () => {
   const stories = [
     {
       id: 1,
-      date: 'January 15, 2025',
-      title: 'The Future of AI in Software Development',
-      subtitle: 'Exploring how artificial intelligence is transforming the way we build and deploy applications.',
+      date: 'September 8, 2025',
+      title: 'vanity & introspection',
+      subtitle: 'coming soon...',
       link: '#'
     },
     {
       id: 2,
-      date: 'December 28, 2024',
-      title: 'Building Scalable Microservices',
-      subtitle: 'Lessons learned from designing and implementing microservices architecture in production environments.',
+      date: 'April 6, 2025',
+      title: 'to live is to die',
+      subtitle: 'coming soon...',
       link: '#'
     },
     {
       id: 3,
-      date: 'November 10, 2024',
-      title: 'React Performance Optimization Techniques',
-      subtitle: 'Advanced strategies for optimizing React applications and improving user experience.',
+      date: 'October 22, 2024',
+      title: 'the purpose of working hard',
+      subtitle: 'coming soon...',
       link: '#'
     }
   ];

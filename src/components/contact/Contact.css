@@ -6,7 +6,7 @@
   justify-content: flex-start;
   padding: 0 2rem;
   padding-top: 70px;
-  margin-bottom: 6rem;
+  margin-bottom: 8rem;
 }
 
 .contact-content {
@@ -84,7 +84,7 @@
   align-items: center;
   gap: 1rem;
   color: rgba(224, 224, 224, 0.7);
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 300;
   transition: all 0.3s ease;
   margin-left: 1rem;
