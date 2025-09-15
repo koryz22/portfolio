@@ -4,15 +4,6 @@ my personal portfolio! :)
 
 a modern, responsive portfolio website built with React and TypeScript.
 
-## Features
-
-- 🍔 Hamburger navigation menu with smooth animations
-- 🏠 Home logo ("kz") in the top left
-- 📱 Fully responsive design
-- 🎨 Minimalistic midnight dark blue theme
-- ⚡ Smooth scrolling between sections
-- 🎯 Three main sections: Home, About Me, Contact
-
 ## Getting Started
 
 ### Prerequisites
@@ -72,4 +63,3 @@ src/
 - React 18
 - TypeScript
 - CSS3 with modern features
-- Create React App
