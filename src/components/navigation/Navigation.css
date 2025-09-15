@@ -16,11 +16,21 @@
 
 /* Logo */
 .logo {
+  background: none;
+  border: none;
   font-size: 1.5rem;
-  font-weight: bold;
   color: white;
-  font-family: 'Courier New', monospace;
-  letter-spacing: 1px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  outline: none;
+}
+
+.logo:hover {
+  color: #B0B0B0;
 }
 
 /* Hamburger menu */
@@ -31,8 +41,8 @@
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  width: 30px;
-  height: 20px;
+  width: 26px;
+  height: 16px;
   padding: 0;
   z-index: 1001;
   outline: none;
@@ -40,7 +50,7 @@
 
 .hamburger-menu .line {
   width: 100%;
-  height: 3px;
+  height: 2px;
   background-color: white;
   border-radius: 2px;
   transition: all 0.3s ease;
@@ -53,7 +63,7 @@
 }
 
 .hamburger-menu .line.bottom {
-  width: 100%;
+  width: 80%;
 }
 
 /* Hamburger menu hover */
@@ -67,15 +77,12 @@
   background-color: #B0B0B0;
 }
 
-/* Hamburger menu active (X) */
 .hamburger-menu.active .line.top {
-  transform: rotate(44deg) translate(4px, 4px);
   width: 100%;
   background-color: white;
 }
 
 .hamburger-menu.active .line.bottom {
-  transform: rotate(-46deg) translate(4px, -4px);
   width: 100%;
   background-color: white;
 }

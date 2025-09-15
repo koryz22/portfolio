@@ -28,7 +28,6 @@ const Navigation: React.FC<NavigationProps> = ({ isMenuOpen, toggleMenu, closeMe
     <>
       {/* Header */}
       <header className="header">
-        <div className="logo">kz</div>
         <button 
           className={`hamburger-menu ${isMenuOpen ? 'active' : ''}`}
           onClick={toggleMenu}
@@ -36,6 +35,13 @@ const Navigation: React.FC<NavigationProps> = ({ isMenuOpen, toggleMenu, closeMe
         >
           <span className="line top"></span>
           <span className="line bottom"></span>
+        </button>
+        <button 
+          className="logo"
+          onClick={() => scrollToSection('home')}
+          aria-label="Go to home"
+        >
+          kz
         </button>
       </header>
 

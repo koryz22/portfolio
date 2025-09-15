@@ -16,25 +16,25 @@ const Projects: React.FC = () => {
       id: 1,
       icon: faCarBurst,
       name: 'Car Part Picker',
-      description: 'Build your own car.'
+      description: 'Build, browse, and customize real parts for your car!'
     },
     {
       id: 2,
       icon: faDatabase,
-      name: 'Oppscout',
-      description: 'Ingest data from multiple sources and analyze it.'
+      name: 'OppScout',
+      description: 'A microservice-driven platform for extracting, normalizing, and ingesting opportunity data from diverse sources.'
     },
     {
       id: 3,
       icon: faRocket,
       name: 'Astrochecker',
-      description: 'A tool to help you improve your grammar.'
+      description: 'A speech-to-text tool that helps you improve your grammar.'
     },
     {
       id: 4,
       icon: faCircleNodes,
       name: 'Cluster Analysis Tool',
-      description: 'Analyze data from multiple sources and visualize it.'
+      description: 'Explore patterns in your data by generating visualizations using different clustering techniques.'
     },
   ];
 
