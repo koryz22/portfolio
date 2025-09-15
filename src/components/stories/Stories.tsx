@@ -22,7 +22,7 @@ const Stories: React.FC = () => {
     {
       id: 3,
       date: 'October 22, 2024',
-      title: 'meaningfulness behind selfless labor',
+      title: 'selfless labor',
       subtitle: 'coming soon...',
       link: '#'
     }
