@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>kory zhang / keyboard</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: transparent; font-family: 'Space Mono', monospace; }
+
+  .kb-wrap { padding: 1.5rem 0; }
+  .kb-label { font-size: 11px; color: #aaa; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1rem; }
+  .keyboard { background: #1e1e1e; border-radius: 14px; padding: 16px; display: inline-block; width: 100%; border: 0.5px solid #3a3a3a; }
+  .row { display: flex; gap: 5px; margin-bottom: 5px; justify-content: center; }
+  .key {
+    background: #2a2a2a; border: 0.5px solid #444; border-bottom: 2.5px solid #111;
+    border-radius: 5px; color: #777; font-family: 'Space Mono', monospace; font-size: 10px;
+    cursor: pointer; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; height: 44px; width: 44px; flex-shrink: 0;
+    transition: background 0.12s, color 0.12s, transform 0.08s; user-select: none;
+  }
+  .key:hover { background: #3a3a3a; color: #ccc; }
+  .key:active { transform: translateY(1px); border-bottom-width: 1px; }
+  .key.active { background: #3a3a3a; color: #fff; border-color: #aaa; }
+
+  /* silver — languages */
+  .key.lit-silver { background: #7a7a7a; color: #f0f0f0; border-color: #999; border-bottom-color: #555; }
+  .key.lit-silver .subtext { color: #ccc; }
+  .key.lit-silver.active { background: #9a9a9a; color: #fff; border-color: #bbb; }
+
+  /* white — tools & software */
+  .key.lit-white  { background: #e8e8e8; color: #1a1a1a; border-color: #bbb; border-bottom-color: #999; }
+  .key.lit-white  .subtext { color: #555; }
+  .key.lit-white.active  { background: #fff; color: #000; border-color: #ccc; }
+
+  .key .subtext { font-size: 7px; overflow: hidden; max-width: 40px; text-overflow: ellipsis; white-space: nowrap; color: #555; margin-top: 1px; }
+
+  .key.wide      { width: 66px; }
+  .key.wider     { width: 76px; }
+  .key.tab       { width: 66px; }
+  .key.tab .subtext { font-size: 11px; }
+  .key.caps      { width: 76px; }
+  .key.enter     { width: 88px; }
+  .key.shift-l   { width: 88px; }
+  .key.shift-r   { width: 110px; }
+  .key.backspace { width: 88px; }
+  .key.space     { width: 240px; }
+
+  .info-panel {
+    margin-top: 14px; background: #1e1e1e; border: 0.5px solid #3a3a3a;
+    border-radius: 10px; padding: 14px 18px; min-height: 64px;
+    font-family: 'Space Mono', monospace; color: #ccc; font-size: 13px;
+    line-height: 1.6; transition: all 0.15s;
+  }
+  .info-panel .tag  { font-size: 10px; color: #666; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
+  .info-panel .val  { color: #fff; font-size: 14px; }
+  .info-panel .desc { color: #999; font-size: 11px; margin-top: 4px; }
+
+  .hint { font-size: 11px; color: #444; text-align: center; margin-top: 10px; font-family: 'Space Mono', monospace; }
+
+  .legend { display: flex; gap: 16px; margin-bottom: 12px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 10px; color: #aaa; letter-spacing: 0.05em; }
+  .legend-dot { width: 8px; height: 8px; border-radius: 2px; }
+  .dot-silver { background: #7a7a7a; }
+  .dot-white  { background: #e8e8e8; }
+</style>
+</head>
+<body>
+<div class="kb-wrap">
+  <div class="kb-label">kory zhang // interactive stack</div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot dot-silver"></div>languages</div>
+    <div class="legend-item"><div class="legend-dot dot-white"></div>tools &amp; software</div>
+  </div>
+
+  <div class="keyboard">
+    <!-- number row: languages -->
+    <div class="row">
+      <div class="key"            data-key="esc"  onclick="showInfo(this)"><span>esc</span><span class="subtext">kdawg</span></div>
+      <div class="key lit-silver" data-key="py"   onclick="showInfo(this)"><span>1</span><span class="subtext">python</span></div>
+      <div class="key lit-silver" data-key="cpp"  onclick="showInfo(this)"><span>2</span><span class="subtext">c++</span></div>
+      <div class="key lit-silver" data-key="csh"  onclick="showInfo(this)"><span>3</span><span class="subtext">c#</span></div>
+      <div class="key lit-silver" data-key="jv"   onclick="showInfo(this)"><span>4</span><span class="subtext">java</span></div>
+      <div class="key lit-silver" data-key="ts"   onclick="showInfo(this)"><span>5</span><span class="subtext">ts</span></div>
+      <div class="key lit-silver" data-key="h"    onclick="showInfo(this)"><span>6</span><span class="subtext">html</span></div>
+      <div class="key lit-silver" data-key="sq"   onclick="showInfo(this)"><span>7</span><span class="subtext">sql</span></div>
+      <div class="key"            data-key="blank" onclick="showInfo(this)"><span>8</span></div>
+      <div class="key"            data-key="blank" onclick="showInfo(this)"><span>9</span></div>
+      <div class="key"            data-key="blank" onclick="showInfo(this)"><span>0</span></div>
+      <div class="key"            data-key="blank" onclick="showInfo(this)"><span>- _</span></div>
+      <div class="key"            data-key="blank" onclick="showInfo(this)"><span>= +</span></div>
+      <div class="key backspace"  data-key="uci" onclick="showInfo(this)"><span>delete</span><span class="subtext">anteater</span></div>
+    </div>
+    <!-- QWERTY row -->
+    <div class="row">
+      <div class="key tab"        data-key="tab"  onclick="showInfo(this)"><span>tab</span><span class="subtext">♪ ♫</span></div>
+      <div class="key"            data-key="blank" onclick="showInfo(this)"><span>Q</span></div>
+      <div class="key"            data-key="blank" onclick="showInfo(this)"><span>W</span></div>
+      <div class="key"            data-key="blank" onclick="showInfo(this)"><span>E</span></div>
+      <div class="key lit-white"  data-key="re"   onclick="showInfo(this)"><span>R</span><span class="subtext">react</span></div>
+      <div class="key"            data-key="blank" onclick="showInfo(this)"><span>T</span></div>
+      <div class="key lit-silver" data-key="yaml" onclick="showInfo(this)"><span>Y</span><span class="subtext">yaml</span></div>
+      <div class="key"            data-key="blank" onclick="showInfo(this)"><span>U</span></div>
+      <div class="key"            data-key="blank" onclick="showInfo(this)"><span>I</span></div>
+      <div class="key"            data-key="blank" onclick="showInfo(this)"><span>O</span></div>
+      <div class="key lit-silver" data-key="pypo" onclick="showInfo(this)"><span>P</span><span class="subtext">postman</span></div>
+      <div class="key"            data-key="blank" onclick="showInfo(this)"><span>[ {</span></div>
+      <div class="key"            data-key="blank" onclick="showInfo(this)"><span>] }</span></div>
+      <div class="key enter"      data-key="blank" onclick="showInfo(this)"><span>\ |</span></div>
+    </div>
+    <!-- ASDF row -->
+    <div class="row">
+      <div class="key caps"       data-key="caps"  onclick="showInfo(this)"><span>caps</span></div>
+      <div class="key lit-white"  data-key="az"   onclick="showInfo(this)"><span>A</span><span class="subtext">azure</span></div>
+      <div class="key lit-white"  data-key="sf"   onclick="showInfo(this)"><span>S</span><span class="subtext">sfdc</span></div>
+      <div class="key"            data-key="blank" onclick="showInfo(this)"><span>D</span></div>
+      <div class="key lit-white"  data-key="fg"   onclick="showInfo(this)"><span>F</span><span class="subtext">figma</span></div>
+      <div class="key lit-white"  data-key="gi"   onclick="showInfo(this)"><span>G</span><span class="subtext">git</span></div>
+      <div class="key"            data-key="blank" onclick="showInfo(this)"><span>H</span></div>
+      <div class="key lit-white"  data-key="ji"   onclick="showInfo(this)"><span>J</span><span class="subtext">jira</span></div>
+      <div class="key"            data-key="blank" onclick="showInfo(this)"><span>K</span></div>
+      <div class="key lit-white"  data-key="lwc"  onclick="showInfo(this)"><span>L</span><span class="subtext">lucid</span></div>
+      <div class="key"            data-key="blank" onclick="showInfo(this)"><span>;</span></div>
+      <div class="key"            data-key="blank" onclick="showInfo(this)"><span>' "</span></div>
+      <div class="key wider"      data-key="role" onclick="showInfo(this)"><span>return</span><span class="subtext">major</span></div>
+    </div>
+    <!-- ZXCV row -->
+    <div class="row">
+      <div class="key shift-l"    data-key="shift-l" onclick="showInfo(this)"><span>shift</span></div>
+      <div class="key"            data-key="blank" onclick="showInfo(this)"><span>Z</span></div>
+      <div class="key"            data-key="blank" onclick="showInfo(this)"><span>X</span></div>
+      <div class="key lit-white"  data-key="cert" onclick="showInfo(this)"><span>C</span><span class="subtext">certs</span></div>
+      <div class="key"            data-key="blank" onclick="showInfo(this)"><span>V</span></div>
+      <div class="key lit-white"  data-key="bs"   onclick="showInfo(this)"><span>B</span><span class="subtext">bootstrap</span></div>
+      <div class="key"            data-key="blank" onclick="showInfo(this)"><span>N</span></div>
+      <div class="key"            data-key="blank" onclick="showInfo(this)"><span>M</span></div>
+      <div class="key"            data-key="blank" onclick="showInfo(this)"><span>,</span></div>
+      <div class="key"            data-key="blank" onclick="showInfo(this)"><span>.</span></div>
+      <div class="key"            data-key="blank" onclick="showInfo(this)"><span>/ ?</span></div>
+      <div class="key shift-r"    data-key="shift-r" onclick="showInfo(this)"><span>shift</span><span class="subtext">中文</span></div>
+    </div>
+    <!-- bottom row -->
+    <div class="row">
+      <div class="key wide"  data-key="ctrl"  onclick="showInfo(this)"><span>ctrl</span><span class="subtext">reads</span></div>
+      <div class="key wide"  data-key="opt"   onclick="showInfo(this)"><span>opt</span></div>
+      <div class="key wide"  data-key="loc"   onclick="showInfo(this)"><span>cmd</span><span class="subtext">bay area</span></div>
+      <div class="key space" data-key="interests"  onclick="showInfo(this)"><span>space</span><span class="subtext">interests</span></div>
+      <div class="key wide"  data-key="blank" onclick="showInfo(this)"><span>cmd</span></div>
+      <div class="key wide"  data-key="blank" onclick="showInfo(this)"><span>opt</span></div>
+      <div class="key wide"  data-key="blank" onclick="showInfo(this)"><span>ctrl</span></div>
+    </div>
+  </div>
+
+  <div class="info-panel" id="panel">
+    <div class="tag">press any key (click or type)</div>
+    <div class="val">— my stack, mapped.</div>
+  </div>
+  
+</div>
+
+<script>
+const info = {
+  esc:   { tag: "BIO",             val: "Kory Zhang",                       desc: "full-stack, building useful things" },
+  tab:   { tag: "currently listening to", val: "Feel it in My<br><span class=\"desc\">it's murph, Arlo, fkblnde</span>", desc: "" },
+  caps:  { tag: "unmapped",        val: "—",                                desc: "" },
+  shift: { tag: "—",               val: "—",                                desc: "" },
+  "shift-l": { tag: "unmapped",        val: "—",                                desc: "" },
+  "shift-r": { tag: "Spoken Languages", val: "English (Native Proficiency), Mandarin Chinese (Professional Proficiency)", desc: "" },
+  ctrl:  { tag: "currently reading", val: "Shoe Dog — Phil Knight",         desc: "" },
+  opt:   { tag: "unmapped",        val: "—",                                desc: "" },
+  loc:   { tag: "location",        val: "Bay Area, CA",                     desc: "" },
+  uci:   { tag: "education",       val: "UC Irvine '24",                   desc: "" },
+  role:  { tag: "field of study",  val: "Software Engineer",                desc: "" },
+  interests: { tag: "Interests",   val: "Guitar, Skiing, Basketball, Gaming, Running, Speed Typing", desc: "" },
+  py:    { tag: "language",        val: "Python",                           desc: "" },
+  cpp:   { tag: "language",        val: "C++",                              desc: "" },
+  csh:   { tag: "language",        val: "C#",                               desc: "" },
+  jv:    { tag: "language",        val: "Java",                             desc: "" },
+  ts:    { tag: "language",        val: "TypeScript",                       desc: "" },
+  h:     { tag: "language",        val: "HTML / CSS / JavaScript",          desc: "" },
+  hcj:   { tag: "language",        val: "HTML / CSS / JavaScript",          desc: "" },
+  sq:    { tag: "language",        val: "SQL",                              desc: "" },
+  yaml:  { tag: "language",        val: "YAML",                             desc: "" },
+  pypo:  { tag: "language",        val: "Python & Postman",                 desc: "" },
+  re:    { tag: "tool",            val: "React",                            desc: "" },
+  bs:    { tag: "tool",            val: "Bootstrap",                        desc: "" },
+  lwc:   { tag: "tool",            val: "Lucid / Lightning Web Components", desc: "" },
+  az:    { tag: "tool",            val: "Azure / AWS",                      desc: "" },
+  sf:    { tag: "tool",            val: "Salesforce / Splunk / Slack",      desc: "" },
+  fg:    { tag: "tool",            val: "Figma / Framer",                   desc: "" },
+  gi:    { tag: "tool",            val: "Git",                              desc: "" },
+  ji:    { tag: "tool",            val: "Jira",                             desc: "" },
+  cert:  { tag: "certifications",  val: "Salesforce Platform Developer I (2025), Salesforce Agentforce Specialist (2025)", desc: "" },
+};
+
+// map physical key -> data-key (for keyboard press handling)
+const keyMap = {
+  Escape: 'esc', '1': 'py', '2': 'cpp', '3': 'csh', '4': 'jv', '5': 'ts', '6': 'h', '7': 'sq',
+  '8': 'blank', '9': 'blank', '0': 'blank', '-': 'blank', '_': 'blank', '=': 'blank', '+': 'blank', Backspace: 'uci',
+  Tab: 'tab', Enter: 'role', CapsLock: 'caps', ' ': 'interests',
+  ShiftLeft: 'shift-l', ShiftRight: 'shift-r', Control: 'ctrl', Alt: 'opt', Meta: 'loc',
+  'q': 'blank', 'w': 'blank', 'e': 'blank', 'r': 're', 't': 'blank', 'y': 'yaml',
+  'u': 'blank', 'i': 'blank', 'o': 'blank',   'p': 'pypo', '[': 'blank', ']': 'blank', '{': 'blank', '}': 'blank',
+  '\\': 'blank', '|': 'blank',
+  'a': 'az', 's': 'sf', 'd': 'blank', 'f': 'fg', 'g': 'gi', 'h': 'blank', 'j': 'ji',
+  'k': 'blank', 'l': 'lwc', ';': 'blank', "'": 'blank', '"': 'blank',
+  'z': 'blank', 'x': 'blank', 'c': 'cert', 'v': 'blank', 'b': 'bs', 'n': 'blank',
+  'm': 'blank', ',': 'blank', '.': 'blank', '/': 'blank', '?': 'blank',
+};
+// label shown on key for physical key (used to find correct element when data-key="blank")
+const keyToLabel = {
+  '8': '8', '9': '9', '0': '0', '-': '- _', '_': '- _', '=': '= +', '+': '= +', Backspace: 'delete', Enter: 'return',
+  'q': 'Q', 'w': 'W', 'e': 'E', 't': 'T', 'u': 'U', 'i': 'I', 'o': 'O',
+  '[': '[ {', ']': '] }', '{': '[ {', '}': '] }', '\\': '\\ |', '|': '\\ |', "'": "' \"", '"': "' \"",
+  'd': 'D', 'h': 'H', 'k': 'K', ';': ';', '/': '/ ?', '?': '/ ?',
+  'z': 'Z', 'x': 'X', 'v': 'V', 'n': 'N', 'm': 'M', ',': ',', '.': '.',
+};
+function getDataKeyForEvent(e) {
+  let k = e.key;
+  if (e.key.length === 1 && e.key >= 'A' && e.key <= 'Z' && !e.shiftKey) k = k.toLowerCase();
+  return keyMap[k];
+}
+function findKeyElement(dk, physKey) {
+  if (dk !== 'blank') return document.querySelector(`.key[data-key="${dk}"]`);
+  const label = keyToLabel[physKey];
+  if (!label) return document.querySelector(`.key[data-key="blank"]`);
+  return [...document.querySelectorAll('.key[data-key="blank"]')].find(k =>
+    k.querySelector('span:not(.subtext)')?.textContent.trim() === label
+  ) || document.querySelector(`.key[data-key="blank"]`);
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.target.matches('input, textarea, select')) return;
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'r') return;
+  let k = e.key;
+  if (e.key.length === 1 && e.key >= 'A' && e.key <= 'Z' && !e.shiftKey) k = k.toLowerCase();
+  let dk = keyMap[e.code] ?? keyMap[k];
+  if (!dk) return;
+  const el = findKeyElement(dk, k);
+  if (el) { e.preventDefault(); showInfo(el); }
+});
+
+let current = null;
+function showInfo(el) {
+  if (current) current.classList.remove('active');
+  el.classList.add('active');
+  current = el;
+  const key = el.dataset.key;
+  const d = info[key];
+  const panel = document.getElementById('panel');
+  if (!d || key === 'blank') {
+    panel.innerHTML = '<div class="tag">unmapped</div><div class="val">—</div>';
+    return;
+  }
+  const showDesc = key === "esc";
+  panel.innerHTML = `<div class="tag">${d.tag}</div><div class="val">${d.val}</div>${showDesc ? `<div class="desc">${d.desc}</div>` : ""}`;
+}
+</script>
+</body>
+</html>
