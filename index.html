@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>kory zhang — portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link href="https://basicons.gitlab.io/i/@/icons.css" rel="stylesheet" crossorigin />
+<style>
+/* ═══════════════════════ RESET & VARIABLES ═══════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #1b1d2a;
+  --bg-card: #232538;
+  --bg-topbar: rgba(27,29,42,0.94);
+  --text: #e8e4de;
+  --text-dim: #8a8a9a;
+  --text-dimmer: #55566a;
+  --accent: #c8c3bb;
+  --border: #2e3045;
+  --tag-green: #4ade80;
+}
+
+[data-theme="light"] {
+  --bg: #f0f1f7;
+  --bg-card: #e4e5ef;
+  --bg-topbar: rgba(240,241,247,0.94);
+  --text: #1b1d2a;
+  --text-dim: #555;
+  --text-dimmer: #888;
+  --accent: #2a2c3e;
+  --border: #c8c9d6;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  overflow-x: hidden;
+  transition: background 0.4s, color 0.4s;
+}
+a { color: inherit; text-decoration: none; }
+
+/* ═══════════════════════ SPLASH ═══════════════════════ */
+#splash {
+  position: fixed; inset: 0;
+  background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 9999; opacity: 1;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+#splash.hidden { opacity: 0; }
+#splash .splash-name {
+  font-size: 1.8rem; font-weight: 300; letter-spacing: 0.15em;
+  color: var(--text-dim); opacity: 0;
+  animation: splashFade 1s ease forwards;
+}
+@keyframes splashFade {
+  0% { opacity: 0; transform: translateY(10px); }
+  40% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* ═══════════════════════ PAGE TRANSITION ═══════════════════════ */
+.page { will-change: opacity, transform, filter; }
+.page.fade-out {
+  animation: fadeSwipeOut 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+.page.fade-in {
+  animation: fadeSwipeIn 0.45s cubic-bezier(0.0, 0, 0.2, 1) forwards;
+}
+@keyframes fadeSwipeOut {
+  0%   { opacity: 1; transform: translateY(0); filter: blur(0); }
+  100% { opacity: 0; transform: translateY(-18px); filter: blur(6px); }
+}
+@keyframes fadeSwipeIn {
+  0%   { opacity: 0; transform: translateY(22px); filter: blur(6px); }
+  100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+/* ═══════════════════════ TOPBAR ═══════════════════════ */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0; height: 48px;
+  background: var(--bg-topbar); backdrop-filter: blur(12px);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px; z-index: 1000;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.4s;
+}
+.hamburger {
+  background: none; border: none; color: var(--text-dim);
+  font-size: 22px; cursor: pointer; padding: 4px; transition: color 0.2s;
+  letter-spacing: 2px; transform: scaleX(1.4); transform-origin: left;
+}
+.topbar-right { display: flex; align-items: center; gap: 24px; }
+.topbar-nav { display: flex; gap: 20px; }
+.topbar-nav a {
+  font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 400;
+  color: var(--text-dimmer); cursor: pointer; transition: color 0.2s;
+  letter-spacing: 0.03em;
+}
+.topbar-nav a:hover { color: var(--text); }
+.hamburger:hover { color: var(--text); }
+.theme-toggle {
+  font-family: 'Inter', sans-serif; font-size: 13px;
+  color: var(--text-dimmer); cursor: pointer; user-select: none;
+}
+.theme-toggle span { transition: color 0.2s, opacity 0.2s; padding: 2px 1px; }
+.theme-toggle span:hover { color: var(--text); }
+.theme-toggle .active-theme { color: var(--text); opacity: 1; }
+.theme-toggle .inactive-theme { color: var(--text-dimmer); opacity: 0.5; }
+
+/* ═══════════════════════ NAV OVERLAY ═══════════════════════ */
+.nav-overlay {
+  position: fixed; inset: 0; background: var(--bg); z-index: 999;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 0 0 80px 0; opacity: 0; pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+.nav-overlay.open { opacity: 1; pointer-events: all; }
+.nav-overlay .nav-item {
+  display: block; font-size: 1.4rem; font-weight: 400;
+  color: var(--text-dim); padding: 18px 48px;
+  border-bottom: 1px solid var(--border); cursor: pointer; transition: color 0.2s;
+}
+.nav-overlay .nav-item:first-child { border-top: 1px solid var(--border); }
+.nav-overlay .nav-item:hover { color: var(--text); }
+.nav-bottom-bar {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px; border-top: 1px solid var(--border);
+}
+
+/* ═══════════════════════ PAGES ═══════════════════════ */
+.page {
+  display: none; padding: 80px 48px 48px;
+  max-width: 1400px; margin: 0 auto;
+}
+#page-home { max-width: 100%; padding: 56px 64px 0; overflow: hidden; }
+.page.active { display: block; }
+
+/* ═══════════════════════ HOME TWO-COLUMN ═══════════════════════ */
+.home-layout {
+  display: flex; gap: 0; align-items: stretch; min-height: calc(100vh - 56px);
+}
+.home-left {
+  flex: 1; padding-right: 48px;
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; justify-content: flex-start;
+}
+.home-right {
+  flex: 1; padding-left: 48px;
+  display: flex; flex-direction: column; justify-content: flex-start;
+}
+
+/* ═══════════════════════ SCROLL ANIM ═══════════════════════ */
+.anim {
+  opacity: 0; transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.anim.visible { opacity: 1; transform: translateY(0); }
+.anim-delay-1 { transition-delay: 0.1s; }
+.anim-delay-2 { transition-delay: 0.2s; }
+.anim-delay-3 { transition-delay: 0.3s; }
+.anim-delay-4 { transition-delay: 0.4s; }
+.anim-delay-5 { transition-delay: 0.5s; }
+
+/* ═══════════════════════ HOME ═══════════════════════ */
+.social-icons { display: flex; gap: 8px; margin-top: 15px; margin-bottom: -14px; }
+.social-icons a { color: var(--text-dim); font-size: 18px; transition: color 0.2s; }
+.social-icons a:hover { color: var(--text); }
+
+.hero-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: -10px; flex-wrap: wrap; }
+.hero-name { font-size: 2.6rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
+.hero-graphic {
+  height: 70px; opacity: 0.45;
+  animation: cloudFloat 6s ease-in-out infinite;
+  transition: opacity 0.3s, transform 0.3s;
+}
+.hero-graphic:hover { opacity: 0.7; transform: translateY(-3px); }
+[data-theme="light"] .hero-graphic { filter: invert(1); }
+@keyframes cloudFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.typewriter-wrap { font-size: 1rem; font-weight: 300; color: var(--text-dim); margin-bottom: 12px; height: 1.6em; }
+.typewriter-cursor {
+  display: inline-block; width: 2px; height: 1em;
+  background: var(--text-dim); margin-left: 2px; vertical-align: text-bottom;
+  animation: blink 1.2s step-end infinite;
+}
+@keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0; } }
+
+.bio { font-size: 0.88rem; color: var(--text-dim); margin-top: 20px; margin-bottom: 18px; line-height: 1.6; font-weight: 300; }
+.bio-secondary { font-size: 0.88rem; color: var(--text-dim); margin-bottom: 20px; line-height: 1.6; font-weight: 300; }
+
+.explore-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  background: #fff; color: #111; border: none; padding: 11px 26px;
+  font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 500;
+  cursor: pointer; border-radius: 24px; transition: background 0.2s, transform 0.15s;
+  margin-bottom: 28px; outline: none; box-shadow: none;
+}
+.explore-btn:hover { background: #f0f0f0; transform: translateX(4px); }
+.explore-btn:focus, .explore-btn:active { outline: none; box-shadow: none; }
+.explore-btn .arrow { font-size: 1rem; transition: transform 0.2s; }
+.explore-btn:hover .arrow { transform: translateX(4px); }
+
+.portrait-section { display: flex; gap: 0; margin-top: 20px; margin-bottom: 0; align-items: stretch; }
+.personal-info {
+  flex: 1; display: flex; flex-direction: column; justify-content: flex-end;
+  font-size: 0.85rem; color: var(--text-dim); font-weight: 300;
+  padding-bottom: 8px; margin-right: 20px;
+}
+.info-row {
+  display: flex; flex-direction: column; padding: 10px 0 0;
+}
+.info-row .info-text { margin-bottom: 10px; }
+.info-row .info-line {
+  width: 100%; height: 1px; background: var(--border);
+}
+.portrait-container { position: relative; display: flex; align-items: flex-start; gap: 6px; }
+.portrait-clip {
+  width: 340px; height: 340px;
+  border-radius: 12px; overflow: hidden; background: var(--bg-card); flex-shrink: 0;
+}
+.portrait-img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center 55%;
+  transform: scale(1.15); transform-origin: center 55%;
+}
+.portrait-icons { display: flex; flex-direction: column; gap: 6px; padding-top: 4px; }
+.portrait-icons i { color: var(--text-dim); font-size: 20px; transition: color 0.2s; cursor: pointer; }
+.portrait-icons i:hover { color: var(--text); }
+.portrait-icons-row { display: none; gap: 16px; margin-bottom: 12px; }
+.portrait-icons-row i { color: var(--text-dim); font-size: 20px; transition: color 0.2s; cursor: pointer; }
+.portrait-icons-row i:hover { color: var(--text); }
+
+/* ═══════════════════════ EXPERIENCES ═══════════════════════ */
+.section-title { font-size: 1.8rem; font-weight: 700; margin-bottom: 16px; }
+.home-right .section-title { margin-top: 30px; }
+.home-left .portrait-section { margin-top: 80px; }
+.exp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+.exp-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
+.exp-num { font-size: 0.82rem; color: var(--text-dim); font-weight: 500; }
+.exp-title { font-size: 0.95rem; font-weight: 600; }
+.exp-tag { display: inline-block; background: rgba(74,222,128,0.15); color: var(--tag-green); font-size: 0.68rem; padding: 2px 8px; border-radius: 10px; font-weight: 500; }
+.exp-meta { display: flex; gap: 12px; flex-wrap: wrap; font-size: 0.75rem; color: var(--text-dimmer); margin-bottom: 8px; }
+.exp-meta span { display: flex; align-items: center; gap: 4px; }
+.exp-meta i { font-size: 0.75rem; color: var(--text-dimmer); }
+.exp-desc { font-size: 0.82rem; color: var(--text-dim); font-weight: 300; line-height: 1.6; }
+
+/* ═══════════════════════ KEYBOARD (inline) ═══════════════════════ */
+.kb-section { margin-bottom: 0; }
+.kb-label { font-family: 'Space Mono', monospace; font-size: 11px; color: #aaa; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1rem; }
+.legend { display: flex; gap: 16px; margin-bottom: 12px; flex-wrap: wrap; }
+.legend-item { display: flex; align-items: center; gap: 6px; font-size: 10px; color: #aaa; letter-spacing: 0.05em; }
+.legend-dot { width: 8px; height: 8px; border-radius: 2px; }
+.dot-silver { background: #7a7a7a; }
+.dot-white { background: #e8e8e8; }
+
+.keyboard { background: #1e1e1e; border-radius: 14px; padding: 16px; width: 100%; border: 0.5px solid #3a3a3a; overflow-x: auto; }
+.kb-row { display: flex; gap: 5px; margin-bottom: 5px; justify-content: center; }
+.key {
+  background: #2a2a2a; border: 0.5px solid #444; border-bottom: 2.5px solid #111;
+  border-radius: 5px; color: #777; font-family: 'Space Mono', monospace; font-size: 10px;
+  cursor: pointer; display: flex; flex-direction: column; align-items: center;
+  justify-content: center; height: 44px; min-width: 44px; flex: 0 0 44px;
+  transition: background 0.12s, color 0.12s, transform 0.08s; user-select: none;
+}
+.key:hover { background: #3a3a3a; color: #ccc; }
+.key:active { transform: translateY(1px); border-bottom-width: 1px; }
+.key.active { background: #3a3a3a; color: #fff; border-color: #aaa; }
+.key.lit-silver { background: #7a7a7a; color: #f0f0f0; border-color: #999; border-bottom-color: #555; }
+.key.lit-silver .subtext { color: #ccc; }
+.key.lit-silver.active { background: #9a9a9a; color: #fff; border-color: #bbb; }
+.key.lit-white { background: #e8e8e8; color: #1a1a1a; border-color: #bbb; border-bottom-color: #999; }
+.key.lit-white .subtext { color: #555; }
+.key.lit-white.active { background: #fff; color: #000; border-color: #ccc; }
+.key .subtext { font-size: 7px; overflow: hidden; max-width: 40px; text-overflow: ellipsis; white-space: nowrap; color: #555; margin-top: 1px; }
+.key.k-wide    { flex: 0 0 66px; min-width: 66px; }
+.key.k-wider   { flex: 0 0 76px; min-width: 76px; }
+.key.k-tab     { flex: 0 0 66px; min-width: 66px; }
+.key.k-tab .subtext { font-size: 11px; }
+.key.k-caps    { flex: 0 0 76px; min-width: 76px; }
+.key.k-enter   { flex: 0 0 88px; min-width: 88px; }
+.key.k-shift-l { flex: 0 0 88px; min-width: 88px; }
+.key.k-shift-r { flex: 0 0 110px; min-width: 110px; }
+.key.k-bksp    { flex: 0 0 88px; min-width: 88px; }
+.key.k-space   { flex: 0 0 240px; min-width: 240px; }
+
+.info-panel {
+  margin-top: 14px; background: #1e1e1e; border: 0.5px solid #3a3a3a;
+  border-radius: 10px; padding: 14px 18px; min-height: 64px;
+  font-family: 'Space Mono', monospace; color: #ccc; font-size: 13px;
+  line-height: 1.6; transition: all 0.15s;
+}
+.info-panel .tag { font-size: 10px; color: #666; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
+.info-panel .val { color: #fff; font-size: 14px; }
+.info-panel .desc { color: #999; font-size: 11px; margin-top: 4px; }
+
+/* ═══════════════════════ FOOTER (full-width HTML) ═══════════════════════ */
+.site-footer {
+  width: 100%; background: #161829;
+  border-top: 1px solid #2e3045;
+  padding: 40px 48px 28px;
+  font-family: 'Inter', sans-serif;
+  transition: background 0.4s;
+}
+[data-theme="light"] .site-footer { background: #dddee8; border-top-color: #c8c9d6; }
+
+.footer-inner {
+  max-width: 960px; margin: 0 auto;
+  display: flex; gap: 48px; align-items: flex-start; flex-wrap: wrap;
+}
+
+/* Orion constellation canvas area */
+.footer-constellation {
+  flex: 0 0 180px; height: 140px; position: relative;
+}
+.footer-constellation svg { width: 100%; height: 100%; }
+
+.footer-identity { flex: 1; min-width: 160px; }
+.footer-identity h3 {
+  font-size: 1.15rem; font-weight: 500; letter-spacing: 0.15em;
+  color: #c8c3bb; margin-bottom: 4px;
+}
+[data-theme="light"] .footer-identity h3 { color: #333; }
+.footer-identity p {
+  font-size: 0.68rem; color: #56546e; letter-spacing: 0.06em; font-weight: 300;
+}
+[data-theme="light"] .footer-identity p { color: #888; }
+
+.footer-col { min-width: 100px; }
+.footer-col h4 {
+  font-size: 0.6rem; color: #8888a0; letter-spacing: 0.1em;
+  font-weight: 500; text-transform: uppercase; margin-bottom: 10px;
+}
+[data-theme="light"] .footer-col h4 { color: #666; }
+.footer-col a, .footer-col span {
+  display: block; font-size: 0.7rem; color: #56546e;
+  letter-spacing: 0.05em; font-weight: 300;
+  padding: 3px 0; cursor: pointer; transition: color 0.2s;
+}
+[data-theme="light"] .footer-col a, [data-theme="light"] .footer-col span { color: #888; }
+.footer-col a:hover, .footer-col span:hover { color: #ccc; }
+[data-theme="light"] .footer-col a:hover, [data-theme="light"] .footer-col span:hover { color: #333; }
+
+.footer-divider {
+  width: 100%; height: 1px; background: #2e3045; margin: 20px 0 14px;
+}
+[data-theme="light"] .footer-divider { background: #c8c9d6; }
+
+.footer-bottom {
+  max-width: 960px; margin: 0 auto;
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;
+}
+.footer-bottom span {
+  font-size: 0.62rem; color: #42405c; letter-spacing: 0.04em; font-weight: 300;
+}
+[data-theme="light"] .footer-bottom span { color: #aaa; }
+
+/* ═══════════════════════ PROJECTS ═══════════════════════ */
+.page-title { font-size: 2.2rem; font-weight: 700; margin-bottom: 36px; color: var(--text-dim); }
+.page-title span { color: var(--text-dimmer); }
+.project-list { display: flex; flex-direction: column; gap: 32px; }
+.project-item { display: flex; gap: 20px; align-items: flex-start; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+.project-item:last-child { border-bottom: none; }
+.project-icon { width: 56px; height: 56px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 28px; }
+.project-icon svg { width: 42px; height: 42px; }
+.project-content { flex: 1; }
+.project-name { font-weight: 700; font-size: 0.95rem; display: inline; }
+.project-desc { font-size: 0.9rem; color: var(--text-dim); font-weight: 300; line-height: 1.6; display: inline; }
+.project-meta { font-size: 0.75rem; color: var(--text-dimmer); margin-top: 8px; font-style: italic; }
+.c-purple { color: #c084fc; } .c-green { color: #4ade80; } .c-red { color: #f87171; }
+.c-blue { color: #60a5fa; } .c-orange { color: #fb923c; } .c-yellow { color: #facc15; }
+.c-pink { color: #f472b6; } .c-cyan { color: #22d3ee; } .c-teal { color: #2dd4bf; }
+
+/* ═══════════════════════ VALUES ═══════════════════════ */
+.values-list { display: flex; flex-direction: column; gap: 36px; }
+.value-item { font-size: 0.95rem; line-height: 1.7; font-weight: 300; }
+.value-num { font-weight: 600; margin-right: 4px; }
+
+/* ═══════════════════════ TESTIMONY ═══════════════════════ */
+.testimony-text { font-size: 0.9rem; color: var(--text-dim); font-weight: 300; line-height: 1.85; white-space: pre-line; }
+.testimony-text p { margin-bottom: 18px; }
+
+/* ═══════════════════════ CONTACT ═══════════════════════ */
+.contact-section { text-align: center; padding-top: 80px; }
+.contact-section h2 { font-size: 1.6rem; margin-bottom: 16px; }
+.contact-links { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; }
+.contact-links a { color: var(--text-dim); font-size: 0.9rem; font-weight: 300; transition: color 0.2s; border-bottom: 1px solid var(--border); padding-bottom: 2px; }
+.contact-links a:hover { color: var(--text); }
+
+/* ═══════════════════════ RESPONSIVE ═══════════════════════ */
+@media (max-width: 1400px) {
+  .home-layout { flex-direction: column; min-height: auto; }
+  .home-left { padding-right: 0; border-right: none; border-bottom: 1px solid var(--border); padding-bottom: 40px; margin-bottom: 40px; }
+  .home-right { padding-left: 0; }
+  .home-left .portrait-section { margin-top: 8px; }
+}
+@media (max-width: 640px) {
+  .hero-name { font-size: 1.8rem; }
+  .exp-grid { grid-template-columns: 1fr; }
+  .portrait-section { flex-direction: column; }
+  .portrait-clip { width: 100%; height: 300px; }
+  .info-row .info-line { display: none; }
+  .page { padding: 70px 20px 30px; max-width: 100%; }
+  .site-footer { padding: 30px 20px 20px; }
+  .footer-constellation { flex: 0 0 120px; height: 100px; }
+}
+@media (min-width: 1401px) {
+  .portrait-icons-row { display: flex; }
+  .portrait-icons { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════ SPLASH ═══════════════════════ -->
+<div id="splash"><div class="splash-name">kory zhang</div></div>
+
+<!-- ═══════════════════════ TOPBAR ═══════════════════════ -->
+<nav class="topbar">
+  <button class="hamburger" id="menuBtn" aria-label="Menu">≡</button>
+  <div class="topbar-right">
+    <div class="topbar-nav">
+      <a data-page="home">home</a>
+      <a data-page="projects">projects</a>
+      <a data-page="values">values</a>
+      <a data-page="testimony">testimony</a>
+      <a data-page="contact">contact</a>
+    </div>
+    <div class="theme-toggle" id="themeToggle">
+      [<span class="active-theme" data-mode="dark">dark</span>
+       <span class="inactive-theme" data-mode="light">light</span>]
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════ NAV OVERLAY ═══════════════════════ -->
+<div class="nav-overlay" id="navOverlay">
+  <div class="nav-item" data-page="home">home</div>
+  <div class="nav-item" data-page="projects">projects</div>
+  <div class="nav-item" data-page="values">values</div>
+  <div class="nav-item" data-page="testimony">testimony</div>
+  <div class="nav-item" data-page="contact">contact</div>
+  <div class="nav-bottom-bar">
+    <button class="hamburger" id="menuBtnClose" aria-label="Close menu">≡</button>
+    <div class="theme-toggle" id="themeToggle2">
+      [<span class="active-theme" data-mode="dark">dark</span>
+       <span class="inactive-theme" data-mode="light">light</span>]
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     HOME PAGE
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="page active" id="page-home">
+<div class="home-layout">
+  <div class="home-left">
+
+  <div class="social-icons anim">
+    <a href="https://instagram.com" target="_blank" title="Instagram"><i class="basicons" icon-name="instagram"></i></a>
+    <a href="https://linkedin.com" target="_blank" title="LinkedIn"><i class="basicons" icon-name="linkedin"></i></a>
+    <a href="mailto:kory@example.com" title="Email"><i class="basicons" icon-name="mail"></i></a>
+    <a href="https://tiktok.com" target="_blank" title="TikTok"><i class="basicons" icon-name="tiktok"></i></a>
+  </div>
+
+  <div class="hero-header anim anim-delay-1">
+    <h1 class="hero-name">kory zhang</h1>
+    <img src="photos/clouds_transparent.png" alt="" class="hero-graphic" />
+  </div>
+
+  <div class="typewriter-wrap anim anim-delay-2">
+    <span class="typewriter-text" id="typewriterText"></span><span class="typewriter-cursor"></span>
+  </div>
+
+  <p class="bio anim anim-delay-3">my name is kory! i'm from the east bay and i work full-time as a software engineer at JPF Capital. on a day to day basis, i design and build modern SaaS systems with an eye toward practicality — doing thoughtful, yet simple and effective work</p>
+
+  <p class="bio-secondary anim anim-delay-4">outside of work, i'm always building. i love to produce melodic house, refine my wardrobe, and collect thule stickers //</p>
+
+  <div class="anim anim-delay-5">
+    <button class="explore-btn" id="exploreProjBtn">explore projects <span class="arrow">⇒</span></button>
+  </div>
+
+  <div class="portrait-icons-row anim anim-delay-5">
+    <i class="basicons" icon-name="headphones-2"></i>
+    <i class="basicons" icon-name="snowflake"></i>
+    <i class="basicons" icon-name="fish-1"></i>
+    <i class="basicons" icon-name="translate"></i>
+    <i class="basicons" icon-name="target-crosshair-1"></i>
+  </div>
+
+  <div class="portrait-section">
+    <div class="personal-info anim">
+      <div class="info-row"><span class="info-text">23 y/o :)</span><span class="info-line"></span></div>
+      <div class="info-row"><span class="info-text">UC Irvine '24</span><span class="info-line"></span></div>
+      <div class="info-row"><span class="info-text">bay area, ca</span><span class="info-line"></span></div>
+      <div class="info-row"><span class="info-text">full-stack developer</span><span class="info-line"></span></div>
+    </div>
+    <div class="portrait-container anim anim-delay-2">
+      <div class="portrait-clip"><img src="photos/portfolio_portrait.JPG" alt="Kory Zhang" class="portrait-img" /></div>
+      <div class="portrait-icons">
+        <i class="basicons" icon-name="headphones-2"></i>
+        <i class="basicons" icon-name="snowflake"></i>
+        <i class="basicons" icon-name="fish-1"></i>
+        <i class="basicons" icon-name="translate"></i>
+        <i class="basicons" icon-name="target-crosshair-1"></i>
+      </div>
+    </div>
+  </div>
+
+  </div><!-- end home-left -->
+  <div class="home-right">
+
+  <h2 class="section-title anim">experiences</h2>
+  <div class="exp-grid">
+    <div class="exp-card anim">
+      <div class="exp-header">
+        <span class="exp-num">[01]</span>
+        <span class="exp-title">Software Engineer</span>
+        <span class="exp-tag">Current</span>
+      </div>
+      <div class="exp-meta">
+        <span><i class="basicons" icon-name="calendar"></i> 2025 - Now</span><span><i class="basicons" icon-name="building"></i> JPF Capital</span><span><i class="basicons" icon-name="map-pin"></i> Danville, CA</span>
+      </div>
+      <p class="exp-desc">Leading the design, architecture, and engineering of a next-generation all-in-one CRM, financial, and accounting software platform for family offices</p>
+    </div>
+    <div class="exp-card anim">
+      <div class="exp-header">
+        <span class="exp-num">[02]</span>
+        <span class="exp-title">Intern → Software Engineer I</span>
+      </div>
+      <div class="exp-meta">
+        <span><i class="basicons" icon-name="calendar"></i> 2022 - Now</span><span><i class="basicons" icon-name="building"></i> Robert Half</span><span><i class="basicons" icon-name="map-pin"></i> San Ramon, CA</span>
+      </div>
+      <p class="exp-desc">Renovated Salesforce for consultants at a prominent Fortune 500 company through full-stack development, agentic AI workflows and streamlined CI/CD pipelines</p>
+    </div>
+    <div class="exp-card anim">
+      <div class="exp-header">
+        <span class="exp-num">[03]</span>
+        <span class="exp-title">Developer</span>
+      </div>
+      <div class="exp-meta">
+        <span><i class="basicons" icon-name="calendar"></i> 2022 - Now</span><span><i class="basicons" icon-name="building"></i> Commit The Change</span><span><i class="basicons" icon-name="map-pin"></i> Irvine, CA</span>
+      </div>
+      <p class="exp-desc">Delivered modern web experiences for nonprofits as part of Commit The Change, UCI's student-led engineering organization</p>
+    </div>
+    <div class="exp-card anim">
+      <div class="exp-header">
+        <span class="exp-num">[04]</span>
+        <span class="exp-title">Software Engineer Intern</span>
+      </div>
+      <div class="exp-meta">
+        <span><i class="basicons" icon-name="calendar"></i> 2017 - 2019</span><span><i class="basicons" icon-name="building"></i> Gausscode</span><span><i class="basicons" icon-name="map-pin"></i> Remote</span>
+      </div>
+      <p class="exp-desc">Built Python tooling for data visualization and cluster analysis, and developed a React-based API platform with the R&D team</p>
+    </div>
+  </div>
+
+  <!-- ══════════ KEYBOARD (inlined) ══════════ -->
+  <div class="kb-section anim">
+    <div class="kb-label">kory zhang // interactive stack</div>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot dot-silver"></div>languages</div>
+      <div class="legend-item"><div class="legend-dot dot-white"></div>tools &amp; software</div>
+    </div>
+    <div class="keyboard">
+      <div class="kb-row">
+        <div class="key"            data-key="esc"><span>esc</span><span class="subtext">kdawg</span></div>
+        <div class="key lit-silver" data-key="py"><span>1</span><span class="subtext">python</span></div>
+        <div class="key lit-silver" data-key="cpp"><span>2</span><span class="subtext">c++</span></div>
+        <div class="key lit-silver" data-key="csh"><span>3</span><span class="subtext">c#</span></div>
+        <div class="key lit-silver" data-key="jv"><span>4</span><span class="subtext">java</span></div>
+        <div class="key lit-silver" data-key="ts"><span>5</span><span class="subtext">ts</span></div>
+        <div class="key lit-silver" data-key="h"><span>6</span><span class="subtext">html</span></div>
+        <div class="key lit-silver" data-key="sq"><span>7</span><span class="subtext">sql</span></div>
+        <div class="key"            data-key="blank"><span>8</span></div>
+        <div class="key"            data-key="blank"><span>9</span></div>
+        <div class="key"            data-key="blank"><span>0</span></div>
+        <div class="key"            data-key="blank"><span>- _</span></div>
+        <div class="key"            data-key="blank"><span>= +</span></div>
+        <div class="key k-bksp"     data-key="uci"><span>delete</span><span class="subtext">anteater</span></div>
+      </div>
+      <div class="kb-row">
+        <div class="key k-tab"      data-key="tab"><span>tab</span><span class="subtext">♪ ♫</span></div>
+        <div class="key"            data-key="blank"><span>Q</span></div>
+        <div class="key"            data-key="blank"><span>W</span></div>
+        <div class="key"            data-key="blank"><span>E</span></div>
+        <div class="key lit-white"  data-key="re"><span>R</span><span class="subtext">react</span></div>
+        <div class="key"            data-key="blank"><span>T</span></div>
+        <div class="key lit-silver" data-key="yaml"><span>Y</span><span class="subtext">yaml</span></div>
+        <div class="key"            data-key="blank"><span>U</span></div>
+        <div class="key"            data-key="blank"><span>I</span></div>
+        <div class="key"            data-key="blank"><span>O</span></div>
+        <div class="key lit-silver" data-key="pypo"><span>P</span><span class="subtext">postman</span></div>
+        <div class="key"            data-key="blank"><span>[ {</span></div>
+        <div class="key"            data-key="blank"><span>] }</span></div>
+        <div class="key k-enter"    data-key="blank"><span>\ |</span></div>
+      </div>
+      <div class="kb-row">
+        <div class="key k-caps"     data-key="caps"><span>caps</span></div>
+        <div class="key lit-white"  data-key="az"><span>A</span><span class="subtext">azure</span></div>
+        <div class="key lit-white"  data-key="sf"><span>S</span><span class="subtext">sfdc</span></div>
+        <div class="key"            data-key="blank"><span>D</span></div>
+        <div class="key lit-white"  data-key="fg"><span>F</span><span class="subtext">figma</span></div>
+        <div class="key lit-white"  data-key="gi"><span>G</span><span class="subtext">git</span></div>
+        <div class="key"            data-key="blank"><span>H</span></div>
+        <div class="key lit-white"  data-key="ji"><span>J</span><span class="subtext">jira</span></div>
+        <div class="key"            data-key="blank"><span>K</span></div>
+        <div class="key lit-white"  data-key="lwc"><span>L</span><span class="subtext">lucid</span></div>
+        <div class="key"            data-key="blank"><span>;</span></div>
+        <div class="key"            data-key="blank"><span>' "</span></div>
+        <div class="key k-wider"    data-key="role"><span>return</span><span class="subtext">major</span></div>
+      </div>
+      <div class="kb-row">
+        <div class="key k-shift-l"  data-key="shift-l"><span>shift</span></div>
+        <div class="key"            data-key="blank"><span>Z</span></div>
+        <div class="key"            data-key="blank"><span>X</span></div>
+        <div class="key lit-white"  data-key="cert"><span>C</span><span class="subtext">certs</span></div>
+        <div class="key"            data-key="blank"><span>V</span></div>
+        <div class="key lit-white"  data-key="bs"><span>B</span><span class="subtext">bootstrap</span></div>
+        <div class="key"            data-key="blank"><span>N</span></div>
+        <div class="key"            data-key="blank"><span>M</span></div>
+        <div class="key"            data-key="blank"><span>,</span></div>
+        <div class="key"            data-key="blank"><span>.</span></div>
+        <div class="key"            data-key="blank"><span>/ ?</span></div>
+        <div class="key k-shift-r"  data-key="shift-r"><span>shift</span><span class="subtext">中文</span></div>
+      </div>
+      <div class="kb-row">
+        <div class="key k-wide" data-key="ctrl"><span>ctrl</span><span class="subtext">reads</span></div>
+        <div class="key k-wide" data-key="opt"><span>opt</span></div>
+        <div class="key k-wide" data-key="loc"><span>cmd</span><span class="subtext">bay area</span></div>
+        <div class="key k-space" data-key="interests"><span>space</span><span class="subtext">interests</span></div>
+        <div class="key k-wide" data-key="blank"><span>cmd</span></div>
+        <div class="key k-wide" data-key="blank"><span>opt</span></div>
+        <div class="key k-wide" data-key="blank"><span>ctrl</span></div>
+      </div>
+    </div>
+    <div class="info-panel" id="kbPanel">
+      <div class="tag">press any key (click or type)</div>
+      <div class="val">— my stack, mapped.</div>
+    </div>
+  </div>
+
+  </div><!-- end home-right -->
+</div><!-- end home-layout -->
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     PROJECTS PAGE
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="page" id="page-projects">
+  <div class="page-title anim"><span>// </span>projects</div>
+  <div class="project-list">
+    <div class="project-item anim">
+      <div class="project-icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="24" cy="20" r="10"/><path d="M14 38c0-5.5 4.5-10 10-10s10 4.5 10 10"/><path d="M20 18v4l4 2"/></svg></div>
+      <div class="project-content"><span class="project-name c-purple">aurora</span><span class="project-desc"> is the world's first AI-powered DAW, built to accelerate user-directed music production</span><div class="project-meta">artificial intelligence • 2026</div></div>
+    </div>
+    <div class="project-item anim">
+      <div class="project-icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 16h24l-2 20H14L12 16z"/><path d="M18 16V12a6 6 0 0112 0v4"/></svg></div>
+      <div class="project-content"><span class="project-name c-green">kwone</span><span class="project-desc"> is an elite men's accessories brand featuring a custom Shopify storefront with SMS marketing flows</span><div class="project-meta">entrepreneurship • 2026</div></div>
+    </div>
+    <div class="project-item anim">
+      <div class="project-icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="10" y="10" width="28" height="28" rx="4"/><circle cx="20" cy="24" r="3"/><circle cx="28" cy="24" r="3"/><path d="M24 32v-8"/></svg></div>
+      <div class="project-content"><span class="project-name c-red">nodebeat</span><span class="project-desc">, a mechanical Roblox rhythm game — tap, hold, and slide your way through community-synced beatmaps</span><div class="project-meta">game development • 2026</div></div>
+    </div>
+    <div class="project-item anim">
+      <div class="project-icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M24 12c-8 0-14 6-14 10s6 10 14 10 14-6 14-10-6-10-14-10z"/><path d="M10 22h28"/></svg></div>
+      <div class="project-content"><span class="project-name c-blue">salesforce reimagined</span><span class="project-desc">, a valiant effort to modernize Protiviti's salesforce instance — shipped custom Apex, LWC, and Agentforce development.</span><div class="project-meta">full-stack development • 2025</div></div>
+    </div>
+    <div class="project-item anim">
+      <div class="project-icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="24" cy="24" r="12"/><path d="M24 16v8l6 4"/><path d="M36 24h4M8 24h4"/></svg></div>
+      <div class="project-content"><span class="project-name c-orange">opportunity scout</span><span class="project-desc">, microservices pipeline scraping SEC filings and public news — surfaces real-time opportunity signals directly into salesforce via azure</span><div class="project-meta">software microservice • 2024-2025</div></div>
+    </div>
+    <div class="project-item anim">
+      <div class="project-icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="8" y="18" width="32" height="14" rx="4"/><circle cx="16" cy="25" r="3"/><circle cx="32" cy="25" r="3"/><path d="M16 18V14M32 18V14"/></svg></div>
+      <div class="project-content"><span class="project-name c-yellow">partpilot</span><span class="project-desc"> is a react + python car configurator with an AI compatibility engine — search, compare, and build your dream car specs in real time</span><div class="project-meta">frontend development • 2026</div></div>
+    </div>
+    <div class="project-item anim">
+      <div class="project-icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 14h24v20H12z"/><path d="M16 20h16M16 26h10"/><circle cx="36" cy="34" r="6"/><path d="M34 34l2 2 3-3"/></svg></div>
+      <div class="project-content"><span class="project-name c-pink">astrochecker</span><span class="project-desc">, a best NLP hack built at venushacks 2022 — uses assemblyai and textgears apis to catch and fix grammar errors in live speech transcriptions</span><div class="project-meta">hackathon • 2022</div></div>
+    </div>
+    <div class="project-item anim">
+      <div class="project-icon"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 12h20l4 8H10l4-8z"/><rect x="10" y="20" width="28" height="16" rx="2"/><path d="M18 28h12"/></svg></div>
+      <div class="project-content"><span class="project-name c-teal">simpify</span><span class="project-desc">, the leading family office SaaS bridging CRM, financial, and accounting capabilities into an all-in-one system</span><div class="project-meta">software as a service • 2026</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ VALUES PAGE ═══════════════════════ -->
+<div class="page" id="page-values">
+  <div class="page-title anim"><span>// </span>values</div>
+  <div class="values-list">
+    <div class="value-item anim"><span class="value-num">1.</span> visit and take care of your family often, for your time is short, and theirs is shorter</div>
+    <div class="value-item anim"><span class="value-num">2.</span> live with joy; for the world is fleeting, but it is also a gift from God (Ecclesiastes 3:12–13)</div>
+    <div class="value-item anim"><span class="value-num">3.</span> imperfect action > overthinking. just take the step!!</div>
+    <div class="value-item anim"><span class="value-num">4.</span> confidence comes from keeping your word in private</div>
+    <div class="value-item anim"><span class="value-num">5.</span> reject slothfulness; a disciplined life is an honorable one</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ TESTIMONY PAGE ═══════════════════════ -->
+<div class="page" id="page-testimony">
+  <div class="page-title anim"><span>// </span>testimony</div>
+  <div class="testimony-text">
+    <p class="anim">My name is Kory and today I'll be sharing my testimony, what God has done throughout my life, and how He has led me to faith.</p>
+    <p class="anim">Church has always been a part of my life. From attending Sunday Service with my family, to going on youth retreats, I was actively involved within the community.</p>
+    <p class="anim">However, this attendance was the extent of my faith. As a kid, I could merely name a few books in the Bible or explain what the gospel was. I often questioned my beliefs and why I went to church. But due to a lack of interest, I pushed these doubts aside. Christianity to me, was more about community.</p>
+    <p class="anim">During highschool, my faith grew even weaker as I started to focus on my future and how to be successful. I thought I had it all figured out: get into a good college, get a good job, make money, and enjoy life. However, this self-reliant mindset became one I was familiar with, and I lost sight of what god I achieved, I was never satisfied.</p>
+    <p class="anim">And so, I realized I wasn't satisfied. I found myself in a constant cycle, chasing the feeling of emptiness, and searching for meaning in the world. I started to party, go to raves, and prioritize materialism. Over time, my heart had hardened and completely turned away from the Lord. Fueled by selfishness and lust, I became blinded to the truth.</p>
+    <p class="anim">As an unsuspecting result, I felt even more so out of touch with deep depression and anxiety. By the grace of God, the rest of my life is the lowest and became my source of strength and comfort. I found myself at Beacon Community Church in Irvine, seeking the love and wisdom of the Lord. And it was there that I encountered the truth — that God was not simply a distant figure, but rather a personal God: one who loved me deeply, one who sent His only Son to die for sinners who lifted me up and brought me to who I am today. I found myself in the Lord's embrace.</p>
+    <p class="anim">The truth is this, God, our good and loving ruler, created us and the world. He has given us all that we need for this life and for the next. However, we began to live our own lives and rightly deserve eternal death. But, in love, God sent His Son, Jesus Christ, to die on the cross, taking the punishment we deserved, so that through faith in Him we might have eternal life. In our place, he suffered greatly and took our judgement upon himself by dying on a cross. But on the third day, God raised Jesus from death, and by his grace, granting us the decision to either continue our rebellion, or to trust in Christ alone for the forgiveness of our sins.</p>
+    <p class="anim">This truth, the gospel, didn't become clear to me until I learned the forgiveness of God. While I was separated from God by my sin, I was also subject to the wrath of God. But He is merciful and offers atonement through the sacrifice of His own Son. And this truth brings me more hope and peace compared to the temporary things I was gaining in the world.</p>
+    <p class="anim">If you are a non-believer in this room today, I encourage you to take a step of faith and explore this truth for yourself. For a long time, I lived my life like I didn't need God, and was constantly chasing the desires of my heart. Matthew 6:33 says, Jesus said in His Sermon on the Mount "But seek first the kingdom of God and his righteousness, and all these things will be added to you."</p>
+    <p class="anim">It is only because of God, that we can have and experience anything. So I exhort myself for the rest of my life, to be self-less, and exhort my joy in depletion. As I strive to live with Christ as my Lord and Savior, I humbly submit my testimony to be a reminder of the love of God. Thank you.</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════ CONTACT PAGE ═══════════════════════ -->
+<div class="page" id="page-contact">
+  <div class="contact-section">
+    <h2 class="anim">get in touch</h2>
+    <div class="contact-links anim anim-delay-1">
+      <a href="https://linkedin.com" target="_blank"><i class="basicons" icon-name="linkedin"></i> LinkedIn</a>
+      <a href="https://instagram.com" target="_blank"><i class="basicons" icon-name="instagram"></i> Instagram</a>
+      <a href="mailto:kory@example.com"><i class="basicons" icon-name="mail"></i> Email</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     GLOBAL FOOTER — full viewport width, on every page
+     ═══════════════════════════════════════════════════════════════ -->
+<footer class="site-footer anim" id="globalFooter">
+  <div class="footer-inner">
+
+    <!-- Orion constellation -->
+    <div class="footer-constellation">
+      <svg viewBox="0 0 180 140" xmlns="http://www.w3.org/2000/svg">
+        <line x1="57" y1="20" x2="72" y2="42" stroke="#2e3045" stroke-width="0.7" />
+        <line x1="72" y1="42" x2="62" y2="70" stroke="#2e3045" stroke-width="0.7" />
+        <line x1="62" y1="70" x2="72" y2="100" stroke="#2e3045" stroke-width="0.7" />
+        <line x1="72" y1="100" x2="55" y2="122" stroke="#2e3045" stroke-width="0.7" />
+        <line x1="57" y1="20" x2="115" y2="10" stroke="#2e3045" stroke-width="0.7" />
+        <line x1="115" y1="10" x2="140" y2="30" stroke="#2e3045" stroke-width="0.7" />
+        <line x1="140" y1="30" x2="120" y2="60" stroke="#2e3045" stroke-width="0.7" />
+        <line x1="72" y1="42" x2="120" y2="60" stroke="#2e3045" stroke-width="0.7" />
+        <line x1="62" y1="70" x2="120" y2="60" stroke="#2e3045" stroke-width="0.7" />
+        <line x1="120" y1="60" x2="130" y2="90" stroke="#2e3045" stroke-width="0.7" />
+        <line x1="130" y1="90" x2="155" y2="110" stroke="#2e3045" stroke-width="0.7" />
+        <line x1="72" y1="100" x2="130" y2="90" stroke="#2e3045" stroke-width="0.7" />
+        <circle cx="57" cy="20" r="3.2" fill="#d4d0c4" />
+        <circle cx="115" cy="10" r="2.2" fill="#9a9a8a" />
+        <circle cx="140" cy="30" r="2.6" fill="#9a9a8a" />
+        <circle cx="72" cy="42" r="1.8" fill="#4a4a52" />
+        <circle cx="120" cy="60" r="2.2" fill="#9a9a8a" />
+        <circle cx="62" cy="70" r="3.8" fill="#d4d0c4" />
+        <circle cx="72" cy="100" r="3.2" fill="#d4d0c4" />
+        <circle cx="130" cy="90" r="3.2" fill="#d4d0c4" />
+        <circle cx="55" cy="122" r="2.2" fill="#9a9a8a" />
+        <circle cx="155" cy="110" r="2.2" fill="#9a9a8a" />
+        <circle cx="25" cy="40" r="1.2" fill="#4a4a52" />
+        <circle cx="168" cy="47" r="1" fill="#4a4a52" />
+        <circle cx="88" cy="134" r="1.2" fill="#4a4a52" />
+        <circle cx="18" cy="87" r="0.8" fill="#4a4a52" />
+      </svg>
+    </div>
+
+    <!-- Identity -->
+    <div class="footer-identity">
+      <h3>KORY ZHANG</h3>
+      <p>SOFTWARE ENGINEER.</p>
+    </div>
+
+    <!-- Sections col -->
+    <div class="footer-col">
+      <h4>Sections</h4>
+      <span data-nav="home">ABOUT</span>
+      <span data-nav="projects">PROJECTS</span>
+      <span data-nav="values">VALUES</span>
+      <span data-nav="testimony">TESTIMONY</span>
+    </div>
+
+    <!-- Socials col -->
+    <div class="footer-col">
+      <h4>Socials</h4>
+      <a href="https://linkedin.com" target="_blank">LINKEDIN</a>
+      <a href="https://instagram.com" target="_blank">INSTAGRAM</a>
+      <a href="https://tiktok.com" target="_blank">TIKTOK</a>
+      <a href="https://facebook.com" target="_blank">FACEBOOK</a>
+    </div>
+
+  </div>
+
+  <div class="footer-divider"></div>
+  <div class="footer-bottom">
+    <span>© 2026 KORY ZHANG.</span>
+    <span>STRIVING IN FAITH. PSALM 103:10</span>
+  </div>
+</footer>
+
+
+<script>
+/* ═══════════════════════ SPLASH ═══════════════════════ */
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('splash').classList.add('hidden');
+    setTimeout(() => { document.getElementById('splash').style.display = 'none'; }, 500);
+    initScrollObserver();
+  }, 1200);
+});
+
+/* ═══════════════════════ SCROLL ANIM ═══════════════════════ */
+function initScrollObserver() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.anim').forEach(el => observer.observe(el));
+}
+
+/* ═══════════════════════ NAV ═══════════════════════ */
+const navOverlay = document.getElementById('navOverlay');
+document.getElementById('menuBtn').addEventListener('click', () => navOverlay.classList.toggle('open'));
+document.getElementById('menuBtnClose').addEventListener('click', () => navOverlay.classList.remove('open'));
+document.querySelectorAll('.nav-item').forEach(item => {
+  item.addEventListener('click', () => { navOverlay.classList.remove('open'); navigateTo(item.dataset.page); });
+});
+document.querySelectorAll('.topbar-nav a').forEach(link => {
+  link.addEventListener('click', () => navigateTo(link.dataset.page));
+});
+document.querySelectorAll('[data-nav]').forEach(el => {
+  el.addEventListener('click', () => navigateTo(el.dataset.nav));
+});
+
+/* ═══════════════════════ PAGE NAV ═══════════════════════ */
+let isTransitioning = false;
+function navigateTo(pageId) {
+  const cur = document.querySelector('.page.active');
+  const next = document.getElementById('page-' + pageId);
+  if (!next || next === cur || isTransitioning) return;
+  isTransitioning = true;
+
+  // Phase 1: fade-swipe current page out
+  cur.classList.add('fade-out');
+
+  setTimeout(() => {
+    // Phase 2: swap pages
+    cur.classList.remove('active', 'fade-out');
+    next.classList.add('active', 'fade-in');
+    window.scrollTo(0, 0);
+
+    // reset scroll animations
+    next.querySelectorAll('.anim').forEach(el => el.classList.remove('visible'));
+    document.getElementById('globalFooter').classList.remove('visible');
+
+    // Phase 3: after fade-in completes
+    setTimeout(() => {
+      next.classList.remove('fade-in');
+      initScrollObserver();
+      isTransitioning = false;
+    }, 460);
+  }, 360);
+}
+document.getElementById('exploreProjBtn').addEventListener('click', () => navigateTo('projects'));
+
+/* ═══════════════════════ THEME ═══════════════════════ */
+function setupThemeToggle(c) {
+  c.querySelectorAll('span').forEach(span => {
+    span.addEventListener('click', () => {
+      const m = span.dataset.mode;
+      document.documentElement.setAttribute('data-theme', m);
+      document.querySelectorAll('.theme-toggle span').forEach(s => {
+        s.className = s.dataset.mode === m ? 'active-theme' : 'inactive-theme';
+      });
+    });
+  });
+}
+setupThemeToggle(document.getElementById('themeToggle'));
+setupThemeToggle(document.getElementById('themeToggle2'));
+
+/* ═══════════════════════ TYPEWRITER ═══════════════════════ */
+const titles = ['software engineer', 'keyboard enthusiast', 'part-time dog sitter'];
+const typeEl = document.getElementById('typewriterText');
+let tIdx = 0, cIdx = 0, deleting = false;
+function typewriterTick() {
+  const t = titles[tIdx];
+  if (!deleting) {
+    typeEl.textContent = t.substring(0, cIdx + 1); cIdx++;
+    if (cIdx === t.length) { setTimeout(() => { deleting = true; typewriterTick(); }, 3500); return; }
+    setTimeout(typewriterTick, 80 + Math.random() * 40);
+  } else {
+    typeEl.textContent = t.substring(0, cIdx - 1); cIdx--;
+    if (cIdx === 0) { deleting = false; tIdx = (tIdx + 1) % titles.length; setTimeout(typewriterTick, 400); return; }
+    setTimeout(typewriterTick, 40 + Math.random() * 20);
+  }
+}
+setTimeout(typewriterTick, 1800);
+
+/* ═══════════════════════ KEYBOARD (inline logic) ═══════════════════════ */
+const kbInfo = {
+  esc:   { tag: "BIO",             val: "Kory Zhang",                       desc: "full-stack, building useful things" },
+  tab:   { tag: "currently listening to", val: 'Feel it in My<br><span class="desc">it\'s murph, Arlo, fkblnde</span>', desc: "" },
+  caps:  { tag: "unmapped",        val: "—",  desc: "" },
+  "shift-l": { tag: "unmapped",    val: "—",  desc: "" },
+  "shift-r": { tag: "Spoken Languages", val: "English (Native Proficiency), Mandarin Chinese (Professional Proficiency)", desc: "" },
+  ctrl:  { tag: "currently reading", val: "Shoe Dog — Phil Knight", desc: "" },
+  opt:   { tag: "unmapped",        val: "—",  desc: "" },
+  loc:   { tag: "location",        val: "Bay Area, CA", desc: "" },
+  uci:   { tag: "education",       val: "UC Irvine '24", desc: "" },
+  role:  { tag: "field of study",  val: "Software Engineer", desc: "" },
+  interests: { tag: "Interests",   val: "Guitar, Skiing, Basketball, Gaming, Running, Speed Typing", desc: "" },
+  py:    { tag: "language", val: "Python", desc: "" },
+  cpp:   { tag: "language", val: "C++", desc: "" },
+  csh:   { tag: "language", val: "C#", desc: "" },
+  jv:    { tag: "language", val: "Java", desc: "" },
+  ts:    { tag: "language", val: "TypeScript", desc: "" },
+  h:     { tag: "language", val: "HTML / CSS / JavaScript", desc: "" },
+  sq:    { tag: "language", val: "SQL", desc: "" },
+  yaml:  { tag: "language", val: "YAML", desc: "" },
+  pypo:  { tag: "language", val: "Python & Postman", desc: "" },
+  re:    { tag: "tool", val: "React", desc: "" },
+  bs:    { tag: "tool", val: "Bootstrap", desc: "" },
+  lwc:   { tag: "tool", val: "Lucid / Lightning Web Components", desc: "" },
+  az:    { tag: "tool", val: "Azure / AWS", desc: "" },
+  sf:    { tag: "tool", val: "Salesforce / Splunk / Slack", desc: "" },
+  fg:    { tag: "tool", val: "Figma / Framer", desc: "" },
+  gi:    { tag: "tool", val: "Git", desc: "" },
+  ji:    { tag: "tool", val: "Jira", desc: "" },
+  cert:  { tag: "certifications", val: "Salesforce Platform Developer I (2025), Salesforce Agentforce Specialist (2025)", desc: "" },
+};
+
+const kbKeyMap = {
+  Escape:'esc','1':'py','2':'cpp','3':'csh','4':'jv','5':'ts','6':'h','7':'sq',
+  '8':'blank','9':'blank','0':'blank','-':'blank','_':'blank','=':'blank','+':'blank',Backspace:'uci',
+  Tab:'tab',Enter:'role',CapsLock:'caps',' ':'interests',
+  ShiftLeft:'shift-l',ShiftRight:'shift-r',Control:'ctrl',Alt:'opt',Meta:'loc',
+  'q':'blank','w':'blank','e':'blank','r':'re','t':'blank','y':'yaml',
+  'u':'blank','i':'blank','o':'blank','p':'pypo','[':'blank',']':'blank','{':'blank','}':'blank',
+  '\\':'blank','|':'blank',
+  'a':'az','s':'sf','d':'blank','f':'fg','g':'gi','h':'blank','j':'ji',
+  'k':'blank','l':'lwc',';':'blank',"'":'blank','"':'blank',
+  'z':'blank','x':'blank','c':'cert','v':'blank','b':'bs','n':'blank',
+  'm':'blank',',':'blank','.':'blank','/':'blank','?':'blank',
+};
+const kbKeyLabel = {
+  '8':'8','9':'9','0':'0','-':'- _','_':'- _','=':'= +','+':'= +',Backspace:'delete',Enter:'return',
+  'q':'Q','w':'W','e':'E','t':'T','u':'U','i':'I','o':'O',
+  '[':'[ {',']':'] }','{':'[ {','}':'] }','\\':'\\ |','|':'\\ |',"'":"' \"",'"':"' \"",
+  'd':'D','h':'H','k':'K',';':';','/':'/ ?','?':'/ ?',
+  'z':'Z','x':'X','v':'V','n':'N','m':'M',',':',','.':'.',
+};
+
+let kbCurrent = null;
+function kbShow(el) {
+  if (kbCurrent) kbCurrent.classList.remove('active');
+  el.classList.add('active'); kbCurrent = el;
+  const k = el.dataset.key, d = kbInfo[k], p = document.getElementById('kbPanel');
+  if (!d || k === 'blank') { p.innerHTML = '<div class="tag">unmapped</div><div class="val">—</div>'; return; }
+  p.innerHTML = `<div class="tag">${d.tag}</div><div class="val">${d.val}</div>${k==='esc'?`<div class="desc">${d.desc}</div>`:''}`;
+}
+
+document.querySelectorAll('.key').forEach(k => k.addEventListener('click', () => kbShow(k)));
+
+document.addEventListener('keydown', function(e) {
+  if (e.target.matches('input,textarea,select')) return;
+  if ((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='r') return;
+  let k = e.key;
+  if (k.length===1 && k>='A' && k<='Z' && !e.shiftKey) k = k.toLowerCase();
+  let dk = kbKeyMap[e.code] ?? kbKeyMap[k];
+  if (!dk) return;
+  let el;
+  if (dk !== 'blank') {
+    el = document.querySelector(`.key[data-key="${dk}"]`);
+  } else {
+    const label = kbKeyLabel[k];
+    if (label) el = [...document.querySelectorAll('.key[data-key="blank"]')].find(x => x.querySelector('span:not(.subtext)')?.textContent.trim() === label);
+    if (!el) el = document.querySelector('.key[data-key="blank"]');
+  }
+  if (el) { e.preventDefault(); kbShow(el); }
+});
+</script>
+
+</body>
+</html>
