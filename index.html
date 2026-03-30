@@ -34,14 +34,32 @@
   --border: #c8c9d6;
 }
 
-html { scroll-behavior: smooth; }
+html {
+  height: 100%;
+  scroll-behavior: smooth;
+  scrollbar-gutter: stable;
+}
 body {
+  min-height: 100%;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
   font-family: 'Inter', sans-serif;
   background: var(--bg);
   color: var(--text);
   line-height: 1.6;
   overflow-x: hidden;
   transition: background 0.4s, color 0.4s;
+}
+/* Fills viewport under topbar so short pages don’t leave gap below the footer */
+.site-main {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.site-main > .page {
+  flex: 1 0 auto;
 }
 a { color: inherit; text-decoration: none; }
 
@@ -67,20 +85,20 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* ═══════════════════════ PAGE TRANSITION ═══════════════════════ */
-.page { will-change: opacity, transform, filter; }
+.page { will-change: opacity, transform; }
 .page.fade-out {
-  animation: fadeSwipeOut 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: pageTxOut 0.16s ease-out forwards;
 }
 .page.fade-in {
-  animation: fadeSwipeIn 0.45s cubic-bezier(0.0, 0, 0.2, 1) forwards;
+  animation: pageTxIn 0.18s ease-out forwards;
 }
-@keyframes fadeSwipeOut {
-  0%   { opacity: 1; transform: translateY(0); filter: blur(0); }
-  100% { opacity: 0; transform: translateY(-18px); filter: blur(6px); }
+@keyframes pageTxOut {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.985); }
 }
-@keyframes fadeSwipeIn {
-  0%   { opacity: 0; transform: translateY(22px); filter: blur(6px); }
-  100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+@keyframes pageTxIn {
+  from { opacity: 0; transform: scale(1.012); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 /* ═══════════════════════ TOPBAR ═══════════════════════ */
@@ -143,6 +161,15 @@ a { color: inherit; text-decoration: none; }
 }
 #page-home { max-width: 100%; padding: 56px 64px 0; overflow: hidden; }
 .page.active { display: block; }
+/* Subpages: centered column; flex only when .active (don’t override display:none on hidden pages) */
+.page.active:not(#page-home) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.page.active:not(#page-home) > * {
+  width: min(42rem, 100%);
+}
 
 /* ═══════════════════════ HOME TWO-COLUMN ═══════════════════════ */
 .home-layout {
@@ -156,6 +183,11 @@ a { color: inherit; text-decoration: none; }
 .home-right {
   flex: 1; padding-left: 48px;
   display: flex; flex-direction: column; justify-content: flex-start;
+}
+/* Wrappers reserve min height on wide layout so portrait / keyboard don’t jump when text reflows */
+.home-left-top,
+.home-right-top {
+  min-height: 0;
 }
 
 /* ═══════════════════════ SCROLL ANIM ═══════════════════════ */
@@ -174,6 +206,17 @@ a { color: inherit; text-decoration: none; }
 .social-icons { display: flex; gap: 8px; margin-top: 15px; margin-bottom: -14px; }
 .social-icons a { color: var(--text-dim); font-size: 18px; transition: color 0.2s; }
 .social-icons a:hover { color: var(--text); }
+/* Inline X logo — same em box as Basicons icons */
+.social-icons a.social-icon-x {
+  margin-left: -0.10em;
+  margin-right: -0.10em;
+}
+.social-icons a .social-x-icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.12em;
+}
 
 .hero-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: -10px; flex-wrap: wrap; }
 .hero-name { font-size: 2.6rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
@@ -245,7 +288,6 @@ a { color: inherit; text-decoration: none; }
 /* ═══════════════════════ EXPERIENCES ═══════════════════════ */
 .section-title { font-size: 1.8rem; font-weight: 700; margin-bottom: 16px; }
 .home-right .section-title { margin-top: 30px; }
-.home-left .portrait-section { margin-top: 80px; }
 .exp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
 .exp-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; flex-wrap: wrap; }
 .exp-num { font-size: 0.82rem; color: var(--text-dim); font-weight: 500; }
@@ -309,9 +351,11 @@ a { color: inherit; text-decoration: none; }
 .site-footer {
   width: 100%; background: #1e1e1e;
   border-top: 1px solid #3a3a3a;
+  margin-top: 56px;
   padding: 40px 48px 28px;
   font-family: 'Inter', sans-serif;
   transition: background 0.4s;
+  flex-shrink: 0;
 }
 
 .footer-inner {
@@ -379,13 +423,32 @@ a { color: inherit; text-decoration: none; }
 .value-num { font-weight: 600; margin-right: 4px; }
 
 /* ═══════════════════════ TESTIMONY ═══════════════════════ */
-.testimony-text { font-size: 0.9rem; color: var(--text-dim); font-weight: 300; line-height: 1.85; white-space: pre-line; }
-.testimony-text p { margin-bottom: 18px; }
+.testimony-text {
+  font-size: 0.9rem; color: var(--text-dim); font-weight: 300; line-height: 1.85; white-space: pre-line;
+  margin: 0; padding: 0;
+}
+/* Match projects: no extra gap above first line (browser p margins); space only from .page-title */
+.testimony-text p {
+  margin-top: -20px;
+  margin-bottom: 18px;
+}
+.testimony-text p:last-child { margin-bottom: 0; }
+.testimony-yt {
+  display: inline;
+  margin-left: 0.35em;
+  vertical-align: -0.12em;
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 0.82em;
+  line-height: 0;
+  transition: color 0.2s;
+}
+.testimony-yt:hover { color: var(--text); }
+.testimony-yt .basicons { display: inline-block; }
 
 /* ═══════════════════════ CONTACT ═══════════════════════ */
-.contact-section { text-align: center; padding-top: 80px; }
-.contact-section h2 { font-size: 1.6rem; margin-bottom: 16px; }
-.contact-links { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; }
+.contact-section { margin-top: 0; text-align: left; }
+.contact-links { display: flex; gap: 24px; justify-content: flex-start; flex-wrap: wrap; margin-top: 4px; }
 .contact-links a { color: var(--text-dim); font-size: 0.9rem; font-weight: 300; transition: color 0.2s; border-bottom: 1px solid var(--border); padding-bottom: 2px; }
 .contact-links a:hover { color: var(--text); }
 
@@ -395,14 +458,9 @@ a { color: inherit; text-decoration: none; }
   .home-left { padding-right: 0; border-right: none; border-bottom: 1px solid var(--border); padding-bottom: 40px; margin-bottom: 40px; }
   .home-right { padding-left: 0; }
   .home-left .portrait-section { margin-top: 8px; }
-}
-/* Two-column: tiny band where portrait block sits low — pull profile (labels + photo) up */
-@media (min-width: 1529px) and (max-width: 1560px) {
-  .home-left .portrait-section { margin-top: 60px; }
-}
-/* Two-column: tiny band where portrait block sits low — pull profile (labels + photo) up */
-@media (min-width: 1400px) and (max-width: 1528px) {
-  .home-left .portrait-section { margin-top: 75px; }
+  /* Match wide-layout optical alignment: SVG sat slightly high vs Basicons once column layout kicks in */
+  .social-icons { align-items: center; }
+  .social-icons a .social-x-icon { transform: translateY(2px); }
 }
 /* Two-column home: left column narrows — cloud was crowding the name around ~1500px */
 @media (max-width: 1528px) {
@@ -516,15 +574,26 @@ a { color: inherit; text-decoration: none; }
 @media (min-width: 1401px) {
   .portrait-icons-row { display: flex; }
   .portrait-icons { display: none; }
-  /* Space above “interactive stack” on wide / two-column layout */
-  .kb-section { margin-top: 22px; }
+  /* Tuned to ≥ worst-case wrapped height so portrait top stays stable; adjust if copy/layout changes */
+  .home-left-top {
+    min-height: 440px;
+    margin-top: 10px;
+  }
+  .home-right-top { min-height: 300px; }
+  .home-left .portrait-section { margin-top: 18px; }
+  .home-right .section-title { margin-top: 32px; }
+  .kb-section { margin-top: 24px; }
+}
+/* Two-column mid band: right column (experiences + keyboard) stacks taller — nudge portrait down to stay visually aligned */
+@media (max-width: 1852px) and (min-width: 1401px) {
+  .home-left .portrait-section { margin-top: 40px; }
 }
 </style>
 </head>
 <body>
 
 <!-- ═══════════════════════ SPLASH ═══════════════════════ -->
-<div id="splash"><div class="splash-name">kory zhang</div></div>
+<div id="splash"><div class="splash-name">kory zhang!</div></div>
 
 <!-- ═══════════════════════ TOPBAR ═══════════════════════ -->
 <nav class="topbar">
@@ -560,6 +629,8 @@ a { color: inherit; text-decoration: none; }
   </div>
 </div>
 
+<main class="site-main">
+
 <!-- ═══════════════════════════════════════════════════════════════
      HOME PAGE
      ═══════════════════════════════════════════════════════════════ -->
@@ -567,11 +638,12 @@ a { color: inherit; text-decoration: none; }
 <div class="home-layout">
   <div class="home-left">
 
+  <div class="home-left-top">
   <div class="social-icons anim">
-    <a href="https://instagram.com" target="_blank" title="Instagram"><i class="basicons" icon-name="instagram"></i></a>
-    <a href="https://linkedin.com" target="_blank" title="LinkedIn"><i class="basicons" icon-name="linkedin"></i></a>
-    <a href="mailto:kory@example.com" title="Email"><i class="basicons" icon-name="mail"></i></a>
-    <a href="https://tiktok.com" target="_blank" title="TikTok"><i class="basicons" icon-name="tiktok"></i></a>
+    <a href="https://www.instagram.com/k.oryy/" target="_blank" rel="noopener noreferrer" title="Instagram"><i class="basicons" icon-name="instagram"></i></a>
+    <a href="https://www.linkedin.com/in/koryz/" target="_blank" rel="noopener noreferrer" title="LinkedIn"><i class="basicons" icon-name="linkedin"></i></a>
+    <a class="social-icon-x" href="https://x.com/koryzhangg" target="_blank" rel="noopener noreferrer" title="X (Twitter)" aria-label="X"><svg class="social-x-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+    <a href="https://www.tiktok.com/@kordawgg" target="_blank" rel="noopener noreferrer" title="TikTok"><i class="basicons" icon-name="tiktok"></i></a>
   </div>
 
   <div class="hero-header anim anim-delay-1">
@@ -598,6 +670,7 @@ a { color: inherit; text-decoration: none; }
     <i class="basicons" icon-name="translate"></i>
     <i class="basicons" icon-name="target-crosshair-1"></i>
   </div>
+  </div><!-- end home-left-top -->
 
   <div class="portrait-section">
     <div class="personal-info anim">
@@ -621,6 +694,7 @@ a { color: inherit; text-decoration: none; }
   </div><!-- end home-left -->
   <div class="home-right">
 
+  <div class="home-right-top">
   <h2 class="section-title anim">experiences</h2>
   <div class="exp-grid">
     <div class="exp-card anim">
@@ -665,6 +739,7 @@ a { color: inherit; text-decoration: none; }
       <p class="exp-desc">Built Python tooling for data visualization and cluster analysis, and developed a React-based API platform with the R&D team</p>
     </div>
   </div>
+  </div><!-- end home-right-top -->
 
   <!-- ══════════ KEYBOARD (inlined) ══════════ -->
   <div class="kb-section anim">
@@ -812,7 +887,7 @@ a { color: inherit; text-decoration: none; }
 <div class="page" id="page-testimony">
   <div class="page-title anim"><span>// </span>testimony</div>
   <div class="testimony-text">
-    <p class="anim">My name is Kory and today I'll be sharing my testimony, what God has done throughout my life, and how He has led me to faith.</p>
+    <p class="anim">"My name is Kory and today I'll be sharing my testimony, what God has done throughout my life, and how He has led me to faith.</p>
     <p class="anim">Church has always been a part of my life. From attending Sunday Service with my family, to going on youth retreats, I was actively involved within the community.</p>
     <p class="anim">However, this attendance was the extent of my faith. As a kid, I could merely name a few books in the Bible or explain what the gospel was. I often questioned my beliefs and why I went to church. But due to a lack of interest, I pushed these doubts aside. Christianity to me, was more about community.</p>
     <p class="anim">During highschool, my faith grew even weaker as I started to focus on my future and how to be successful. I thought I had it all figured out: get into a good college, get a good job, make money, and enjoy life. However, this self-reliant mindset became one I was familiar with, and I lost sight of what god I achieved, I was never satisfied.</p>
@@ -820,27 +895,29 @@ a { color: inherit; text-decoration: none; }
     <p class="anim">As an unsuspecting result, I felt even more so out of touch with deep depression and anxiety. By the grace of God, the rest of my life is the lowest and became my source of strength and comfort. I found myself at Beacon Community Church in Irvine, seeking the love and wisdom of the Lord. And it was there that I encountered the truth — that God was not simply a distant figure, but rather a personal God: one who loved me deeply, one who sent His only Son to die for sinners who lifted me up and brought me to who I am today. I found myself in the Lord's embrace.</p>
     <p class="anim">The truth is this, God, our good and loving ruler, created us and the world. He has given us all that we need for this life and for the next. However, we began to live our own lives and rightly deserve eternal death. But, in love, God sent His Son, Jesus Christ, to die on the cross, taking the punishment we deserved, so that through faith in Him we might have eternal life. In our place, he suffered greatly and took our judgement upon himself by dying on a cross. But on the third day, God raised Jesus from death, and by his grace, granting us the decision to either continue our rebellion, or to trust in Christ alone for the forgiveness of our sins.</p>
     <p class="anim">This truth, the gospel, didn't become clear to me until I learned the forgiveness of God. While I was separated from God by my sin, I was also subject to the wrath of God. But He is merciful and offers atonement through the sacrifice of His own Son. And this truth brings me more hope and peace compared to the temporary things I was gaining in the world.</p>
-    <p class="anim">If you are a non-believer in this room today, I encourage you to take a step of faith and explore this truth for yourself. For a long time, I lived my life like I didn't need God, and was constantly chasing the desires of my heart. Matthew 6:33 says, Jesus said in His Sermon on the Mount "But seek first the kingdom of God and his righteousness, and all these things will be added to you."</p>
-    <p class="anim">It is only because of God, that we can have and experience anything. So I exhort myself for the rest of my life, to be self-less, and exhort my joy in depletion. As I strive to live with Christ as my Lord and Savior, I humbly submit my testimony to be a reminder of the love of God. Thank you.</p>
+    <p class="anim">If you are a non-believer in this room today, I encourage you to take a step of faith and explore this truth for yourself. For a long time, I lived my life like I didn't need God, and was constantly chasing the desires of my heart. Matthew 6:33 says, Jesus said in His Sermon on the Mount 'But seek first the kingdom of God and his righteousness, and all these things will be added to you.'</p>
+    <p class="anim">It is only because of God, that we can have and experience anything. So I exhort myself for the rest of my life, to be self-less, and exhort my joy in depletion. As I strive to live with Christ as my Lord and Savior, I humbly submit my testimony to be a reminder of the love of God. Thank you."<a class="testimony-yt" href="https://youtu.be/TE_sTtacp4E" target="_blank" rel="noopener noreferrer" title="Watch on YouTube" aria-label="Watch testimony on YouTube"><i class="basicons" icon-name="youtube" aria-hidden="true"></i></a></p>
   </div>
 </div>
 
 <!-- ═══════════════════════ CONTACT PAGE ═══════════════════════ -->
 <div class="page" id="page-contact">
+  <div class="page-title anim"><span>// </span>contact</div>
   <div class="contact-section">
-    <h2 class="anim">get in touch</h2>
     <div class="contact-links anim anim-delay-1">
-      <a href="https://linkedin.com" target="_blank"><i class="basicons" icon-name="linkedin"></i> LinkedIn</a>
-      <a href="https://instagram.com" target="_blank"><i class="basicons" icon-name="instagram"></i> Instagram</a>
-      <a href="mailto:kory@example.com"><i class="basicons" icon-name="mail"></i> Email</a>
+      <a href="https://www.linkedin.com/in/koryz/" target="_blank" rel="noopener noreferrer"><i class="basicons" icon-name="linkedin"></i> LinkedIn</a>
+      <a href="https://www.instagram.com/k.oryy/" target="_blank" rel="noopener noreferrer"><i class="basicons" icon-name="instagram"></i> Instagram</a>
+      <a href="mailto:koryy.zhang@gmail.com"><i class="basicons" icon-name="mail"></i> Email</a>
     </div>
   </div>
 </div>
 
+</main>
+
 <!-- ═══════════════════════════════════════════════════════════════
      GLOBAL FOOTER — full viewport width, on every page
      ═══════════════════════════════════════════════════════════════ -->
-<footer class="site-footer anim" id="globalFooter">
+<footer class="site-footer" id="globalFooter">
   <div class="footer-inner">
 
     <!-- Orion constellation -->
@@ -893,9 +970,9 @@ a { color: inherit; text-decoration: none; }
     <!-- Socials col -->
     <div class="footer-col">
       <h4>Socials</h4>
-      <a href="https://linkedin.com" target="_blank">LINKEDIN</a>
-      <a href="https://instagram.com" target="_blank">INSTAGRAM</a>
-      <a href="https://tiktok.com" target="_blank">TIKTOK</a>
+      <a href="https://www.linkedin.com/in/koryz/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
+      <a href="https://www.instagram.com/k.oryy/" target="_blank" rel="noopener noreferrer">INSTAGRAM</a>
+      <a href="https://www.tiktok.com/@kordawgg" target="_blank" rel="noopener noreferrer">TIKTOK</a>
       <a href="https://facebook.com" target="_blank">FACEBOOK</a>
     </div>
 
@@ -920,11 +997,13 @@ window.addEventListener('load', () => {
 });
 
 /* ═══════════════════════ SCROLL ANIM ═══════════════════════ */
+let animObserver = null;
 function initScrollObserver() {
-  const observer = new IntersectionObserver((entries) => {
+  if (animObserver) animObserver.disconnect();
+  animObserver = new IntersectionObserver((entries) => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
-  document.querySelectorAll('.anim').forEach(el => observer.observe(el));
+  document.querySelectorAll('.anim').forEach(el => animObserver.observe(el));
 }
 
 /* ═══════════════════════ NAV ═══════════════════════ */
@@ -948,27 +1027,23 @@ function navigateTo(pageId) {
   const next = document.getElementById('page-' + pageId);
   if (!next || next === cur || isTransitioning) return;
   isTransitioning = true;
+  const OUT_MS = 160;
+  const IN_MS = 180;
 
-  // Phase 1: fade-swipe current page out
   cur.classList.add('fade-out');
 
   setTimeout(() => {
-    // Phase 2: swap pages
     cur.classList.remove('active', 'fade-out');
     next.classList.add('active', 'fade-in');
     window.scrollTo(0, 0);
-
-    // reset scroll animations
     next.querySelectorAll('.anim').forEach(el => el.classList.remove('visible'));
-    document.getElementById('globalFooter').classList.remove('visible');
 
-    // Phase 3: after fade-in completes
     setTimeout(() => {
       next.classList.remove('fade-in');
       initScrollObserver();
       isTransitioning = false;
-    }, 460);
-  }, 360);
+    }, IN_MS);
+  }, OUT_MS);
 }
 document.getElementById('exploreProjBtn').addEventListener('click', () => navigateTo('projects'));
 
