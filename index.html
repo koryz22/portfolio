@@ -3,9 +3,10 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>kory zhang — portfolio</title>
+<title>Finding Kory</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@500;600;700&display=swap" rel="stylesheet" />
 <link href="https://basicons.gitlab.io/i/@/icons.css" rel="stylesheet" crossorigin />
 <style>
 /* ═══════════════════════ RESET & VARIABLES ═══════════════════════ */
@@ -24,14 +25,60 @@
 }
 
 [data-theme="light"] {
-  --bg: #f0f1f7;
-  --bg-card: #e4e5ef;
-  --bg-topbar: rgba(240,241,247,0.94);
-  --text: #1b1d2a;
-  --text-dim: #555;
-  --text-dimmer: #888;
-  --accent: #2a2c3e;
-  --border: #c8c9d6;
+  /* Warm cream page (readable on white browser chrome) */
+  --bg: #ebe4d9;
+  --bg-card: #f5f0e8;
+  --bg-topbar: rgba(235, 228, 217, 0.94);
+  --text: #2a2826;
+  --text-dim: #58544f;
+  --text-dimmer: #7a756d;
+  --accent: #b07867;
+  --border: #d1c9bd;
+  /* Cream keyboard case; outer caps use --text like titles */
+  --kb-plate: #e3dbd0;
+  --kb-plate-border: #c9c1b5;
+  --kb-alpha: #faf8f5;
+  --kb-silver-cap: #e3dfd6;
+  --kb-rose-cap: #d8b4a6;
+  --kb-rose-cap-border: #b89586;
+  --kb-rose-cap-deep: #9a7868;
+  --info-plate: #ded8ce;
+  --footer-plate: #2f3138;
+}
+/* Light: cream page + cream keyboard; footer stays dark for constellation */
+[data-theme="light"] .kb-layout-desktop .keyboard {
+  background: var(--kb-plate);
+  border-color: var(--kb-plate-border);
+}
+[data-theme="light"] .kb-mod {
+  background: var(--kb-plate);
+  border-color: var(--kb-plate-border);
+}
+[data-theme="light"] .info-panel {
+  background: var(--info-plate);
+  border-color: var(--kb-plate-border);
+  color: var(--text);
+}
+[data-theme="light"] .info-panel .tag { color: var(--text-dimmer); }
+[data-theme="light"] .info-panel .val { color: var(--text); }
+[data-theme="light"] .info-panel .desc { color: var(--text-dim); }
+[data-theme="light"] .site-footer {
+  background: var(--footer-plate);
+  border-top-color: var(--kb-plate-border);
+}
+[data-theme="light"] .footer-divider {
+  background: var(--kb-plate-border);
+}
+[data-theme="light"] .kb-label {
+  color: var(--text-dimmer);
+}
+[data-theme="light"] .hero-name,
+[data-theme="light"] .section-title,
+[data-theme="light"] .page-title,
+[data-theme="light"] .page-title span,
+[data-theme="light"] .typewriter-wrap,
+[data-theme="light"] .exp-title {
+  color: var(--text);
 }
 
 html {
@@ -51,15 +98,15 @@ body {
   overflow-x: hidden;
   transition: background 0.4s, color 0.4s;
 }
-/* Fills viewport under topbar so short pages don’t leave gap below the footer */
+/* Main keeps to content height so the gap above the footer does not grow with the viewport */
 .site-main {
-  flex: 1 0 auto;
+  flex: 0 1 auto;
   display: flex;
   flex-direction: column;
   width: 100%;
 }
 .site-main > .page {
-  flex: 1 0 auto;
+  flex: 0 1 auto;
 }
 a { color: inherit; text-decoration: none; }
 
@@ -101,29 +148,168 @@ a { color: inherit; text-decoration: none; }
   to { opacity: 1; transform: scale(1); }
 }
 
-/* ═══════════════════════ TOPBAR ═══════════════════════ */
+/* ═══════════════════════ TOPBAR (fixed bar; hamburger hidden while dropdown open) ═══════════════════════ */
 .topbar {
-  position: fixed; top: 0; left: 0; right: 0; height: 48px;
-  background: var(--bg-topbar); backdrop-filter: blur(12px);
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 32px; z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 48px;
+  background: var(--bg-topbar);
+  backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  z-index: 1000;
   border-bottom: 1px solid var(--border);
   transition: background 0.4s;
+}
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex: 0 0 auto;
+  justify-content: flex-end;
+  min-width: 0;
+}
+.topbar-nav {
+  display: flex;
+  gap: 18px;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  min-width: 0;
+  flex: 0 1 auto;
+}
+/* Closed topbar: extra space after hamburger so tabs sit a bit right */
+.topbar-left .topbar-nav {
+  margin-left: 12px;
 }
 .hamburger {
   background: none; border: none; color: var(--text-dim);
   font-size: 22px; cursor: pointer; padding: 4px; transition: color 0.2s;
   letter-spacing: 2px; transform: scaleX(1.4); transform-origin: left;
+  flex-shrink: 0;
 }
-.topbar-right { display: flex; align-items: center; gap: 24px; }
-.topbar-nav { display: flex; gap: 20px; }
+.hamburger:hover { color: var(--text); }
+body.nav-menu-open #menuBtn {
+  display: none !important;
+}
+/* Full-bleed menu: hide top bar stripe so list starts at top of viewport */
+body.nav-menu-open .topbar {
+  height: 0;
+  min-height: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+  overflow: hidden;
+  pointer-events: none;
+}
+body.nav-menu-open .topbar-nav {
+  display: none !important;
+}
+body.nav-menu-open #topbarClock {
+  display: none !important;
+}
+body.nav-menu-open #themeToggle {
+  display: none !important;
+}
 .topbar-nav a {
-  font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 400;
-  color: var(--text-dimmer); cursor: pointer; transition: color 0.2s;
-  letter-spacing: 0.03em;
+  font-family: 'Inter', sans-serif;
+  font-size: 11.5px;
+  font-weight: 400;
+  color: var(--text-dimmer);
+  cursor: pointer;
+  transition: color 0.2s;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
 }
 .topbar-nav a:hover { color: var(--text); }
-.hamburger:hover { color: var(--text); }
+@media (max-width: 800px) {
+  .topbar-nav { display: none; }
+}
+@media (min-width: 801px) and (max-width: 1100px) {
+  .topbar { padding: 0 20px; }
+  .topbar-nav { gap: 14px; }
+  .topbar-nav a { font-size: 11px; letter-spacing: 0.01em; }
+  .topbar-clock-time { font-size: 15px; }
+}
+/* Watch-style stack: time over date + temp */
+.topbar-clock {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  text-align: right;
+  line-height: 1.05;
+  font-family: 'Inter', system-ui, sans-serif;
+  margin-left: 8px;
+}
+.topbar-clock-time {
+  display: inline-flex;
+  align-items: baseline;
+  flex-wrap: nowrap;
+  font-family: 'Orbitron', system-ui, sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: 'tnum' 1;
+  color: var(--text);
+  text-transform: uppercase;
+}
+.topbar-clock-time.topbar-clock-time--plain .topbar-clock-colon {
+  display: none;
+}
+.topbar-clock-colon {
+  margin: 0 0.02em;
+  animation: topbar-colon-blink 2s step-end infinite;
+}
+@keyframes topbar-colon-blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0.2; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .topbar-clock-colon {
+    animation: none;
+    opacity: 1;
+  }
+}
+[data-theme="light"] .topbar-clock-time {
+  letter-spacing: 0.1em;
+}
+.topbar-clock-sub {
+  display: block;
+  margin-top: 2px;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-dimmer);
+}
+.topbar-clock-sub .topbar-clock-sep {
+  opacity: 0.45;
+  font-weight: 400;
+  padding: 0 0.35em;
+}
+.topbar-clock-sub .topbar-clock-temp {
+  color: var(--text-dim);
+  font-weight: 600;
+}
+.topbar-right .topbar-clock {
+  margin-left: 0;
+  margin-right: 4px;
+}
 .theme-toggle {
   font-family: 'Inter', sans-serif; font-size: 13px;
   color: var(--text-dimmer); cursor: pointer; user-select: none;
@@ -133,33 +319,133 @@ a { color: inherit; text-decoration: none; }
 .theme-toggle .active-theme { color: var(--text); opacity: 1; }
 .theme-toggle .inactive-theme { color: var(--text-dimmer); opacity: 0.5; }
 
-/* ═══════════════════════ NAV OVERLAY ═══════════════════════ */
-.nav-overlay {
-  position: fixed; inset: 0; background: var(--bg); z-index: 999;
-  display: flex; flex-direction: column; justify-content: center;
-  padding: 0 0 80px 0; opacity: 0; pointer-events: none;
-  transition: opacity 0.35s ease;
+/* ═══════════════════════ NAV DROPDOWN (full height from top when open; topbar collapsed) ═══════════════════════ */
+.nav-dropdown {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  padding-top: calc(env(safe-area-inset-top, 0px) + 28px);
+  max-height: calc(100vh - env(safe-area-inset-bottom, 0px));
+  max-height: calc(100dvh - env(safe-area-inset-bottom, 0px));
+  box-sizing: border-box;
+  z-index: 1001;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  backdrop-filter: blur(14px);
+  border: none;
+  border-radius: 0;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+  opacity: 0;
+  transform: translateY(-6px);
+  visibility: hidden;
+  pointer-events: none;
+  overflow-x: hidden;
+  overflow-y: auto;
+  transition:
+    opacity 0.22s ease,
+    transform 0.24s cubic-bezier(0.34, 1.15, 0.55, 1),
+    visibility 0.24s;
 }
-.nav-overlay.open { opacity: 1; pointer-events: all; }
-.nav-overlay .nav-item {
-  display: block; font-size: 1.4rem; font-weight: 400;
-  color: var(--text-dim); padding: 18px 48px;
-  border-bottom: 1px solid var(--border); cursor: pointer; transition: color 0.2s;
+.nav-dropdown.open {
+  opacity: 1;
+  transform: translateY(0);
+  visibility: visible;
+  pointer-events: all;
 }
-.nav-overlay .nav-item:first-child { border-top: 1px solid var(--border); }
-.nav-overlay .nav-item:hover { color: var(--text); }
-.nav-bottom-bar {
-  position: absolute; bottom: 0; left: 0; right: 0; height: 48px;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 32px; border-top: 1px solid var(--border);
+.nav-dropdown-body {
+  flex: 0 0 auto;
+  overflow-x: hidden;
+  overflow-y: visible;
+  overscroll-behavior: contain;
+  /* Inset so row :hover backgrounds aren’t clipped by .nav-dropdown overflow-y */
+  padding: 8px 32px 12px;
+}
+.nav-dropdown-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  text-transform: lowercase;
+  color: var(--text-dim);
+  background: none;
+  border: none;
+  border-bottom: 1px solid var(--border);
+  padding: 9px 8px;
+  cursor: pointer;
+  transition: color 0.15s, background 0.15s;
+}
+.nav-dropdown-item:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+.nav-dropdown-item:hover {
+  color: var(--text);
+  background: rgba(128, 128, 160, 0.06);
+}
+.nav-dropdown-bottom {
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 8px 32px max(10px, env(safe-area-inset-bottom, 0px));
+}
+.nav-dropdown-bottom .hamburger.nav-dropdown-close {
+  transform: scaleX(1.4);
+  transform-origin: left;
+  flex-shrink: 0;
+}
+.nav-dropdown-bottom-right {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 14px;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.nav-dropdown-time-corner {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  pointer-events: none;
+}
+.nav-dropdown-time-corner .topbar-clock {
+  align-items: flex-end;
+  text-align: right;
+  margin: 0;
+  pointer-events: none;
+}
+.nav-dropdown-time-corner .topbar-clock-time {
+  font-size: clamp(13px, 2.8vw, 16px);
+}
+.nav-dropdown-time-corner .topbar-clock-sub {
+  font-size: 8px;
+}
+.nav-dropdown-bottom .theme-toggle {
+  font-size: 12px;
+  flex-shrink: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .nav-dropdown {
+    transition: opacity 0.15s ease;
+  }
+  .nav-dropdown.open {
+    transform: translateY(0);
+  }
 }
 
 /* ═══════════════════════ PAGES ═══════════════════════ */
 .page {
-  display: none; padding: 80px 48px 48px;
+  display: none; padding: 80px 48px 56px;
   max-width: 1400px; margin: 0 auto;
 }
-#page-home { max-width: 100%; padding: 56px 64px 0; overflow: hidden; }
+#page-home { max-width: 100%; padding: 56px 64px 56px; overflow: hidden; }
 .page.active { display: block; }
 /* Subpages: centered column; flex only when .active (don’t override display:none on hidden pages) */
 .page.active:not(#page-home) {
@@ -173,11 +459,10 @@ a { color: inherit; text-decoration: none; }
 
 /* ═══════════════════════ HOME TWO-COLUMN ═══════════════════════ */
 .home-layout {
-  display: flex; gap: 0; align-items: stretch; min-height: calc(100vh - 56px);
+  display: flex; gap: 0; align-items: stretch;
 }
 .home-left {
   flex: 1; padding-right: 48px;
-  border-right: 1px solid var(--border);
   display: flex; flex-direction: column; justify-content: flex-start;
 }
 .home-right {
@@ -191,16 +476,69 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* ═══════════════════════ SCROLL ANIM ═══════════════════════ */
+/* Default: simple fade. Home hero uses .anim-rise; experiences use .anim-exp */
 .anim {
-  opacity: 0; transform: translateY(24px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
+  --td: calc(var(--tier, 0s) + var(--d, 0s));
+  opacity: 0;
+  transition: opacity 1.05s cubic-bezier(0.33, 0.02, 0.2, 1) var(--td);
 }
-.anim.visible { opacity: 1; transform: translateY(0); }
-.anim-delay-1 { transition-delay: 0.1s; }
-.anim-delay-2 { transition-delay: 0.2s; }
-.anim-delay-3 { transition-delay: 0.3s; }
-.anim-delay-4 { transition-delay: 0.4s; }
-.anim-delay-5 { transition-delay: 0.5s; }
+.anim.visible { opacity: 1; }
+.anim-delay-1 { --d: 0.1s; }
+.anim-delay-2 { --d: 0.2s; }
+.anim-delay-3 { --d: 0.3s; }
+.anim-delay-4 { --d: 0.4s; }
+.anim-delay-5 { --d: 0.5s; }
+.anim-seq-profile { --tier: 0s; }
+.anim-seq-exp { --tier: 0.38s; }
+/* Profile / hero — lift up + fade */
+.anim.anim-rise {
+  transform: translateY(24px);
+  transition:
+    opacity 0.7s ease var(--td),
+    transform 0.7s ease var(--td);
+}
+.anim.anim-rise.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* Keyboard — quicker, different feel: subtle zoom + settle (not the same as profile) */
+.anim.anim-kb {
+  transform: scale(0.97) translateY(10px);
+  transition:
+    opacity 0.48s cubic-bezier(0.22, 1, 0.36, 1) var(--td),
+    transform 0.48s cubic-bezier(0.22, 1, 0.36, 1) var(--td);
+}
+.anim.anim-kb.visible {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}
+/* Experiences — slide in from the right, one after another */
+.anim.anim-exp {
+  transform: translateX(28px);
+  transition:
+    opacity 0.72s cubic-bezier(0.22, 1, 0.36, 1) var(--td),
+    transform 0.72s cubic-bezier(0.22, 1, 0.36, 1) var(--td);
+}
+.anim.anim-exp.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+.exp-grid > .exp-card:nth-child(1) { --d: 0.08s; }
+.exp-grid > .exp-card:nth-child(2) { --d: 0.2s; }
+.exp-grid > .exp-card:nth-child(3) { --d: 0.34s; }
+.exp-grid > .exp-card:nth-child(4) { --d: 0.48s; }
+@media (prefers-reduced-motion: reduce) {
+  .anim {
+    opacity: 1;
+    transition: none;
+  }
+  .anim.anim-rise,
+  .anim.anim-rise.visible,
+  .anim.anim-exp,
+  .anim.anim-exp.visible {
+    transform: none;
+  }
+}
 
 /* ═══════════════════════ HOME ═══════════════════════ */
 .social-icons { display: flex; gap: 8px; margin-top: 15px; margin-bottom: -14px; }
@@ -254,6 +592,16 @@ a { color: inherit; text-decoration: none; }
 .explore-btn:focus, .explore-btn:active { outline: none; box-shadow: none; }
 .explore-btn .arrow { font-size: 1rem; transition: transform 0.2s; }
 .explore-btn:hover .arrow { transform: translateX(4px); }
+[data-theme="light"] .explore-btn {
+  background: #d8b4a6;
+  color: #2a201c;
+  border: 1px solid #b89586;
+}
+[data-theme="light"] .explore-btn:hover {
+  background: #c9a090;
+  color: #1a1513;
+  border-color: #9a7868;
+}
 
 .portrait-section { display: flex; gap: 0; margin-top: 20px; margin-bottom: 0; align-items: stretch; }
 .personal-info {
@@ -270,13 +618,26 @@ a { color: inherit; text-decoration: none; }
 }
 .portrait-container { position: relative; display: flex; align-items: flex-start; gap: 6px; }
 .portrait-clip {
+  position: relative;
   width: 340px; height: 340px;
   border-radius: 12px; overflow: hidden; background: var(--bg-card); flex-shrink: 0;
 }
-.portrait-img {
+.portrait-clip .portrait-img {
+  display: block;
+  position: absolute;
+  inset: 0;
   width: 100%; height: 100%;
   object-fit: cover; object-position: center 55%;
   transform: scale(1.15); transform-origin: center 55%;
+}
+.portrait-clip .portrait-img.portrait-img--theme-light {
+  display: none;
+}
+[data-theme="light"] .portrait-clip .portrait-img--theme-dark {
+  display: none;
+}
+[data-theme="light"] .portrait-clip .portrait-img--theme-light {
+  display: block;
 }
 .portrait-icons { display: flex; flex-direction: column; gap: 6px; padding-top: 4px; }
 .portrait-icons i { color: var(--text-dim); font-size: 20px; transition: color 0.2s; cursor: pointer; }
@@ -284,6 +645,57 @@ a { color: inherit; text-decoration: none; }
 .portrait-icons-row { display: none; gap: 16px; margin-bottom: 12px; }
 .portrait-icons-row i { color: var(--text-dim); font-size: 20px; transition: color 0.2s; cursor: pointer; }
 .portrait-icons-row i:hover { color: var(--text); }
+
+/* Portrait interest icons — smooth wave through crest (row: up, column: right) */
+@keyframes iconWaveY {
+  0% {
+    transform: translateY(0);
+    animation-timing-function: cubic-bezier(0.37, 0, 0.63, 1);
+  }
+  50% {
+    transform: translateY(-6px);
+    animation-timing-function: cubic-bezier(0.37, 0, 0.63, 1);
+  }
+  100% { transform: translateY(0); }
+}
+@keyframes iconWaveX {
+  0% {
+    transform: translateX(0);
+    animation-timing-function: cubic-bezier(0.37, 0, 0.63, 1);
+  }
+  50% {
+    transform: translateX(5px);
+    animation-timing-function: cubic-bezier(0.37, 0, 0.63, 1);
+  }
+  100% { transform: translateX(0); }
+}
+.portrait-icons-row.icon-wave i {
+  animation: iconWaveY 0.68s both;
+  will-change: transform;
+}
+.portrait-icons.icon-wave i {
+  animation: iconWaveX 0.68s both;
+  will-change: transform;
+}
+.portrait-icons-row.icon-wave i:nth-child(1) { animation-delay: 0s; }
+.portrait-icons-row.icon-wave i:nth-child(2) { animation-delay: 0.09s; }
+.portrait-icons-row.icon-wave i:nth-child(3) { animation-delay: 0.18s; }
+.portrait-icons-row.icon-wave i:nth-child(4) { animation-delay: 0.27s; }
+.portrait-icons-row.icon-wave i:nth-child(5) { animation-delay: 0.36s; }
+.portrait-icons-row.icon-wave i:nth-child(6) { animation-delay: 0.45s; }
+.portrait-icons.icon-wave i:nth-child(1) { animation-delay: 0s; }
+.portrait-icons.icon-wave i:nth-child(2) { animation-delay: 0.1s; }
+.portrait-icons.icon-wave i:nth-child(3) { animation-delay: 0.2s; }
+.portrait-icons.icon-wave i:nth-child(4) { animation-delay: 0.3s; }
+.portrait-icons.icon-wave i:nth-child(5) { animation-delay: 0.4s; }
+.portrait-icons.icon-wave i:nth-child(6) { animation-delay: 0.5s; }
+@media (prefers-reduced-motion: reduce) {
+  .portrait-icons-row.icon-wave i,
+  .portrait-icons.icon-wave i {
+    animation: none !important;
+    will-change: auto;
+  }
+}
 
 /* ═══════════════════════ EXPERIENCES ═══════════════════════ */
 .section-title { font-size: 1.8rem; font-weight: 700; margin-bottom: 16px; }
@@ -293,6 +705,11 @@ a { color: inherit; text-decoration: none; }
 .exp-num { font-size: 0.82rem; color: var(--text-dim); font-weight: 500; }
 .exp-title { font-size: 0.95rem; font-weight: 600; }
 .exp-tag { display: inline-block; background: rgba(74,222,128,0.15); color: var(--tag-green); font-size: 0.68rem; padding: 2px 8px; border-radius: 10px; font-weight: 500; }
+[data-theme="light"] .exp-tag {
+  background: rgba(176, 120, 103, 0.22);
+  color: #5a3028;
+  border: 1px solid rgba(176, 120, 103, 0.35);
+}
 .exp-meta { display: flex; gap: 12px; flex-wrap: wrap; font-size: 0.75rem; color: var(--text-dimmer); margin-bottom: 8px; }
 .exp-meta span { display: flex; align-items: center; gap: 4px; }
 .exp-meta i { font-size: 0.75rem; color: var(--text-dimmer); }
@@ -300,32 +717,141 @@ a { color: inherit; text-decoration: none; }
 
 /* ═══════════════════════ KEYBOARD (inline) ═══════════════════════ */
 .kb-section { margin-bottom: 0; }
-.kb-label { font-family: 'Space Mono', monospace; font-size: 11px; color: #aaa; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 1rem; }
+/* Fade only — same duration/easing as .anim-rise (profile), same stagger base as .anim-seq-profile */
+.kb-section.anim { transition: opacity 0.7s ease var(--td); }
+.kb-label {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 11px;
+  font-weight: 500;
+  color: #aaa;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
 .legend { display: flex; gap: 16px; margin-bottom: 12px; flex-wrap: wrap; }
-.legend-item { display: flex; align-items: center; gap: 6px; font-size: 10px; color: #aaa; letter-spacing: 0.05em; }
-.legend-dot { width: 8px; height: 8px; border-radius: 2px; }
-.dot-silver { background: #7a7a7a; }
-.dot-white { background: #e8e8e8; }
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+}
+/* Legend swatches — light grey languages vs almost-white tools */
+.legend-item.legend-lang { color: #b0b0b8; }
+.legend-item.legend-tools { color: #d8d8e0; }
+.legend-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+.dot-lang { background: #b4b4bc; border: 1px solid rgba(255,255,255,0.12); }
+.dot-tools { background: #e8e8ee; border: 1px solid rgba(0,0,0,0.18); }
+[data-theme="light"] .legend-item.legend-lang { color: #4e4b47; }
+[data-theme="light"] .legend-item.legend-tools { color: #5c5853; }
+[data-theme="light"] .dot-lang { background: var(--kb-silver-cap); border-color: rgba(0,0,0,0.12); }
+[data-theme="light"] .dot-tools { background: var(--kb-alpha); border-color: rgba(0,0,0,0.1); }
 
-.keyboard { background: #1e1e1e; border-radius: 14px; padding: 16px; width: 100%; border: 0.5px solid #3a3a3a; overflow-x: auto; }
+/* Full + split keyboards share this plate + keycap look (split uses slightly smaller caps below) */
+.kb-layout-desktop .keyboard {
+  background: #080808;
+  border-radius: 14px;
+  padding: 14px 16px;
+  width: 100%;
+  border: 1px solid #262626;
+  overflow-x: visible;
+  overflow-y: visible;
+}
+.keyboard { border-radius: 14px; width: 100%; }
 .kb-row { display: flex; gap: 5px; margin-bottom: 5px; justify-content: center; }
 .key {
-  background: #2a2a2a; border: 0.5px solid #444; border-bottom: 2.5px solid #111;
-  border-radius: 5px; color: #777; font-family: 'Space Mono', monospace; font-size: 10px;
-  cursor: pointer; display: flex; flex-direction: column; align-items: center;
-  justify-content: center; height: 44px; min-width: 44px; flex: 0 0 44px;
-  transition: background 0.12s, color 0.12s, transform 0.08s; user-select: none;
+  background: #c8c8c8;
+  color: #1a1a1a;
+  border: 0.5px solid #8a8a8a;
+  border-bottom: 2.5px solid #5c5c5c;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 10px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  min-width: 42px;
+  flex: 0 0 42px;
+  transition: background 0.12s, color 0.12s, transform 0.08s, box-shadow 0.12s;
+  user-select: none;
 }
-.key:hover { background: #3a3a3a; color: #ccc; }
+.key:hover { background: #d6d6d6; color: #000; }
 .key:active { transform: translateY(1px); border-bottom-width: 1px; }
-.key.active { background: #3a3a3a; color: #fff; border-color: #aaa; }
-.key.lit-silver { background: #7a7a7a; color: #f0f0f0; border-color: #999; border-bottom-color: #555; }
-.key.lit-silver .subtext { color: #ccc; }
-.key.lit-silver.active { background: #9a9a9a; color: #fff; border-color: #bbb; }
-.key.lit-white { background: #e8e8e8; color: #1a1a1a; border-color: #bbb; border-bottom-color: #999; }
-.key.lit-white .subtext { color: #555; }
-.key.lit-white.active { background: #fff; color: #000; border-color: #ccc; }
-.key .subtext { font-size: 7px; overflow: hidden; max-width: 40px; text-overflow: ellipsis; white-space: nowrap; color: #555; margin-top: 1px; }
+.key.active {
+  box-shadow: 0 0 0 2px rgba(200, 195, 180, 0.45);
+  background: #ececec;
+  color: #000;
+  border-color: #6a6a6a;
+}
+.key-lit-mod {
+  background: #2e2e2e;
+  color: #e8e8e8;
+  border-color: #444;
+  border-bottom-color: #161616;
+}
+.key-lit-mod:hover { background: #3a3a3a; color: #fff; }
+.key-lit-mod .subtext { color: #a0a0a0; }
+.key-lit-mod.active {
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.2);
+  background: #454545;
+  color: #fff;
+  border-color: #666;
+}
+.key .subtext { font-size: 7px; overflow: hidden; max-width: 40px; text-overflow: ellipsis; white-space: nowrap; color: #444; margin-top: 1px; }
+/* Languages (1–7, SQL, etc.) — lighter neutral grey */
+.key.lit-silver {
+  background: #b4b4bc;
+  color: #101014;
+  border-color: #888892;
+  border-bottom-color: #65656e;
+}
+.key.lit-silver .subtext { color: #2a2a32; }
+.key.lit-silver:hover { background: #bebec6; color: #08080c; }
+.key.lit-silver.active {
+  background: #c8c8d0;
+  color: #08080c;
+  border-color: #6a6a74;
+  box-shadow: 0 0 0 2px rgba(80, 82, 92, 0.5);
+}
+/* Tools & software — very light grey, almost white */
+.key.lit-white {
+  background: #e8e8ee;
+  color: #12121a;
+  border-color: #c6c6ce;
+  border-bottom-color: #a6a6ae;
+}
+.key.lit-white .subtext { color: #383840; }
+.key.lit-white:hover { background: #efeff4; color: #0a0a10; }
+.key.lit-white.active {
+  background: #f5f5f8;
+  color: #0a0a10;
+  border-color: #9898a2;
+  box-shadow: 0 0 0 2px rgba(100, 102, 115, 0.4);
+}
+/* Unmapped keys — same dark caps as esc / shift / mods */
+.key[data-key="blank"]:not(.key-lit-mod) {
+  background: #2e2e2e;
+  color: #e8e8e8;
+  border-color: #444;
+  border-bottom-color: #161616;
+}
+.key[data-key="blank"]:not(.key-lit-mod) .subtext { color: #a0a0a0; }
+.key[data-key="blank"]:not(.key-lit-mod):hover {
+  background: #3a3a3a;
+  color: #fff;
+}
+.key[data-key="blank"]:not(.key-lit-mod).active {
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.2);
+  background: #454545;
+  color: #fff;
+  border-color: #666;
+}
 .key.k-wide    { flex: 0 0 66px; min-width: 66px; }
 .key.k-wider   { flex: 0 0 76px; min-width: 76px; }
 .key.k-tab     { flex: 0 0 66px; min-width: 66px; }
@@ -336,61 +862,408 @@ a { color: inherit; text-decoration: none; }
 .key.k-shift-r { flex: 0 0 110px; min-width: 110px; }
 .key.k-bksp    { flex: 0 0 88px; min-width: 88px; }
 .key.k-space   { flex: 0 0 240px; min-width: 240px; }
+.key.k-space-l { flex: 1 1 72px; min-width: 56px; max-width: 120px; }
+.key.k-space-r { flex: 1 1 100px; min-width: 72px; max-width: 160px; }
+/* Full-width space — same blue-grey as split halves */
+.kb-layout-desktop .key.k-space {
+  background: #9eb0c4;
+  color: #1a2430;
+  border-color: #6a7a8c;
+  border-bottom-color: #4a5a6a;
+}
+.kb-layout-desktop .key.k-space .subtext { color: #2a3848; }
+.kb-layout-desktop .key.k-space:hover { background: #aebfd0; }
+.kb-layout-desktop .key.k-space.active {
+  background: #c2d2e4;
+  box-shadow: 0 0 0 2px rgba(70, 90, 110, 0.4);
+  border-color: #5a6d82;
+}
+.kb-layout-mobile { display: none; }
+.keyboard.keyboard--split {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  background: transparent;
+  border: none;
+  padding: 0;
+  overflow: visible;
+}
+.kb-mod {
+  border-radius: 14px;
+  padding: 13px 11px;
+  background: #080808;
+  border: 1px solid #262626;
+}
+.kb-mod--split-left {
+  align-self: flex-start;
+  width: max-content;
+  max-width: 100%;
+  padding-right: 28px;
+  overflow: visible;
+  border-radius: 14px;
+}
+.kb-mod--split-right {
+  align-self: flex-end;
+  width: max-content;
+  max-width: 100%;
+  margin-top: 14px;
+  padding-left: 28px;
+  overflow: visible;
+  border-radius: 14px;
+}
+.keyboard.keyboard--split .kb-row {
+  justify-content: flex-start;
+  margin-bottom: 5px;
+}
+/* Physical row stagger (standard OEM column offset) — keys line up with Y / H / N seam */
+.keyboard.keyboard--split .kb-mod--split-left > .kb-row:nth-child(1) { transform: translateX(0); }
+.keyboard.keyboard--split .kb-mod--split-left > .kb-row:nth-child(2) { transform: translateX(11px); }
+.keyboard.keyboard--split .kb-mod--split-left > .kb-row:nth-child(3) { transform: translateX(22px); }
+.keyboard.keyboard--split .kb-mod--split-left > .kb-row:nth-child(4) { transform: translateX(33px); }
+.keyboard.keyboard--split .kb-mod--split-left > .kb-row:nth-child(5) { transform: translateX(8px); }
+.keyboard.keyboard--split .kb-mod--split-right > .kb-row:nth-child(1) { transform: translateX(0); margin-top: 0; }
+/* Right half: stair step — Y leftmost, then H, then N each shifted right (matches OEM column stagger) */
+.keyboard.keyboard--split .kb-mod--split-right > .kb-row:nth-child(2) { transform: translateX(-18px); margin-top: 0; }
+.keyboard.keyboard--split .kb-mod--split-right > .kb-row:nth-child(3) { transform: translateX(-6px); margin-top: 5px; }
+.keyboard.keyboard--split .kb-mod--split-right > .kb-row:nth-child(4) { transform: translateX(8px); margin-top: 5px; }
+.keyboard.keyboard--split .kb-mod--split-right > .kb-row:nth-child(5) { transform: translateX(12px); margin-top: 4px; }
+.keyboard.keyboard--split .kb-mod--split-left > .kb-row,
+.keyboard.keyboard--split .kb-mod--split-right > .kb-row {
+  transition: transform 0.15s ease;
+}
+/* Split spacebars — cool blue-grey like reference boards */
+.keyboard.keyboard--split .key.k-space-l,
+.keyboard.keyboard--split .key.k-space-r {
+  background: #9eb0c4;
+  color: #1a2430;
+  border-color: #6a7a8c;
+  border-bottom-color: #4a5a6a;
+}
+.keyboard.keyboard--split .key.k-space-l .subtext,
+.keyboard.keyboard--split .key.k-space-r .subtext { color: #2a3848; }
+.keyboard.keyboard--split .key.k-space-l:hover,
+.keyboard.keyboard--split .key.k-space-r:hover { background: #aebfd0; }
+.keyboard.keyboard--split .key.k-space-l.active,
+.keyboard.keyboard--split .key.k-space-r.active {
+  background: #c2d2e4;
+  box-shadow: 0 0 0 2px rgba(70, 90, 110, 0.4);
+  border-color: #5a6d82;
+}
+/* Split halves: slightly smaller keycaps only (colors from shared .key rules) */
+.keyboard.keyboard--split .key {
+  height: 38px;
+  min-width: 36px;
+  flex: 0 0 36px;
+  font-size: 9px;
+}
+.keyboard.keyboard--split .key.k-wide {
+  flex: 0 0 48px;
+  min-width: 48px;
+}
+.keyboard.keyboard--split .key.k-tab { flex: 0 0 50px; min-width: 50px; }
+.keyboard.keyboard--split .key.k-caps { flex: 0 0 58px; min-width: 58px; }
+.keyboard.keyboard--split .key.k-enter { flex: 0 0 52px; min-width: 52px; }
+.keyboard.keyboard--split .key.k-shift-l { flex: 0 0 62px; min-width: 62px; }
+.keyboard.keyboard--split .key.k-shift-r { flex: 0 0 76px; min-width: 76px; }
+.keyboard.keyboard--split .key.k-bksp { flex: 0 0 58px; min-width: 58px; }
+.keyboard.keyboard--split .key.k-wider { flex: 0 0 58px; min-width: 58px; }
+.keyboard.keyboard--split .key.k-space-l {
+  flex: 1 1 72px;
+  min-width: 58px;
+  max-width: 130px;
+}
+.keyboard.keyboard--split .key.k-space-r {
+  flex: 1 1 56px;
+  min-width: 48px;
+  max-width: 108px;
+}
+
+@media (max-width: 924px) {
+  .kb-layout-desktop { display: none !important; }
+  .kb-layout-mobile { display: block; }
+}
+
+/* Light: cream keycaps — outers = title text on cap; esc = rose; space = blue-grey */
+[data-theme="light"] .key:not(.key-lit-mod):not(.lit-silver):not(.lit-white):not(.k-space):not(.k-space-l):not(.k-space-r) {
+  background: var(--kb-alpha);
+  color: var(--text);
+  border-color: #d0cbc4;
+  border-bottom-color: #b0aaa0;
+}
+[data-theme="light"] .key:not(.key-lit-mod):not(.lit-silver):not(.lit-white):not(.k-space):not(.k-space-l):not(.k-space-r):hover {
+  background: #f2efe8;
+  color: var(--text);
+}
+[data-theme="light"] .key:not(.key-lit-mod):not(.lit-silver):not(.lit-white):not(.k-space):not(.k-space-l):not(.k-space-r).active {
+  background: #ebe6dd;
+  color: var(--text);
+  border-color: #a0988c;
+  box-shadow: 0 0 0 2px rgba(176, 120, 103, 0.3);
+}
+[data-theme="light"] .key:not(.key-lit-mod):not(.lit-silver):not(.lit-white):not(.k-space):not(.k-space-l):not(.k-space-r) .subtext { color: var(--text-dim); }
+[data-theme="light"] .key.lit-silver {
+  background: var(--kb-silver-cap);
+  color: var(--text);
+  border-color: #c5bfb4;
+  border-bottom-color: #a69f92;
+}
+[data-theme="light"] .key.lit-silver .subtext { color: var(--text-dim); }
+[data-theme="light"] .key.lit-silver:hover {
+  background: #ece8df;
+  color: var(--text);
+}
+[data-theme="light"] .key.lit-silver.active {
+  background: #ded8cc;
+  color: var(--text);
+  border-color: #958d80;
+  box-shadow: 0 0 0 2px rgba(176, 120, 103, 0.3);
+}
+[data-theme="light"] .key.lit-white {
+  background: var(--kb-alpha);
+  color: var(--text);
+  border-color: #d0cbc4;
+  border-bottom-color: #b0aaa0;
+}
+[data-theme="light"] .key.lit-white .subtext { color: var(--text-dim); }
+[data-theme="light"] .key.lit-white:hover {
+  background: #f2efe8;
+  color: var(--text);
+}
+[data-theme="light"] .key.lit-white.active {
+  background: #ebe6dd;
+  color: var(--text);
+  border-color: #a0988c;
+  box-shadow: 0 0 0 2px rgba(176, 120, 103, 0.3);
+}
+[data-theme="light"] .key[data-key="blank"]:not(.key-lit-mod) {
+  background: var(--kb-alpha);
+  color: var(--text);
+  border-color: #d0cbc4;
+  border-bottom-color: #b0aaa0;
+}
+[data-theme="light"] .key[data-key="blank"]:not(.key-lit-mod) .subtext { color: var(--text-dim); }
+[data-theme="light"] .key[data-key="blank"]:not(.key-lit-mod):hover {
+  background: #f2efe8;
+  color: var(--text);
+}
+[data-theme="light"] .key[data-key="blank"]:not(.key-lit-mod).active {
+  background: #ebe6dd;
+  color: var(--text);
+  border-color: #a0988c;
+  box-shadow: 0 0 0 2px rgba(176, 120, 103, 0.3);
+}
+/* Modifiers / wide outers: same hue as title text */
+[data-theme="light"] .key.key-lit-mod:not([data-key="esc"]) {
+  background: var(--text);
+  color: #f5f0e8;
+  border-color: #1a1917;
+  border-bottom-color: #0d0c0b;
+}
+[data-theme="light"] .key.key-lit-mod:not([data-key="esc"]) .subtext { color: #c9c4bc; }
+[data-theme="light"] .key.key-lit-mod:not([data-key="esc"]):hover {
+  background: #353230;
+  color: #faf8f5;
+}
+[data-theme="light"] .key.key-lit-mod:not([data-key="esc"]).active {
+  background: #3d3a38;
+  color: #faf8f5;
+  border-color: #0d0c0b;
+  box-shadow: 0 0 0 2px rgba(42, 40, 38, 0.35);
+}
+[data-theme="light"] .key[data-key="esc"].key-lit-mod {
+  background: var(--kb-rose-cap);
+  color: #2a201c;
+  border-color: var(--kb-rose-cap-border);
+  border-bottom-color: var(--kb-rose-cap-deep);
+}
+[data-theme="light"] .key[data-key="esc"].key-lit-mod .subtext { color: #4a3028; }
+[data-theme="light"] .key[data-key="esc"].key-lit-mod:hover {
+  background: #c9a090;
+  color: #1a1513;
+}
+[data-theme="light"] .key[data-key="esc"].key-lit-mod.active {
+  background: #d4bbae;
+  border-color: var(--kb-rose-cap-deep);
+  box-shadow: 0 0 0 2px rgba(154, 120, 104, 0.4);
+}
+[data-theme="light"] .kb-layout-desktop .key.k-space,
+[data-theme="light"] .keyboard.keyboard--split .key.k-space-l,
+[data-theme="light"] .keyboard.keyboard--split .key.k-space-r {
+  background: #9eb0c4;
+  color: #1a2430;
+  border-color: #6a7a8c;
+  border-bottom-color: #4a5a6a;
+}
+[data-theme="light"] .kb-layout-desktop .key.k-space .subtext,
+[data-theme="light"] .keyboard.keyboard--split .key.k-space-l .subtext,
+[data-theme="light"] .keyboard.keyboard--split .key.k-space-r .subtext { color: #2a3848; }
+[data-theme="light"] .kb-layout-desktop .key.k-space:hover,
+[data-theme="light"] .keyboard.keyboard--split .key.k-space-l:hover,
+[data-theme="light"] .keyboard.keyboard--split .key.k-space-r:hover { background: #aebfd0; }
+[data-theme="light"] .kb-layout-desktop .key.k-space.active,
+[data-theme="light"] .keyboard.keyboard--split .key.k-space-l.active,
+[data-theme="light"] .keyboard.keyboard--split .key.k-space-r.active {
+  background: #c2d2e4;
+  box-shadow: 0 0 0 2px rgba(70, 90, 110, 0.35);
+  border-color: #5a6d82;
+}
 
 .info-panel {
-  margin-top: 14px; background: #1e1e1e; border: 0.5px solid #3a3a3a;
-  border-radius: 10px; padding: 14px 18px; min-height: 64px;
-  font-family: 'Space Mono', monospace; color: #ccc; font-size: 13px;
-  line-height: 1.6; transition: all 0.15s;
+  margin-top: 14px;
+  background: #080808;
+  border: 1px solid #262626;
+  border-radius: 14px;
+  padding: 16px 18px;
+  min-height: 64px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-weight: 400;
+  color: #b8b8b8;
+  font-size: 13px;
+  line-height: 1.6;
+  transition: background 0.15s, border-color 0.15s;
 }
-.info-panel .tag { font-size: 10px; color: #666; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
-.info-panel .val { color: #fff; font-size: 14px; }
-.info-panel .desc { color: #999; font-size: 11px; margin-top: 4px; }
+.info-panel .tag {
+  font-size: 10px;
+  font-weight: 500;
+  color: #7a7a8a;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.info-panel .val { color: #e4e4e4; font-size: 14px; font-weight: 600; }
+.info-panel .desc { color: #8a8a9a; font-size: 11px; margin-top: 6px; }
 
 /* ═══════════════════════ FOOTER (full-width HTML) ═══════════════════════ */
+/* Matches keyboard plate; vertical breathing room mirrors topbar (48px) + page rhythm (56px gutter) */
 .site-footer {
-  width: 100%; background: #1e1e1e;
-  border-top: 1px solid #3a3a3a;
-  margin-top: 56px;
-  padding: 40px 48px 28px;
+  width: 100%;
+  background: #080808;
+  border-top: 1px solid #262626;
+  margin-top: 0;
+  padding: 48px 48px 48px;
   font-family: 'Inter', sans-serif;
-  transition: background 0.4s;
+  transition: background 0.4s, border-color 0.4s;
   flex-shrink: 0;
 }
 
 .footer-inner {
   max-width: 960px; margin: 0 auto;
-  display: flex; gap: 48px; align-items: flex-start; flex-wrap: wrap;
+  display: flex; gap: 32px; align-items: flex-start; flex-wrap: wrap;
 }
 
-/* Orion constellation canvas area */
+/* Orion — per-star hover + knock physics (JS); lines brighten when a star is hot */
 .footer-constellation {
-  flex: 0 0 180px; height: 140px; position: relative;
+  flex: 0 0 252px; height: 196px; position: relative;
+  margin-right: -20px;
 }
-.footer-constellation svg { width: 100%; height: 100%; }
+.footer-constellation svg { width: 100%; height: 100%; overflow: visible; }
+.footer-constellation svg line {
+  pointer-events: none;
+  transition: stroke 0.45s ease, stroke-width 0.45s ease, opacity 0.45s ease;
+}
+/* Lines incident to the pointer-hovered star (set in initFooterOrion) */
+.footer-constellation svg line.orion-line-hot {
+  stroke: #aebfd0;
+  stroke-width: 1.18;
+  opacity: 1;
+}
+.footer-constellation svg circle.orion-star {
+  pointer-events: all;
+  cursor: default;
+  transition: transform 0.45s cubic-bezier(0.34, 1.45, 0.55, 1), filter 0.35s ease;
+  transform-box: fill-box;
+  transform-origin: center;
+}
 
-.footer-identity { flex: 1; min-width: 160px; }
+.footer-identity {
+  flex: 1; min-width: 160px;
+  margin-left: -12px;
+}
+/* Name / title buttons → home; soft glow on hover */
+.footer-id-word {
+  font: inherit;
+  color: inherit;
+  text-transform: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  display: inline;
+  vertical-align: baseline;
+  transition: color 0.25s ease, text-shadow 0.25s ease, filter 0.25s ease;
+  border-radius: 2px;
+}
+.footer-id-word:focus-visible {
+  outline: 2px solid #9eb0c4;
+  outline-offset: 3px;
+}
+@media (hover: hover) {
+  .footer-identity h3 .footer-id-word:hover {
+    color: #ffffff;
+    text-shadow:
+      0 0 20px rgba(174, 191, 208, 0.7),
+      0 0 40px rgba(240, 245, 255, 0.3);
+    filter: drop-shadow(0 2px 10px rgba(158, 176, 196, 0.3));
+  }
+  .footer-identity p .footer-id-word:hover {
+    color: #d4e2f0;
+    text-shadow:
+      0 0 22px rgba(174, 191, 208, 0.8),
+      0 0 44px rgba(140, 175, 210, 0.38);
+    filter: drop-shadow(0 2px 12px rgba(120, 160, 200, 0.35));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .footer-id-word {
+    transition: color 0.2s ease;
+  }
+  .footer-id-word:hover {
+    filter: none !important;
+    text-shadow: none !important;
+  }
+}
+/* Name: white. Subtitle: mod-key grey. Columns + bottom bar: space-bar blue-grey */
 .footer-identity h3 {
-  font-size: 1.15rem; font-weight: 500; letter-spacing: 0.15em;
-  color: #c8c3bb; margin-bottom: 4px;
+  font-family: 'Inter', sans-serif;
+  font-size: 2.45rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  line-height: 1.08;
+  color: #ffffff;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.28em;
+  align-items: baseline;
 }
 .footer-identity p {
-  font-size: 0.68rem; color: #56546e; letter-spacing: 0.06em; font-weight: 300;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 300;
+  color: #a0a0a0;
+  letter-spacing: 0.14em;
+  line-height: 1.45;
+  text-transform: uppercase;
 }
 .footer-col { min-width: 100px; }
 .footer-col h4 {
-  font-size: 0.6rem; color: #8888a0; letter-spacing: 0.1em;
-  font-weight: 500; text-transform: uppercase; margin-bottom: 10px;
+  font-size: 0.82rem; color: #9eb0c4; letter-spacing: 0.1em;
+  font-weight: 600; text-transform: uppercase; margin-bottom: 12px;
 }
 .footer-col a, .footer-col span {
-  display: block; font-size: 0.7rem; color: #56546e;
+  display: block; font-size: 0.7rem; color: #9eb0c4;
   letter-spacing: 0.05em; font-weight: 300;
   padding: 3px 0; cursor: pointer; transition: color 0.2s;
 }
-.footer-col a:hover, .footer-col span:hover { color: #ccc; }
+.footer-col a:hover, .footer-col span:hover { color: #aebfd0; }
 
 .footer-divider {
-  width: 100%; height: 1px; background: #3a3a3a; margin: 20px 0 14px;
+  width: 100%; height: 1px; background: #262626; margin: 24px 0 24px;
 }
 
 .footer-bottom {
@@ -398,7 +1271,8 @@ a { color: inherit; text-decoration: none; }
   display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;
 }
 .footer-bottom span {
-  font-size: 0.62rem; color: #42405c; letter-spacing: 0.04em; font-weight: 300;
+  font-size: 0.62rem; color: #9eb0c4;
+  letter-spacing: 0.04em; font-weight: 300;
 }
 
 /* ═══════════════════════ PROJECTS ═══════════════════════ */
@@ -561,32 +1435,65 @@ a { color: inherit; text-decoration: none; }
   }
 }
 @media (max-width: 640px) {
+  .topbar { padding: 0 16px; }
+  .nav-dropdown {
+    padding-top: calc(env(safe-area-inset-top, 0px) + 34px);
+  }
+  .nav-dropdown-body {
+    padding: 8px 16px 10px;
+  }
+  .nav-dropdown-item {
+    font-size: 0.88rem;
+    padding: 8px 4px;
+  }
+  .nav-dropdown-bottom {
+    padding: 6px 16px max(10px, env(safe-area-inset-bottom, 0px));
+  }
+  .topbar-clock-time { font-size: 15px; }
+  .topbar-clock-sub { font-size: 8px; }
   .hero-name { font-size: 1.8rem; }
   .typewriter-wrap { font-size: 0.72rem; }
   .social-icons { gap: 6px; }
   .social-icons a { font-size: 13px; }
   .hero-graphic { height: 44px; max-width: min(220px, 85vw); }
   .exp-grid { grid-template-columns: 1fr; }
-  .page { padding: 70px 20px 30px; max-width: 100%; }
-  .site-footer { padding: 30px 20px 20px; }
-  .footer-constellation { flex: 0 0 120px; height: 100px; }
+  .page { padding: 70px 20px 70px; max-width: 100%; }
+  .site-footer { padding: 32px 20px 32px; }
+  .footer-constellation { flex: 0 0 min(200px, 55vw); height: clamp(120px, 40vw, 156px); }
+  .footer-identity { margin-left: 0; }
+  .footer-constellation { margin-right: 0; }
+  .footer-identity h3 { font-size: 1.9rem; letter-spacing: 0.05em; }
+  .footer-identity p { font-size: 0.88rem; letter-spacing: 0.12em; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .footer-constellation svg line,
+  .footer-constellation svg line.orion-line-hot,
+  .footer-constellation svg circle.orion-star { transition: none; }
+  .footer-constellation svg circle.orion-star:hover {
+    transform: scale(1.35);
+    filter: drop-shadow(0 0 8px rgba(174, 191, 208, 0.45));
+  }
 }
 @media (min-width: 1401px) {
   .portrait-icons-row { display: flex; }
   .portrait-icons { display: none; }
+  /* Column rule on the flex child (avoids ::after painting over the right column) */
+  .home-left {
+    border-right: 1px solid var(--border);
+  }
   /* Tuned to ≥ worst-case wrapped height so portrait top stays stable; adjust if copy/layout changes */
   .home-left-top {
     min-height: 440px;
     margin-top: 10px;
   }
   .home-right-top { min-height: 300px; }
-  .home-left .portrait-section { margin-top: 18px; }
+  .home-left .portrait-section { margin-top: 8px; }
   .home-right .section-title { margin-top: 32px; }
   .kb-section { margin-top: 24px; }
 }
 /* Two-column mid band: right column (experiences + keyboard) stacks taller — nudge portrait down to stay visually aligned */
 @media (max-width: 1852px) and (min-width: 1401px) {
-  .home-left .portrait-section { margin-top: 40px; }
+  .home-left .portrait-section { margin-top: 30px; }
 }
 </style>
 </head>
@@ -597,15 +1504,23 @@ a { color: inherit; text-decoration: none; }
 
 <!-- ═══════════════════════ TOPBAR ═══════════════════════ -->
 <nav class="topbar">
-  <button class="hamburger" id="menuBtn" aria-label="Menu">≡</button>
-  <div class="topbar-right">
-    <div class="topbar-nav">
-      <a data-page="home">home</a>
-      <a data-page="projects">projects</a>
-      <a data-page="values">values</a>
-      <a data-page="testimony">testimony</a>
-      <a data-page="contact">contact</a>
+  <div class="topbar-left">
+    <button type="button" class="hamburger" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="navDropdown" aria-haspopup="true">≡</button>
+    <div class="topbar-nav" aria-label="Primary">
+      <a href="#" data-page="home">home</a>
+      <a href="#" data-page="projects">projects</a>
+      <a href="#" data-page="values">values</a>
+      <a href="#" data-page="testimony">testimony</a>
+      <a href="#" data-page="contact">contact</a>
     </div>
+  </div>
+  <div class="topbar-right">
+    <time class="topbar-clock js-topbar-clock" id="topbarClock" datetime="">
+      <span class="topbar-clock-time js-widget-time">
+        <span class="js-time-lead">—</span><span class="topbar-clock-colon" aria-hidden="true">:</span><span class="js-time-tail">—</span>
+      </span>
+      <span class="topbar-clock-sub"><span class="js-widget-date">—</span><span class="topbar-clock-sep" aria-hidden="true">·</span><span class="topbar-clock-temp js-widget-temp">—°</span></span>
+    </time>
     <div class="theme-toggle" id="themeToggle">
       [<span class="active-theme" data-mode="dark">dark</span>
        <span class="inactive-theme" data-mode="light">light</span>]
@@ -613,18 +1528,30 @@ a { color: inherit; text-decoration: none; }
   </div>
 </nav>
 
-<!-- ═══════════════════════ NAV OVERLAY ═══════════════════════ -->
-<div class="nav-overlay" id="navOverlay">
-  <div class="nav-item" data-page="home">home</div>
-  <div class="nav-item" data-page="projects">projects</div>
-  <div class="nav-item" data-page="values">values</div>
-  <div class="nav-item" data-page="testimony">testimony</div>
-  <div class="nav-item" data-page="contact">contact</div>
-  <div class="nav-bottom-bar">
-    <button class="hamburger" id="menuBtnClose" aria-label="Close menu">≡</button>
-    <div class="theme-toggle" id="themeToggle2">
-      [<span class="active-theme" data-mode="dark">dark</span>
-       <span class="inactive-theme" data-mode="light">light</span>]
+<!-- ═══════════════════════ NAV DROPDOWN ═══════════════════════ -->
+<div class="nav-dropdown" id="navDropdown" role="dialog" aria-modal="false" aria-label="Site menu" aria-hidden="true">
+  <div class="nav-dropdown-body">
+    <button type="button" class="nav-dropdown-item" data-page="home">home</button>
+    <button type="button" class="nav-dropdown-item" data-page="projects">projects</button>
+    <button type="button" class="nav-dropdown-item" data-page="values">values</button>
+    <button type="button" class="nav-dropdown-item" data-page="testimony">testimony</button>
+    <button type="button" class="nav-dropdown-item" data-page="contact">contact</button>
+  </div>
+  <div class="nav-dropdown-bottom">
+    <button type="button" class="hamburger nav-dropdown-close" id="menuBtnClose" aria-label="Close menu">≡</button>
+    <div class="nav-dropdown-bottom-right">
+      <div class="nav-dropdown-time-corner">
+        <time class="topbar-clock js-topbar-clock" datetime="">
+          <span class="topbar-clock-time js-widget-time">
+            <span class="js-time-lead">—</span><span class="topbar-clock-colon" aria-hidden="true">:</span><span class="js-time-tail">—</span>
+          </span>
+          <span class="topbar-clock-sub"><span class="js-widget-date">—</span><span class="topbar-clock-sep" aria-hidden="true">·</span><span class="topbar-clock-temp js-widget-temp">—°</span></span>
+        </time>
+      </div>
+      <div class="theme-toggle" id="themeToggleMenu">
+        [<span class="active-theme" data-mode="dark">dark</span>
+         <span class="inactive-theme" data-mode="light">light</span>]
+      </div>
     </div>
   </div>
 </div>
@@ -639,31 +1566,31 @@ a { color: inherit; text-decoration: none; }
   <div class="home-left">
 
   <div class="home-left-top">
-  <div class="social-icons anim">
+  <div class="social-icons anim anim-rise anim-seq-profile">
     <a href="https://www.instagram.com/k.oryy/" target="_blank" rel="noopener noreferrer" title="Instagram"><i class="basicons" icon-name="instagram"></i></a>
     <a href="https://www.linkedin.com/in/koryz/" target="_blank" rel="noopener noreferrer" title="LinkedIn"><i class="basicons" icon-name="linkedin"></i></a>
     <a class="social-icon-x" href="https://x.com/koryzhangg" target="_blank" rel="noopener noreferrer" title="X (Twitter)" aria-label="X"><svg class="social-x-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
     <a href="https://www.tiktok.com/@kordawgg" target="_blank" rel="noopener noreferrer" title="TikTok"><i class="basicons" icon-name="tiktok"></i></a>
   </div>
 
-  <div class="hero-header anim anim-delay-1">
+  <div class="hero-header anim anim-rise anim-seq-profile anim-delay-1">
     <h1 class="hero-name">kory zhang</h1>
     <img src="photos/clouds.png" alt="" class="hero-graphic" />
   </div>
 
-  <div class="typewriter-wrap anim anim-delay-2">
+  <div class="typewriter-wrap anim anim-rise anim-seq-profile anim-delay-2">
     <span class="typewriter-text" id="typewriterText"></span><span class="typewriter-cursor"></span>
   </div>
 
-  <p class="bio anim anim-delay-3">my name is kory! i'm from the east bay and i work full-time as a software engineer at JPF Capital. on a day to day basis, i design and build modern SaaS systems with an eye toward practicality — doing thoughtful, yet simple and effective work</p>
+  <p class="bio anim anim-rise anim-seq-profile anim-delay-3">my name is kory! i'm from the east bay and i work full-time as a software engineer at JPF Capital. on a day to day basis, i design and build modern SaaS systems with an eye toward practicality — doing thoughtful, yet simple and effective work</p>
 
-  <p class="bio-secondary anim anim-delay-4">outside of work, i'm always building. i love to produce melodic house, refine my wardrobe, and collect thule stickers //</p>
+  <p class="bio-secondary anim anim-rise anim-seq-profile anim-delay-4">outside of work, i'm always building. i love to produce melodic house, refine my wardrobe, and collect thule stickers //</p>
 
-  <div class="anim anim-delay-5">
+  <div class="anim anim-rise anim-seq-profile anim-delay-5">
     <button class="explore-btn" id="exploreProjBtn">explore projects <span class="arrow">⇒</span></button>
   </div>
 
-  <div class="portrait-icons-row anim anim-delay-5">
+  <div class="portrait-icons-row anim anim-rise anim-seq-profile anim-delay-5">
     <i class="basicons" icon-name="headphones-2"></i>
     <i class="basicons" icon-name="snowflake"></i>
     <i class="basicons" icon-name="fish-1"></i>
@@ -673,14 +1600,17 @@ a { color: inherit; text-decoration: none; }
   </div><!-- end home-left-top -->
 
   <div class="portrait-section">
-    <div class="personal-info anim">
+    <div class="personal-info anim anim-rise anim-seq-profile">
       <div class="info-row"><span class="info-text">23 y/o :)</span><span class="info-line"></span></div>
       <div class="info-row"><span class="info-text">UC Irvine '24</span><span class="info-line"></span></div>
       <div class="info-row"><span class="info-text">bay area, ca</span><span class="info-line"></span></div>
       <div class="info-row"><span class="info-text">full-stack developer</span><span class="info-line"></span></div>
     </div>
-    <div class="portrait-container anim anim-delay-2">
-      <div class="portrait-clip"><img src="photos/portfolio_portrait.JPG" alt="Kory Zhang" class="portrait-img" /></div>
+    <div class="portrait-container anim anim-rise anim-seq-profile anim-delay-2">
+      <div class="portrait-clip">
+        <img src="photos/portrait/portfolio_portrait_dark.JPG" alt="Kory Zhang" class="portrait-img portrait-img--theme-dark" />
+        <img src="photos/portrait/portfolio_portrait_light.jpg" alt="Kory Zhang" class="portrait-img portrait-img--theme-light" />
+      </div>
       <div class="portrait-icons">
         <i class="basicons" icon-name="headphones-2"></i>
         <i class="basicons" icon-name="snowflake"></i>
@@ -695,9 +1625,9 @@ a { color: inherit; text-decoration: none; }
   <div class="home-right">
 
   <div class="home-right-top">
-  <h2 class="section-title anim">experiences</h2>
+  <h2 class="section-title anim anim-exp anim-seq-exp">experiences</h2>
   <div class="exp-grid">
-    <div class="exp-card anim">
+    <div class="exp-card anim anim-exp anim-seq-exp">
       <div class="exp-header">
         <span class="exp-num">[01]</span>
         <span class="exp-title">Software Engineer</span>
@@ -708,7 +1638,7 @@ a { color: inherit; text-decoration: none; }
       </div>
       <p class="exp-desc">Leading the design, architecture, and engineering of a next-generation all-in-one CRM, financial, and accounting software platform for family offices</p>
     </div>
-    <div class="exp-card anim">
+    <div class="exp-card anim anim-exp anim-seq-exp">
       <div class="exp-header">
         <span class="exp-num">[02]</span>
         <span class="exp-title">Intern → Software Engineer I</span>
@@ -718,7 +1648,7 @@ a { color: inherit; text-decoration: none; }
       </div>
       <p class="exp-desc">Renovated Salesforce for consultants at a prominent Fortune 500 company through full-stack development, agentic AI workflows and streamlined CI/CD pipelines</p>
     </div>
-    <div class="exp-card anim">
+    <div class="exp-card anim anim-exp anim-seq-exp">
       <div class="exp-header">
         <span class="exp-num">[03]</span>
         <span class="exp-title">Developer</span>
@@ -728,7 +1658,7 @@ a { color: inherit; text-decoration: none; }
       </div>
       <p class="exp-desc">Delivered modern web experiences for nonprofits as part of Commit The Change, UCI's student-led engineering organization</p>
     </div>
-    <div class="exp-card anim">
+    <div class="exp-card anim anim-exp anim-seq-exp">
       <div class="exp-header">
         <span class="exp-num">[04]</span>
         <span class="exp-title">Software Engineer Intern</span>
@@ -742,15 +1672,17 @@ a { color: inherit; text-decoration: none; }
   </div><!-- end home-right-top -->
 
   <!-- ══════════ KEYBOARD (inlined) ══════════ -->
-  <div class="kb-section anim">
+  <div class="kb-section anim anim-seq-profile">
     <div class="kb-label">kory zhang // interactive stack</div>
     <div class="legend">
-      <div class="legend-item"><div class="legend-dot dot-silver"></div>languages</div>
-      <div class="legend-item"><div class="legend-dot dot-white"></div>tools &amp; software</div>
+      <div class="legend-item legend-lang"><div class="legend-dot dot-lang"></div>languages</div>
+      <div class="legend-item legend-tools"><div class="legend-dot dot-tools"></div>tools, software, &amp; others</div>
     </div>
+    <!-- Full-width keyboard — desktop / tablet -->
+    <div class="kb-layout-desktop">
     <div class="keyboard">
       <div class="kb-row">
-        <div class="key"            data-key="esc"><span>esc</span><span class="subtext">kdawg</span></div>
+        <div class="key key-lit-mod"            data-key="esc"><span>esc</span><span class="subtext">kdawg</span></div>
         <div class="key lit-silver" data-key="py"><span>1</span><span class="subtext">python</span></div>
         <div class="key lit-silver" data-key="cpp"><span>2</span><span class="subtext">c++</span></div>
         <div class="key lit-silver" data-key="csh"><span>3</span><span class="subtext">c#</span></div>
@@ -763,26 +1695,26 @@ a { color: inherit; text-decoration: none; }
         <div class="key"            data-key="blank"><span>0</span></div>
         <div class="key"            data-key="blank"><span>- _</span></div>
         <div class="key"            data-key="blank"><span>= +</span></div>
-        <div class="key k-bksp"     data-key="uci"><span>delete</span><span class="subtext">anteater</span></div>
+        <div class="key k-bksp key-lit-mod"     data-key="uci"><span>delete</span><span class="subtext">anteater</span></div>
       </div>
       <div class="kb-row">
-        <div class="key k-tab"      data-key="tab"><span>tab</span><span class="subtext">♪ ♫</span></div>
+        <div class="key k-tab key-lit-mod"      data-key="tab"><span>tab</span><span class="subtext">♪ ♫</span></div>
         <div class="key"            data-key="blank"><span>Q</span></div>
         <div class="key"            data-key="blank"><span>W</span></div>
         <div class="key"            data-key="blank"><span>E</span></div>
         <div class="key lit-white"  data-key="re"><span>R</span><span class="subtext">react</span></div>
         <div class="key"            data-key="blank"><span>T</span></div>
-        <div class="key lit-silver" data-key="yaml"><span>Y</span><span class="subtext">yaml</span></div>
+        <div class="key lit-white" data-key="yaml"><span>Y</span><span class="subtext">yaml</span></div>
         <div class="key"            data-key="blank"><span>U</span></div>
         <div class="key"            data-key="blank"><span>I</span></div>
         <div class="key"            data-key="blank"><span>O</span></div>
-        <div class="key lit-silver" data-key="pypo"><span>P</span><span class="subtext">postman</span></div>
+        <div class="key lit-white" data-key="pypo"><span>P</span><span class="subtext">postman</span></div>
         <div class="key"            data-key="blank"><span>[ {</span></div>
         <div class="key"            data-key="blank"><span>] }</span></div>
-        <div class="key k-enter"    data-key="blank"><span>\ |</span></div>
+        <div class="key k-enter key-lit-mod"    data-key="blank"><span>\ |</span></div>
       </div>
       <div class="kb-row">
-        <div class="key k-caps"     data-key="caps"><span>caps</span></div>
+        <div class="key k-caps key-lit-mod"     data-key="caps"><span>caps</span></div>
         <div class="key lit-white"  data-key="az"><span>A</span><span class="subtext">azure</span></div>
         <div class="key lit-white"  data-key="sf"><span>S</span><span class="subtext">sfdc</span></div>
         <div class="key"            data-key="blank"><span>D</span></div>
@@ -794,10 +1726,10 @@ a { color: inherit; text-decoration: none; }
         <div class="key lit-white"  data-key="lwc"><span>L</span><span class="subtext">lucid</span></div>
         <div class="key"            data-key="blank"><span>;</span></div>
         <div class="key"            data-key="blank"><span>' "</span></div>
-        <div class="key k-wider"    data-key="role"><span>return</span><span class="subtext">major</span></div>
+        <div class="key k-wider key-lit-mod"    data-key="role"><span>return</span><span class="subtext">major</span></div>
       </div>
       <div class="kb-row">
-        <div class="key k-shift-l"  data-key="shift-l"><span>shift</span></div>
+        <div class="key k-shift-l key-lit-mod"  data-key="shift-l"><span>shift</span></div>
         <div class="key"            data-key="blank"><span>Z</span></div>
         <div class="key"            data-key="blank"><span>X</span></div>
         <div class="key lit-white"  data-key="cert"><span>C</span><span class="subtext">certs</span></div>
@@ -808,17 +1740,110 @@ a { color: inherit; text-decoration: none; }
         <div class="key"            data-key="blank"><span>,</span></div>
         <div class="key"            data-key="blank"><span>.</span></div>
         <div class="key"            data-key="blank"><span>/ ?</span></div>
-        <div class="key k-shift-r"  data-key="shift-r"><span>shift</span><span class="subtext">中文</span></div>
+        <div class="key k-shift-r key-lit-mod"  data-key="shift-r"><span>shift</span><span class="subtext">中文</span></div>
       </div>
       <div class="kb-row">
-        <div class="key k-wide" data-key="ctrl"><span>ctrl</span><span class="subtext">reads</span></div>
-        <div class="key k-wide" data-key="opt"><span>opt</span></div>
-        <div class="key k-wide" data-key="loc"><span>cmd</span><span class="subtext">bay area</span></div>
+        <div class="key k-wide key-lit-mod" data-key="ctrl"><span>ctrl</span><span class="subtext">reads</span></div>
+        <div class="key k-wide key-lit-mod" data-key="opt"><span>opt</span></div>
+        <div class="key k-wide key-lit-mod" data-key="loc"><span>cmd</span><span class="subtext">bay area</span></div>
         <div class="key k-space" data-key="interests"><span>space</span><span class="subtext">interests</span></div>
-        <div class="key k-wide" data-key="blank"><span>cmd</span></div>
-        <div class="key k-wide" data-key="blank"><span>opt</span></div>
-        <div class="key k-wide" data-key="blank"><span>ctrl</span></div>
+        <div class="key k-wide key-lit-mod" data-key="blank"><span>cmd</span></div>
+        <div class="key k-wide key-lit-mod" data-key="blank"><span>opt</span></div>
+        <div class="key k-wide key-lit-mod" data-key="blank"><span>ctrl</span></div>
       </div>
+    </div>
+    </div>
+
+    <!-- Split ergonomic halves — ≤924px: left above right (avoids horizontal scroll) -->
+    <div class="kb-layout-mobile">
+    <div class="keyboard keyboard--split">
+      <div class="kb-mod kb-mod--split-left">
+      <div class="kb-row">
+        <div class="key key-lit-mod" data-key="esc"><span>esc</span><span class="subtext">kdawg</span></div>
+        <div class="key lit-silver" data-key="py"><span>1</span><span class="subtext">python</span></div>
+        <div class="key lit-silver" data-key="cpp"><span>2</span><span class="subtext">c++</span></div>
+        <div class="key lit-silver" data-key="csh"><span>3</span><span class="subtext">c#</span></div>
+        <div class="key lit-silver" data-key="jv"><span>4</span><span class="subtext">java</span></div>
+        <div class="key lit-silver" data-key="ts"><span>5</span><span class="subtext">ts</span></div>
+        <div class="key lit-silver" data-key="h"><span>6</span><span class="subtext">html</span></div>
+      </div>
+      <div class="kb-row">
+        <div class="key k-tab key-lit-mod"      data-key="tab"><span>tab</span><span class="subtext">♪ ♫</span></div>
+        <div class="key"            data-key="blank"><span>Q</span></div>
+        <div class="key"            data-key="blank"><span>W</span></div>
+        <div class="key"            data-key="blank"><span>E</span></div>
+        <div class="key lit-white"  data-key="re"><span>R</span><span class="subtext">react</span></div>
+        <div class="key"            data-key="blank"><span>T</span></div>
+      </div>
+      <div class="kb-row">
+        <div class="key k-caps key-lit-mod"     data-key="caps"><span>caps</span></div>
+        <div class="key lit-white"  data-key="az"><span>A</span><span class="subtext">azure</span></div>
+        <div class="key lit-white"  data-key="sf"><span>S</span><span class="subtext">sfdc</span></div>
+        <div class="key"            data-key="blank"><span>D</span></div>
+        <div class="key lit-white"  data-key="fg"><span>F</span><span class="subtext">figma</span></div>
+        <div class="key lit-white"  data-key="gi"><span>G</span><span class="subtext">git</span></div>
+      </div>
+      <div class="kb-row">
+        <div class="key k-shift-l key-lit-mod"  data-key="shift-l"><span>shift</span></div>
+        <div class="key"            data-key="blank"><span>Z</span></div>
+        <div class="key"            data-key="blank"><span>X</span></div>
+        <div class="key lit-white"  data-key="cert"><span>C</span><span class="subtext">certs</span></div>
+        <div class="key"            data-key="blank"><span>V</span></div>
+        <div class="key lit-white"  data-key="bs"><span>B</span><span class="subtext">bootstrap</span></div>
+      </div>
+      <div class="kb-row">
+        <div class="key k-wide key-lit-mod" data-key="ctrl"><span>ctrl</span><span class="subtext">reads</span></div>
+        <div class="key k-wide key-lit-mod" data-key="opt"><span>opt</span></div>
+        <div class="key k-wide key-lit-mod" data-key="loc"><span>cmd</span><span class="subtext">bay area</span></div>
+        <div class="key k-space-l" data-key="interests"><span>space</span><span class="subtext">interests</span></div>
+      </div>
+      </div>
+
+      <div class="kb-mod kb-mod--split-right">
+      <div class="kb-row">
+        <div class="key lit-silver" data-key="sq"><span>7</span><span class="subtext">sql</span></div>
+        <div class="key"            data-key="blank"><span>8</span></div>
+        <div class="key"            data-key="blank"><span>9</span></div>
+        <div class="key"            data-key="blank"><span>0</span></div>
+        <div class="key"            data-key="blank"><span>- _</span></div>
+        <div class="key"            data-key="blank"><span>= +</span></div>
+        <div class="key k-bksp key-lit-mod"     data-key="uci"><span>delete</span><span class="subtext">anteater</span></div>
+      </div>
+      <div class="kb-row">
+        <div class="key lit-white" data-key="yaml"><span>Y</span><span class="subtext">yaml</span></div>
+        <div class="key"            data-key="blank"><span>U</span></div>
+        <div class="key"            data-key="blank"><span>I</span></div>
+        <div class="key"            data-key="blank"><span>O</span></div>
+        <div class="key lit-white" data-key="pypo"><span>P</span><span class="subtext">postman</span></div>
+        <div class="key"            data-key="blank"><span>[ {</span></div>
+        <div class="key"            data-key="blank"><span>] }</span></div>
+        <div class="key k-enter key-lit-mod"    data-key="blank"><span>\ |</span></div>
+      </div>
+      <div class="kb-row">
+        <div class="key"            data-key="blank"><span>H</span></div>
+        <div class="key lit-white"  data-key="ji"><span>J</span><span class="subtext">jira</span></div>
+        <div class="key"            data-key="blank"><span>K</span></div>
+        <div class="key lit-white"  data-key="lwc"><span>L</span><span class="subtext">lucid</span></div>
+        <div class="key"            data-key="blank"><span>;</span></div>
+        <div class="key"            data-key="blank"><span>' "</span></div>
+        <div class="key k-wider key-lit-mod"    data-key="role"><span>return</span><span class="subtext">major</span></div>
+      </div>
+      <div class="kb-row">
+        <div class="key"            data-key="blank"><span>N</span></div>
+        <div class="key"            data-key="blank"><span>M</span></div>
+        <div class="key"            data-key="blank"><span>,</span></div>
+        <div class="key"            data-key="blank"><span>.</span></div>
+        <div class="key"            data-key="blank"><span>/ ?</span></div>
+        <div class="key k-shift-r key-lit-mod"  data-key="shift-r"><span>shift</span><span class="subtext">中文</span></div>
+      </div>
+      <div class="kb-row">
+        <div class="key k-space-r" data-key="interests" aria-label="Space — interests"><span>space</span><span class="subtext">interests</span></div>
+        <div class="key k-wide key-lit-mod" data-key="blank"><span>cmd</span></div>
+        <div class="key k-wide key-lit-mod" data-key="blank"><span>opt</span></div>
+        <div class="key k-wide key-lit-mod" data-key="blank"><span>ctrl</span></div>
+      </div>
+      </div>
+    </div>
     </div>
     <div class="info-panel" id="kbPanel">
       <div class="tag">press any key (click or type)</div>
@@ -922,58 +1947,64 @@ a { color: inherit; text-decoration: none; }
 
     <!-- Orion constellation -->
     <div class="footer-constellation">
-      <svg viewBox="0 0 180 140" xmlns="http://www.w3.org/2000/svg">
-        <line x1="57" y1="20" x2="72" y2="42" stroke="#3a3a3a" stroke-width="0.7" />
-        <line x1="72" y1="42" x2="62" y2="70" stroke="#3a3a3a" stroke-width="0.7" />
-        <line x1="62" y1="70" x2="72" y2="100" stroke="#3a3a3a" stroke-width="0.7" />
-        <line x1="72" y1="100" x2="55" y2="122" stroke="#3a3a3a" stroke-width="0.7" />
-        <line x1="57" y1="20" x2="115" y2="10" stroke="#3a3a3a" stroke-width="0.7" />
-        <line x1="115" y1="10" x2="140" y2="30" stroke="#3a3a3a" stroke-width="0.7" />
-        <line x1="140" y1="30" x2="120" y2="60" stroke="#3a3a3a" stroke-width="0.7" />
-        <line x1="72" y1="42" x2="120" y2="60" stroke="#3a3a3a" stroke-width="0.7" />
-        <line x1="62" y1="70" x2="120" y2="60" stroke="#3a3a3a" stroke-width="0.7" />
-        <line x1="120" y1="60" x2="130" y2="90" stroke="#3a3a3a" stroke-width="0.7" />
-        <line x1="130" y1="90" x2="155" y2="110" stroke="#3a3a3a" stroke-width="0.7" />
-        <line x1="72" y1="100" x2="130" y2="90" stroke="#3a3a3a" stroke-width="0.7" />
-        <circle cx="57" cy="20" r="3.2" fill="#d4d0c4" />
-        <circle cx="115" cy="10" r="2.2" fill="#9a9a8a" />
-        <circle cx="140" cy="30" r="2.6" fill="#9a9a8a" />
-        <circle cx="72" cy="42" r="1.8" fill="#4a4a52" />
-        <circle cx="120" cy="60" r="2.2" fill="#9a9a8a" />
-        <circle cx="62" cy="70" r="3.8" fill="#d4d0c4" />
-        <circle cx="72" cy="100" r="3.2" fill="#d4d0c4" />
-        <circle cx="130" cy="90" r="3.2" fill="#d4d0c4" />
-        <circle cx="55" cy="122" r="2.2" fill="#9a9a8a" />
-        <circle cx="155" cy="110" r="2.2" fill="#9a9a8a" />
-        <circle cx="25" cy="40" r="1.2" fill="#4a4a52" />
-        <circle cx="168" cy="47" r="1" fill="#4a4a52" />
-        <circle cx="88" cy="134" r="1.2" fill="#4a4a52" />
-        <circle cx="18" cy="87" r="0.8" fill="#4a4a52" />
+      <svg id="footerOrionSvg" viewBox="0 0 180 140" xmlns="http://www.w3.org/2000/svg">
+        <line x1="57" y1="20" x2="72" y2="42" stroke="#353b48" stroke-width="0.7" />
+        <line x1="72" y1="42" x2="62" y2="70" stroke="#353b48" stroke-width="0.7" />
+        <line x1="62" y1="70" x2="72" y2="100" stroke="#353b48" stroke-width="0.7" />
+        <line x1="72" y1="100" x2="55" y2="122" stroke="#353b48" stroke-width="0.7" />
+        <line x1="57" y1="20" x2="115" y2="10" stroke="#353b48" stroke-width="0.7" />
+        <line x1="115" y1="10" x2="140" y2="30" stroke="#353b48" stroke-width="0.7" />
+        <line x1="140" y1="30" x2="120" y2="60" stroke="#353b48" stroke-width="0.7" />
+        <line x1="72" y1="42" x2="120" y2="60" stroke="#353b48" stroke-width="0.7" />
+        <line x1="62" y1="70" x2="120" y2="60" stroke="#353b48" stroke-width="0.7" />
+        <line x1="120" y1="60" x2="130" y2="90" stroke="#353b48" stroke-width="0.7" />
+        <line x1="130" y1="90" x2="155" y2="110" stroke="#353b48" stroke-width="0.7" />
+        <line x1="72" y1="100" x2="130" y2="90" stroke="#353b48" stroke-width="0.7" />
+        <circle class="orion-star" cx="57" cy="20" r="3.2" fill="#e6e8f0" />
+        <circle class="orion-star" cx="115" cy="10" r="2.2" fill="#8d98ac" />
+        <circle class="orion-star" cx="140" cy="30" r="2.6" fill="#8d98ac" />
+        <circle class="orion-star" cx="72" cy="42" r="1.8" fill="#4a5568" />
+        <circle class="orion-star" cx="120" cy="60" r="2.2" fill="#8d98ac" />
+        <circle class="orion-star" cx="62" cy="70" r="3.8" fill="#e6e8f0" />
+        <circle class="orion-star" cx="72" cy="100" r="3.2" fill="#e6e8f0" />
+        <circle class="orion-star" cx="130" cy="90" r="3.2" fill="#e6e8f0" />
+        <circle class="orion-star" cx="55" cy="122" r="2.2" fill="#8d98ac" />
+        <circle class="orion-star" cx="155" cy="110" r="2.2" fill="#8d98ac" />
+        <circle class="orion-star" cx="25" cy="40" r="1.2" fill="#4a5568" />
+        <circle class="orion-star" cx="168" cy="47" r="1" fill="#4a5568" />
+        <circle class="orion-star" cx="88" cy="134" r="1.2" fill="#4a5568" />
+        <circle class="orion-star" cx="18" cy="87" r="0.8" fill="#4a5568" />
       </svg>
     </div>
 
-    <!-- Identity -->
-    <div class="footer-identity">
-      <h3>KORY ZHANG</h3>
-      <p>SOFTWARE ENGINEER.</p>
+    <!-- Identity — hover glow; click goes home (scroll up if already home) -->
+    <div class="footer-identity" aria-label="Kory Zhang — go to home">
+      <h3>
+        <button type="button" class="footer-id-word" aria-label="Kory — go to home">KORY</button>
+        <button type="button" class="footer-id-word" aria-label="Zhang — go to home">ZHANG</button>
+      </h3>
+      <p>
+        <button type="button" class="footer-id-word" aria-label="Software engineer — go to home">SOFTWARE ENGINEER</button>
+      </p>
     </div>
 
     <!-- Sections col -->
     <div class="footer-col">
       <h4>Sections</h4>
-      <span data-nav="home">ABOUT</span>
+      <span data-nav="home">HOME</span>
       <span data-nav="projects">PROJECTS</span>
       <span data-nav="values">VALUES</span>
       <span data-nav="testimony">TESTIMONY</span>
+      <span data-nav="contact">CONTACT</span>
     </div>
 
-    <!-- Socials col -->
+    <!-- Socials col — same order & URLs as home social icons -->
     <div class="footer-col">
-      <h4>Socials</h4>
-      <a href="https://www.linkedin.com/in/koryz/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
+      <h4>Links</h4>
       <a href="https://www.instagram.com/k.oryy/" target="_blank" rel="noopener noreferrer">INSTAGRAM</a>
+      <a href="https://www.linkedin.com/in/koryz/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
+      <a href="https://x.com/koryzhangg" target="_blank" rel="noopener noreferrer">X</a>
       <a href="https://www.tiktok.com/@kordawgg" target="_blank" rel="noopener noreferrer">TIKTOK</a>
-      <a href="https://facebook.com" target="_blank">FACEBOOK</a>
     </div>
 
   </div>
@@ -981,7 +2012,7 @@ a { color: inherit; text-decoration: none; }
   <div class="footer-divider"></div>
   <div class="footer-bottom">
     <span>© 2026 KORY ZHANG.</span>
-    <span>STRIVING IN FAITH. PSALM 103:10</span>
+    <span class="footer-tagline">STRIVING IN FAITH. PSALM 103:10</span>
   </div>
 </footer>
 
@@ -1006,26 +2037,130 @@ function initScrollObserver() {
   document.querySelectorAll('.anim').forEach(el => animObserver.observe(el));
 }
 
-/* ═══════════════════════ NAV ═══════════════════════ */
-const navOverlay = document.getElementById('navOverlay');
-document.getElementById('menuBtn').addEventListener('click', () => navOverlay.classList.toggle('open'));
-document.getElementById('menuBtnClose').addEventListener('click', () => navOverlay.classList.remove('open'));
-document.querySelectorAll('.nav-item').forEach(item => {
-  item.addEventListener('click', () => { navOverlay.classList.remove('open'); navigateTo(item.dataset.page); });
+/* ═══════════════════════ NAV DROPDOWN ═══════════════════════ */
+const navDropdown = document.getElementById('navDropdown');
+const menuBtn = document.getElementById('menuBtn');
+const menuBtnClose = document.getElementById('menuBtnClose');
+
+function setNavOpen(open) {
+  navDropdown.classList.toggle('open', open);
+  document.body.classList.toggle('nav-menu-open', open);
+  menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  navDropdown.setAttribute('aria-hidden', open ? 'false' : 'true');
+}
+
+menuBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  setNavOpen(!navDropdown.classList.contains('open'));
 });
-document.querySelectorAll('.topbar-nav a').forEach(link => {
-  link.addEventListener('click', () => navigateTo(link.dataset.page));
+if (menuBtnClose) {
+  menuBtnClose.addEventListener('click', () => setNavOpen(false));
+}
+document.querySelectorAll('.nav-dropdown-item').forEach((item) => {
+  item.addEventListener('click', () => {
+    setNavOpen(false);
+    navigateTo(item.dataset.page);
+  });
 });
+document.addEventListener('click', (e) => {
+  if (!navDropdown.classList.contains('open')) return;
+  if (navDropdown.contains(e.target)) return;
+  if (menuBtn && menuBtn.contains(e.target)) return;
+  setNavOpen(false);
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') setNavOpen(false);
+});
+
+/* ═══════════════════════ TOPBAR CLOCK — time / date / temp (Watch-style stack in bar) ═══════════════════════ */
+(function initTopbarWidget() {
+  const clockRoots = document.querySelectorAll('.js-topbar-clock');
+  const timeWraps = document.querySelectorAll('.js-widget-time');
+  const timeLeads = document.querySelectorAll('.js-time-lead');
+  const timeTails = document.querySelectorAll('.js-time-tail');
+  const dateEls = document.querySelectorAll('.js-widget-date');
+  const tempEls = document.querySelectorAll('.js-widget-temp');
+  if (!timeWraps.length || !dateEls.length || !tempEls.length) return;
+
+  const TZ = 'America/Los_Angeles';
+  const time12 = /^(\d{1,2}):(\d{2})\s*(AM|PM)$/i;
+
+  function tickClock() {
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString('en-US', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+      timeZone: TZ,
+    });
+    const weekday = now.toLocaleDateString('en-US', { weekday: 'short', timeZone: TZ });
+    const monDay = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: TZ });
+    const dateStr = (weekday + ', ' + monDay).toUpperCase();
+    const iso = now.toISOString();
+    const m = timeStr.match(time12);
+    if (m) {
+      const tail = m[2] + ' ' + m[3].toUpperCase();
+      timeLeads.forEach((el) => { el.textContent = m[1]; });
+      timeTails.forEach((el) => { el.textContent = tail; });
+      timeWraps.forEach((w) => w.classList.remove('topbar-clock-time--plain'));
+    } else {
+      timeLeads.forEach((el) => { el.textContent = timeStr; });
+      timeTails.forEach((el) => { el.textContent = ''; });
+      timeWraps.forEach((w) => w.classList.add('topbar-clock-time--plain'));
+    }
+    dateEls.forEach((el) => { el.textContent = dateStr; });
+    clockRoots.forEach((root) => { root.dateTime = iso; });
+  }
+  tickClock();
+  setInterval(tickClock, 1000);
+
+  async function refreshTemp() {
+    tempEls.forEach((el) => { el.textContent = '…'; });
+    let t = '—°';
+    try {
+      const url =
+        'https://api.open-meteo.com/v1/forecast?latitude=37.7797&longitude=-121.9830' +
+        '&current=temperature_2m&timezone=' +
+        encodeURIComponent(TZ) +
+        '&temperature_unit=fahrenheit';
+      const res = await fetch(url);
+      if (!res.ok) throw new Error('wx');
+      const data = await res.json();
+      t = Math.round(data.current.temperature_2m) + '°';
+    } catch { /* keep —° */ }
+    tempEls.forEach((el) => { el.textContent = t; });
+  }
+  refreshTemp();
+  setInterval(refreshTemp, 10 * 60 * 1000);
+})();
+
 document.querySelectorAll('[data-nav]').forEach(el => {
   el.addEventListener('click', () => navigateTo(el.dataset.nav));
+  el.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      navigateTo(el.dataset.nav);
+    }
+  });
 });
 
 /* ═══════════════════════ PAGE NAV ═══════════════════════ */
 let isTransitioning = false;
+function scrollPageToTop() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    window.scrollTo(0, 0);
+    return;
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 function navigateTo(pageId) {
   const cur = document.querySelector('.page.active');
   const next = document.getElementById('page-' + pageId);
-  if (!next || next === cur || isTransitioning) return;
+  if (!next || isTransitioning) return;
+  if (next === cur) {
+    scrollPageToTop();
+    return;
+  }
   isTransitioning = true;
   const OUT_MS = 160;
   const IN_MS = 180;
@@ -1047,6 +2182,14 @@ function navigateTo(pageId) {
 }
 document.getElementById('exploreProjBtn').addEventListener('click', () => navigateTo('projects'));
 
+document.querySelectorAll('.topbar-nav a').forEach((link) => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    setNavOpen(false);
+    navigateTo(link.dataset.page);
+  });
+});
+
 /* ═══════════════════════ THEME ═══════════════════════ */
 function setupThemeToggle(c) {
   c.querySelectorAll('span').forEach(span => {
@@ -1059,8 +2202,7 @@ function setupThemeToggle(c) {
     });
   });
 }
-setupThemeToggle(document.getElementById('themeToggle'));
-setupThemeToggle(document.getElementById('themeToggle2'));
+document.querySelectorAll('.theme-toggle').forEach(setupThemeToggle);
 
 /* ═══════════════════════ TYPEWRITER ═══════════════════════ */
 const titles = ['software engineer', 'keyboard enthusiast', 'part-time dog sitter'];
@@ -1100,8 +2242,8 @@ const kbInfo = {
   ts:    { tag: "language", val: "TypeScript", desc: "" },
   h:     { tag: "language", val: "HTML / CSS / JavaScript", desc: "" },
   sq:    { tag: "language", val: "SQL", desc: "" },
-  yaml:  { tag: "language", val: "YAML", desc: "" },
-  pypo:  { tag: "language", val: "Python & Postman", desc: "" },
+  yaml:  { tag: "tool", val: "YAML", desc: "" },
+  pypo:  { tag: "tool", val: "Postman", desc: "" },
   re:    { tag: "tool", val: "React", desc: "" },
   bs:    { tag: "tool", val: "Bootstrap", desc: "" },
   lwc:   { tag: "tool", val: "Lucid / Lightning Web Components", desc: "" },
@@ -1135,9 +2277,24 @@ const kbKeyLabel = {
 };
 
 let kbCurrent = null;
+function kbFirstVisibleKey(selector) {
+  const list = document.querySelectorAll(selector);
+  for (let i = 0; i < list.length; i++) {
+    if (list[i].offsetParent !== null) return list[i];
+  }
+  return list[0] || null;
+}
 function kbShow(el) {
-  if (kbCurrent) kbCurrent.classList.remove('active');
-  el.classList.add('active'); kbCurrent = el;
+  document.querySelectorAll('.key.active').forEach(k => k.classList.remove('active'));
+  const dk = el.dataset.key;
+  if (dk === 'interests') {
+    document.querySelectorAll('.key[data-key="interests"]').forEach(k => {
+      if (k.offsetParent !== null) k.classList.add('active');
+    });
+  } else {
+    el.classList.add('active');
+  }
+  kbCurrent = el;
   const k = el.dataset.key, d = kbInfo[k], p = document.getElementById('kbPanel');
   if (!d || k === 'blank') { p.innerHTML = '<div class="tag">unmapped</div><div class="val">—</div>'; return; }
   p.innerHTML = `<div class="tag">${d.tag}</div><div class="val">${d.val}</div>${k==='esc'?`<div class="desc">${d.desc}</div>`:''}`;
@@ -1154,14 +2311,202 @@ document.addEventListener('keydown', function(e) {
   if (!dk) return;
   let el;
   if (dk !== 'blank') {
-    el = document.querySelector(`.key[data-key="${dk}"]`);
+    el = kbFirstVisibleKey('.key[data-key="' + dk + '"]');
   } else {
     const label = kbKeyLabel[k];
-    if (label) el = [...document.querySelectorAll('.key[data-key="blank"]')].find(x => x.querySelector('span:not(.subtext)')?.textContent.trim() === label);
-    if (!el) el = document.querySelector('.key[data-key="blank"]');
+    if (label) {
+      el = [...document.querySelectorAll('.key[data-key="blank"]')].find(x => {
+        if (x.offsetParent === null) return false;
+        return x.querySelector('span:not(.subtext)')?.textContent.trim() === label;
+      });
+    }
+    if (!el) el = kbFirstVisibleKey('.key[data-key="blank"]');
   }
   if (el) { e.preventDefault(); kbShow(el); }
 });
+
+/* ═══════════════════════ FOOTER IDENTITY — click → home (scroll up when already home) ═══════════════════════ */
+(function initFooterIdentityWords() {
+  const root = document.querySelector('.footer-identity');
+  if (!root) return;
+  root.querySelectorAll('.footer-id-word').forEach((btn) => {
+    btn.addEventListener('click', () => navigateTo('home'));
+  });
+})();
+
+/* ═══════════════════════ FOOTER ORION — star hover + knock-back ═══════════════════════ */
+(function initFooterOrion() {
+  const wrap = document.querySelector('.footer-constellation');
+  if (!wrap) return;
+  const svg = wrap.querySelector('svg');
+  if (!svg) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  svg.querySelectorAll('line').forEach(l => { l.style.pointerEvents = 'none'; });
+  const lineList = [...svg.querySelectorAll('line')];
+  const stars = [...svg.querySelectorAll('circle.orion-star')];
+  if (!stars.length) return;
+
+  const VB_EPS = 1.25;
+  const linesByStar = new Map();
+  stars.forEach((star) => {
+    const cx = +star.getAttribute('cx');
+    const cy = +star.getAttribute('cy');
+    const incident = lineList.filter((line) => {
+      const x1 = +line.getAttribute('x1');
+      const y1 = +line.getAttribute('y1');
+      const x2 = +line.getAttribute('x2');
+      const y2 = +line.getAttribute('y2');
+      return Math.hypot(x1 - cx, y1 - cy) < VB_EPS || Math.hypot(x2 - cx, y2 - cy) < VB_EPS;
+    });
+    linesByStar.set(star, incident);
+  });
+
+  function setHotLines(active) {
+    lineList.forEach((l) => l.classList.remove('orion-line-hot'));
+    if (!active) return;
+    (linesByStar.get(active) || []).forEach((l) => l.classList.add('orion-line-hot'));
+  }
+
+  const KNOCK_RADIUS = 70;
+  const HOVER_SCALE = 1.88;
+  /** Extra pixels beyond the star’s rim to count as “near” (glow + knock) */
+  const PROXIMITY_PAD_PX = 32;
+  let leaveTimer;
+  let lastActive = null;
+
+  function pxPerVbUnit() {
+    return svg.getBoundingClientRect().width / 180;
+  }
+
+  function starProximityRadiusPx(star) {
+    const rVb = +star.getAttribute('r') || 2;
+    return Math.max(28, rVb * pxPerVbUnit() + PROXIMITY_PAD_PX);
+  }
+
+  function nearestStar(clientX, clientY) {
+    let best = null;
+    let bestDist = Infinity;
+    for (let i = 0; i < stars.length; i++) {
+      const s = stars[i];
+      const rect = s.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const d = Math.hypot(clientX - cx, clientY - cy);
+      const limit = starProximityRadiusPx(s);
+      if (d <= limit && d < bestDist) {
+        bestDist = d;
+        best = s;
+      }
+    }
+    return best;
+  }
+
+  function applyStar(active) {
+    const ax = +active.getAttribute('cx');
+    const ay = +active.getAttribute('cy');
+    const sc = pxPerVbUnit();
+    setHotLines(active);
+    active.style.transform = 'scale(' + HOVER_SCALE + ')';
+    active.style.filter = 'drop-shadow(0 0 12px rgba(174, 191, 208, 0.55))';
+
+    stars.forEach(node => {
+      if (node === active) return;
+      const bx = +node.getAttribute('cx');
+      const by = +node.getAttribute('cy');
+      let dx = bx - ax;
+      let dy = by - ay;
+      const dist = Math.hypot(dx, dy) || 0.001;
+      const t = Math.max(0, 1 - dist / KNOCK_RADIUS);
+      const mag = 12 * sc * t * t;
+      const nx = (dx / dist) * mag;
+      const ny = (dy / dist) * mag;
+      node.style.transform = 'translate(' + nx + 'px, ' + ny + 'px)';
+      node.style.filter = '';
+    });
+  }
+
+  function reset() {
+    lastActive = null;
+    setHotLines(null);
+    stars.forEach(node => {
+      node.style.transform = '';
+      node.style.filter = '';
+    });
+  }
+
+  function onPointerNear(e) {
+    clearTimeout(leaveTimer);
+    const near = nearestStar(e.clientX, e.clientY);
+    if (near) {
+      if (near !== lastActive) {
+        lastActive = near;
+        applyStar(near);
+      }
+      return;
+    }
+    leaveTimer = setTimeout(reset, 90);
+  }
+
+  wrap.addEventListener('pointermove', onPointerNear);
+  wrap.addEventListener('pointerleave', () => {
+    clearTimeout(leaveTimer);
+    reset();
+  });
+})();
+</script>
+<script>
+(function scheduleHomeIconWave() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const WAVE_MS = 1280;
+  const FIRST_WAVE_DELAY_MS = 5000;
+  const WAVE_INTERVAL_MS = 12000;
+
+  function isVisible(el) {
+    if (!el) return false;
+    if (el.offsetParent === null && getComputedStyle(el).position !== 'fixed') return false;
+    const cs = getComputedStyle(el);
+    return cs.display !== 'none' && cs.visibility !== 'hidden' && cs.opacity !== '0';
+  }
+
+  function trigger(el) {
+    if (!el || el.classList.contains('icon-wave')) return;
+    el.classList.add('icon-wave');
+    setTimeout(function () { el.classList.remove('icon-wave'); }, WAVE_MS);
+  }
+
+  function scheduleWave(delayMs) {
+    setTimeout(function () {
+      run();
+      scheduleWave(WAVE_INTERVAL_MS);
+    }, delayMs);
+  }
+
+  function run() {
+    var home = document.getElementById('page-home');
+    if (home && home.classList.contains('active')) {
+      var row = document.querySelector('.portrait-icons-row');
+      var col = document.querySelector('.portrait-icons');
+
+      var rowOn = row && isVisible(row) && getComputedStyle(row).display !== 'none';
+      var colOn = col && isVisible(col) && getComputedStyle(col).display !== 'none';
+
+      if (rowOn) {
+        trigger(row);
+      } else if (colOn) {
+        trigger(col);
+      }
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () {
+      scheduleWave(FIRST_WAVE_DELAY_MS);
+    });
+  } else {
+    scheduleWave(FIRST_WAVE_DELAY_MS);
+  }
+})();
 </script>
 
 </body>
