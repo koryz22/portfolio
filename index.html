@@ -396,12 +396,119 @@ a { color: inherit; text-decoration: none; }
   .home-right { padding-left: 0; }
   .home-left .portrait-section { margin-top: 8px; }
 }
+/* Two-column: tiny band where portrait block sits low — pull profile (labels + photo) up */
+@media (min-width: 1529px) and (max-width: 1560px) {
+  .home-left .portrait-section { margin-top: 60px; }
+}
+/* Two-column: tiny band where portrait block sits low — pull profile (labels + photo) up */
+@media (min-width: 1400px) and (max-width: 1528px) {
+  .home-left .portrait-section { margin-top: 75px; }
+}
+/* Two-column home: left column narrows — cloud was crowding the name around ~1500px */
+@media (max-width: 1528px) {
+  .hero-name { font-size: 2.25rem; }
+  .typewriter-wrap { font-size: 0.9rem; }
+  .social-icons { gap: 7px; }
+  .social-icons a { font-size: 16px; }
+  .hero-graphic {
+    height: 60px; width: auto; max-width: min(280px, 42vw);
+    object-fit: contain; flex-shrink: 1;
+  }
+}
+/* Tightest two-column band: left column is narrow; cloud was still crowding the name */
+@media (max-width: 1480px) and (min-width: 1401px) {
+  /* Name / subtitle / icons stay at 1528 sizes; only cloud shrinks so it doesn’t crowd the title */
+  .hero-header { margin-top: 5px; }
+  /* Cloud is 10px shorter than 1528 band — nudge subtitle down so it stays aligned with that layout */
+  .typewriter-wrap { margin-top: 5px; }
+  .hero-graphic {
+    height: 50px; max-width: min(220px, 36vw);
+  }
+}
+/* Shrink cloud only when the row runs out of room (name + graphic wrap / tight width) */
+@media (max-width: 800px) {
+  .hero-graphic {
+    height: 54px; width: auto; max-width: min(280px, 88vw);
+    object-fit: contain; flex-shrink: 1;
+  }
+}
+/* ≤1400 layout is single column — full hero width; keep cloud large down to 665px, then smaller rules apply */
+@media (max-width: 1400px) and (min-width: 665px) {
+  .hero-graphic {
+    height: 70px; width: auto; max-width: none;
+    object-fit: contain; flex-shrink: 0;
+  }
+}
+@media (max-width: 680px) {
+  .portrait-section {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    margin-top: 24px;
+  }
+  /* Labels in a row; each column: word on top, vertical line down to meet photo */
+  .personal-info {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0 6px;
+    justify-content: stretch;
+    margin-right: 0;
+    padding-bottom: 0;
+    min-height: 104px;
+  }
+  .personal-info .info-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    min-height: 100px;
+  }
+  .personal-info .info-text {
+    margin-bottom: 0;
+    text-align: center;
+    font-size: 0.68rem;
+    line-height: 1.25;
+    max-width: 100%;
+  }
+  /* Word sits above the line; line grows down so all bases align with the image top */
+  .personal-info .info-line {
+    width: 1px;
+    flex: 1 1 auto;
+    min-height: 28px;
+    margin-top: 10px;
+    align-self: center;
+    background: var(--border);
+  }
+  .personal-info .info-row:nth-child(1) .info-text,
+  .personal-info .info-row:nth-child(4) .info-text {
+    margin-top: 0;
+  }
+  .personal-info .info-row:nth-child(2) .info-text,
+  .personal-info .info-row:nth-child(3) .info-text {
+    margin-top: 18px;
+  }
+  .portrait-container {
+    width: 100%;
+    justify-content: center;
+    margin-top: 0;
+    border-top: 1px solid var(--border);
+    padding-top: 0;
+  }
+  .portrait-clip {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    max-height: 280px;
+  }
+}
 @media (max-width: 640px) {
   .hero-name { font-size: 1.8rem; }
+  .typewriter-wrap { font-size: 0.72rem; }
+  .social-icons { gap: 6px; }
+  .social-icons a { font-size: 13px; }
+  .hero-graphic { height: 44px; max-width: min(220px, 85vw); }
   .exp-grid { grid-template-columns: 1fr; }
-  .portrait-section { flex-direction: column; }
-  .portrait-clip { width: 100%; height: 300px; }
-  .info-row .info-line { display: none; }
   .page { padding: 70px 20px 30px; max-width: 100%; }
   .site-footer { padding: 30px 20px 20px; }
   .footer-constellation { flex: 0 0 120px; height: 100px; }
@@ -409,6 +516,8 @@ a { color: inherit; text-decoration: none; }
 @media (min-width: 1401px) {
   .portrait-icons-row { display: flex; }
   .portrait-icons { display: none; }
+  /* Space above “interactive stack” on wide / two-column layout */
+  .kb-section { margin-top: 22px; }
 }
 </style>
 </head>
