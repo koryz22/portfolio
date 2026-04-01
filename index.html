@@ -592,10 +592,12 @@ body.nav-menu-open #themeToggle {
   vertical-align: -0.12em;
 }
 
-.hero-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: -10px; flex-wrap: wrap; }
-.hero-name { font-size: 2.6rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
+.hero-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: -10px; flex-wrap: nowrap; }
+.hero-name { font-size: 2.6rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; flex-shrink: 0; min-width: 0; }
 .hero-graphic {
   height: 70px; opacity: 0.45;
+  flex: 0 1 auto; min-width: 0; max-width: 50%;
+  object-fit: contain;
   animation: cloudFloat 6s ease-in-out infinite;
   transition: opacity 0.3s, transform 0.3s;
 }
@@ -1208,14 +1210,14 @@ body.nav-menu-open #themeToggle {
   background: #080808;
   border-top: 1px solid #262626;
   margin-top: 0;
-  padding: 48px 48px 48px;
+  padding: clamp(48px, 4vw, 80px) clamp(48px, 5vw, 120px);
   font-family: 'Inter', sans-serif;
   transition: background 0.4s, border-color 0.4s;
   flex-shrink: 0;
 }
 
 .footer-inner {
-  max-width: 960px; margin: 0 auto;
+  max-width: none; margin: 0;
   display: flex; gap: 32px; align-items: flex-start; flex-wrap: wrap;
 }
 
@@ -1234,6 +1236,17 @@ body.nav-menu-open #themeToggle {
   transform-box: fill-box;
   transform-origin: center;
 }
+
+/* Ambient twinkle — only the 4 outer background stars */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.35; filter: none; }
+  50%      { opacity: 1; filter: drop-shadow(0 0 3px rgba(200,215,240,0.6)); }
+}
+.orion-ambient:nth-child(1 of .orion-ambient) { animation: twinkle 3.2s ease-in-out infinite; }
+.orion-ambient:nth-child(2 of .orion-ambient) { animation: twinkle 4.1s ease-in-out 1.4s infinite; }
+.orion-ambient:nth-child(3 of .orion-ambient) { animation: twinkle 2.8s ease-in-out 0.7s infinite; }
+.orion-ambient:nth-child(4 of .orion-ambient) { animation: twinkle 3.7s ease-in-out 2.1s infinite; }
+@media (prefers-reduced-motion: reduce) { .orion-ambient { animation: none !important; } }
 
 .footer-identity {
   flex: 1; min-width: 160px;
@@ -1308,7 +1321,7 @@ body.nav-menu-open #themeToggle {
 }
 
 .footer-bottom {
-  max-width: 960px; margin: 0 auto;
+  max-width: none; margin: 0;
   display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;
 }
 .footer-bottom span {
@@ -1402,40 +1415,12 @@ body.nav-menu-open #themeToggle {
   .social-icons { align-items: center; }
   .social-icons a .social-x-icon { transform: translateY(2px); }
 }
-/* Two-column home: left column narrows — cloud was crowding the name around ~1500px */
-@media (max-width: 1528px) {
-  .hero-name { font-size: 2.25rem; }
+/* Two-column home: left column narrows — scale text down fluidly */
+@media (max-width: 1528px) and (min-width: 1401px) {
+  .hero-name { font-size: clamp(1.6rem, 1.5vw, 2.25rem); }
   .typewriter-wrap { font-size: 0.9rem; }
   .social-icons { gap: 7px; }
   .social-icons a { font-size: 16px; }
-  .hero-graphic {
-    height: 60px; width: auto; max-width: min(280px, 42vw);
-    object-fit: contain; flex-shrink: 1;
-  }
-}
-/* Tightest two-column band: left column is narrow; cloud was still crowding the name */
-@media (max-width: 1480px) and (min-width: 1401px) {
-  /* Name / subtitle / icons stay at 1528 sizes; only cloud shrinks so it doesn't crowd the title */
-  .hero-header { margin-top: 5px; }
-  /* Cloud is 10px shorter than 1528 band — nudge subtitle down so it stays aligned with that layout */
-  .typewriter-wrap { margin-top: 5px; }
-  .hero-graphic {
-    height: 50px; max-width: min(220px, 36vw);
-  }
-}
-/* Shrink cloud only when the row runs out of room (name + graphic wrap / tight width) */
-@media (max-width: 800px) {
-  .hero-graphic {
-    height: 54px; width: auto; max-width: min(280px, 88vw);
-    object-fit: contain; flex-shrink: 1;
-  }
-}
-/* ≤1400 layout is single column — full hero width; keep cloud large down to 665px, then smaller rules apply */
-@media (max-width: 1400px) and (min-width: 665px) {
-  .hero-graphic {
-    height: 70px; width: auto; max-width: none;
-    object-fit: contain; flex-shrink: 0;
-  }
 }
 @media (max-width: 680px) {
   .portrait-section {
@@ -1654,13 +1639,13 @@ body.nav-menu-open #themeToggle {
 
   /* ── Viewport-scaled footer ── */
   .site-footer { padding: clamp(48px, 3.2vw, 72px) clamp(48px, 4.2vw, 80px); }
-  .footer-inner { max-width: clamp(960px, 64vw, 1400px); gap: clamp(32px, 2.2vw, 52px); }
+  .footer-inner { max-width: none; gap: clamp(32px, 2.2vw, 52px); }
   .footer-identity h3 { font-size: clamp(2.45rem, 2.4vw, 4rem); }
   .footer-identity p { font-size: clamp(1.05rem, 0.9vw, 1.5rem); }
   .footer-col h4 { font-size: clamp(0.82rem, 0.72vw, 1.1rem); margin-bottom: clamp(12px, 0.85vw, 20px); }
   .footer-col a, .footer-col span { font-size: clamp(0.7rem, 0.6vw, 0.95rem); }
   .footer-divider { margin: clamp(24px, 1.6vw, 40px) 0; }
-  .footer-bottom { max-width: clamp(960px, 64vw, 1400px); }
+  .footer-bottom { max-width: none; }
   .footer-bottom span { font-size: clamp(0.62rem, 0.52vw, 0.85rem); }
   .footer-constellation { flex: 0 0 clamp(252px, 16vw, 360px); height: clamp(196px, 13vw, 280px); }
 
@@ -2201,10 +2186,10 @@ body.nav-menu-open #themeToggle {
         <circle class="orion-star" cx="130" cy="90" r="3.2" fill="#e6e8f0" />
         <circle class="orion-star" cx="55" cy="122" r="2.2" fill="#8d98ac" />
         <circle class="orion-star" cx="155" cy="110" r="2.2" fill="#8d98ac" />
-        <circle class="orion-star" cx="25" cy="40" r="1.2" fill="#4a5568" />
-        <circle class="orion-star" cx="168" cy="47" r="1" fill="#4a5568" />
-        <circle class="orion-star" cx="88" cy="134" r="1.2" fill="#4a5568" />
-        <circle class="orion-star" cx="18" cy="87" r="0.8" fill="#4a5568" />
+        <circle class="orion-star orion-ambient" cx="25" cy="40" r="1.2" fill="#4a5568" />
+        <circle class="orion-star orion-ambient" cx="168" cy="47" r="1" fill="#4a5568" />
+        <circle class="orion-star orion-ambient" cx="88" cy="134" r="1.2" fill="#4a5568" />
+        <circle class="orion-star orion-ambient" cx="18" cy="87" r="0.8" fill="#4a5568" />
       </svg>
     </div>
 
@@ -2628,7 +2613,7 @@ document.addEventListener('keydown', function(e) {
   var PUSH_STRENGTH = 8;     // max push in vb units
   var MAX_SCALE = 1.7;
   var LERP_IN = 0.10;        // smoothing toward target (approach)
-  var LERP_OUT = 0.06;       // smoothing toward rest (retreat — slower for soft settle)
+  var LERP_OUT = 0.03;       // smoothing toward rest (retreat — very slow for seamless fade)
 
   /* ── Per-frame update ── */
   var running = false;
@@ -2699,24 +2684,22 @@ document.addEventListener('keydown', function(e) {
         'translate(' + s.tx.toFixed(2) + ',' + s.ty.toFixed(2) + ') ' +
         'scale(' + s.scale.toFixed(3) + ')'
       );
-      // apply glow via fill brightening + filter
-      if (s.glow > 0.01) {
-        var base = hexToRgb(s.baseFill);
-        var r = lerp(base[0], GLOW_COLOR[0], s.glow * 0.7);
-        var g = lerp(base[1], GLOW_COLOR[1], s.glow * 0.7);
-        var b = lerp(base[2], GLOW_COLOR[2], s.glow * 0.7);
-        s.el.setAttribute('fill', rgbStr(r, g, b));
+      // apply glow via fill brightening + filter — always interpolate, never snap
+      var base = hexToRgb(s.baseFill);
+      var r = lerp(base[0], GLOW_COLOR[0], s.glow * 0.7);
+      var g = lerp(base[1], GLOW_COLOR[1], s.glow * 0.7);
+      var b = lerp(base[2], GLOW_COLOR[2], s.glow * 0.7);
+      s.el.setAttribute('fill', rgbStr(r, g, b));
+      if (s.glow > 0.001) {
         var blur = (s.glow * 10).toFixed(1);
-        var spread = (s.glow * 6).toFixed(1);
         s.el.style.filter = 'drop-shadow(0 0 ' + blur + 'px rgba(174,191,208,' + (s.glow * 0.65).toFixed(2) + '))';
       } else {
-        s.el.setAttribute('fill', s.baseFill);
         s.el.style.filter = '';
       }
 
-      if (Math.abs(s.glow - s.tGlow) > 0.005 ||
-          Math.abs(s.tx - s.tTx) > 0.05 ||
-          Math.abs(s.ty - s.tTy) > 0.05) settled = false;
+      if (Math.abs(s.glow - s.tGlow) > 0.0005 ||
+          Math.abs(s.tx - s.tTx) > 0.01 ||
+          Math.abs(s.ty - s.tTy) > 0.01) settled = false;
     }
 
     // animate lines
@@ -2725,21 +2708,14 @@ document.addEventListener('keydown', function(e) {
       var lRate = (l.tGlow > l.glow) ? LERP_IN : LERP_OUT;
       l.glow = lerp(l.glow, l.tGlow, lRate);
 
-      if (l.glow > 0.01) {
-        var baseRgb = hexToRgb(l.baseStroke);
-        var lr = lerp(baseRgb[0], GLOW_COLOR[0], l.glow);
-        var lg = lerp(baseRgb[1], GLOW_COLOR[1], l.glow);
-        var lb = lerp(baseRgb[2], GLOW_COLOR[2], l.glow);
-        l.el.setAttribute('stroke', rgbStr(lr, lg, lb));
-        l.el.setAttribute('stroke-width', (l.baseWidth + 0.6 * l.glow).toFixed(2));
-        l.el.setAttribute('opacity', Math.min(1, 0.7 + 0.3 * l.glow).toFixed(2));
-      } else {
-        l.el.setAttribute('stroke', l.baseStroke);
-        l.el.setAttribute('stroke-width', l.baseWidth);
-        l.el.removeAttribute('opacity');
-      }
+      var baseRgb = hexToRgb(l.baseStroke);
+      var lr = lerp(baseRgb[0], GLOW_COLOR[0], l.glow);
+      var lg = lerp(baseRgb[1], GLOW_COLOR[1], l.glow);
+      var lb = lerp(baseRgb[2], GLOW_COLOR[2], l.glow);
+      l.el.setAttribute('stroke', rgbStr(lr, lg, lb));
+      l.el.setAttribute('stroke-width', (l.baseWidth + 0.6 * l.glow).toFixed(2));
 
-      if (Math.abs(l.glow - l.tGlow) > 0.005) settled = false;
+      if (Math.abs(l.glow - l.tGlow) > 0.0005) settled = false;
     }
 
     if (!settled) {
