@@ -130,7 +130,8 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* ═══════════════════════ PAGE TRANSITION ═══════════════════════ */
-.page { will-change: opacity, transform; overflow: hidden; }
+.page { will-change: opacity, transform; }
+.page.tx-out, .page.tx-in { overflow: hidden; }
 
 /* ── Title: swipe out left / in from right ── */
 .page.tx-out .page-title {
@@ -505,10 +506,12 @@ body.nav-menu-open #themeToggle {
 .home-left {
   flex: 1; padding-right: 48px;
   display: flex; flex-direction: column; justify-content: flex-start;
+  min-height: 0;
 }
 .home-right {
   flex: 1; padding-left: 48px;
   display: flex; flex-direction: column; justify-content: flex-start;
+  min-height: 0;
 }
 
 /* ═══════════════════════ SCROLL ANIM ═══════════════════════ */
@@ -577,7 +580,7 @@ body.nav-menu-open #themeToggle {
 }
 
 /* ═══════════════════════ HOME ═══════════════════════ */
-.social-icons { display: flex; gap: 8px; margin-top: 15px; margin-bottom: -14px; }
+.social-icons { display: flex; gap: 8px; margin-top: 15px; margin-bottom: -20px; }
 .social-icons a { color: var(--text-dim); font-size: 18px; transition: color 0.2s; }
 .social-icons a:hover { color: var(--text); }
 /* Inline X logo — same em box as Basicons icons */
@@ -592,7 +595,7 @@ body.nav-menu-open #themeToggle {
   vertical-align: -0.12em;
 }
 
-.hero-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: -10px; flex-wrap: nowrap; }
+.hero-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: -16px; flex-wrap: nowrap; }
 .hero-name { font-size: 2.6rem; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; flex-shrink: 0; min-width: 0; }
 .hero-graphic {
   height: 70px; opacity: 0.45;
@@ -641,7 +644,7 @@ body.nav-menu-open #themeToggle {
   border-color: #9a7868;
 }
 
-.portrait-section { display: flex; gap: 0; margin-top: 20px; margin-bottom: 0; align-items: stretch; }
+.portrait-section { display: flex; gap: 0; margin-top: 20px; margin-bottom: 0; align-items: stretch; flex-shrink: 1; min-height: 0; }
 .personal-info {
   flex: 1; display: flex; flex-direction: column; justify-content: flex-end;
   font-size: 0.85rem; color: var(--text-dim); font-weight: 300;
@@ -785,7 +788,7 @@ body.nav-menu-open #themeToggle {
 .exp-desc { font-size: 0.82rem; color: var(--text-dim); font-weight: 300; line-height: 1.6; }
 
 /* ═══════════════════════ KEYBOARD (inline) ═══════════════════════ */
-.kb-section { margin-bottom: 0; }
+.kb-section { margin-bottom: 0; flex-shrink: 1; min-height: 0; }
 /* Fade only — same duration/easing as .anim-rise (profile), same stagger base as .anim-seq-profile */
 .kb-section.anim { transition: opacity 0.7s ease var(--td); }
 .kb-label {
@@ -1209,8 +1212,8 @@ body.nav-menu-open #themeToggle {
   width: 100%;
   background: #080808;
   border-top: 1px solid #262626;
-  margin-top: 0;
-  padding: clamp(48px, 4vw, 80px) clamp(48px, 5vw, 120px);
+  margin-top: clamp(40px, 3.5vw, 80px);
+  padding: clamp(48px, 4vw, 80px) clamp(48px, 5vw, 120px) clamp(72px, 6vw, 120px);
   font-family: 'Inter', sans-serif;
   transition: background 0.4s, border-color 0.4s;
   flex-shrink: 0;
@@ -1551,6 +1554,7 @@ body.nav-menu-open #themeToggle {
   #page-home { padding-top: clamp(48px, 3.4vw, 68px); }
   .home-layout {
     min-height: calc(100dvh - clamp(48px, 3.4vw, 68px));
+    overflow: hidden;
   }
   .portrait-icons-row { display: flex; }
   .portrait-icons { display: none; }
@@ -1558,20 +1562,27 @@ body.nav-menu-open #themeToggle {
     border-right: 1px solid var(--border);
     padding-right: clamp(48px, 3.2vw, 72px);
     padding-top: clamp(16px, 1.4vw, 32px);
+    padding-bottom: clamp(16px, 1.4vw, 32px);
+    justify-content: space-between;
   }
   .home-right {
     padding-left: clamp(48px, 3.2vw, 72px);
     padding-top: clamp(16px, 1.4vw, 32px);
+    padding-bottom: clamp(16px, 1.4vw, 32px);
+    justify-content: space-between;
   }
   .home-left-top {
     margin-top: 0;
   }
-  .home-right .section-title { margin-top: clamp(14px, 1.2vw, 28px); }
-  .home-left .portrait-section { margin-top: auto; padding-bottom: clamp(48px, 4vw, 88px); }
-  .home-right .kb-section { margin-top: auto; padding-bottom: clamp(48px, 4vw, 88px); }
+  .home-right .section-title { margin-top: clamp(0px, 0.3vw, 8px); margin-bottom: clamp(8px, 0.6vw, 14px); }
+  .home-left .portrait-section { margin-top: auto; }
+  .home-right .kb-section { margin-top: auto; }
+  .exp-desc { line-height: 1.45; }
+  .exp-meta { margin-bottom: clamp(4px, 0.3vw, 6px); }
+  .exp-header { margin-bottom: clamp(2px, 0.2vw, 4px); }
 
   /* ── Viewport-scaled typography ── */
-  .hero-name { font-size: clamp(2.6rem, 2.6vw, 4.2rem); }
+  .hero-name { font-size: clamp(1.8rem, 2.2vw, 4.2rem); }
   .typewriter-wrap { font-size: clamp(1rem, 0.9vw, 1.5rem); }
   .bio, .bio-secondary { font-size: clamp(0.88rem, 0.82vw, 1.2rem); }
   .explore-btn { font-size: clamp(0.82rem, 0.75vw, 1.1rem); }
@@ -1586,12 +1597,12 @@ body.nav-menu-open #themeToggle {
   .exp-meta { font-size: clamp(0.75rem, 0.66vw, 1rem); }
   .exp-meta i { font-size: clamp(0.75rem, 0.66vw, 1rem); }
   .exp-tag { font-size: clamp(0.68rem, 0.58vw, 0.92rem); }
-  .exp-grid { gap: clamp(16px, 1.1vw, 28px); margin-bottom: clamp(24px, 1.6vw, 40px); }
-  .kb-label { font-size: clamp(11px, 0.72vw, 16px); }
+  .exp-grid { gap: clamp(8px, 0.6vw, 14px); margin-bottom: clamp(10px, 0.7vw, 16px); }
+  .kb-label { font-size: clamp(11px, 0.72vw, 16px); margin-top: clamp(12px, 1vw, 24px); }
   .legend-item { font-size: clamp(10px, 0.66vw, 15px); }
 
   /* ── Viewport-scaled portrait & graphic ── */
-  .portrait-clip { width: clamp(300px, 24vw, 480px); }
+  .portrait-clip { width: clamp(240px, 18vw, 380px); }
   .portrait-label-text { font-size: clamp(0.85rem, 0.78vw, 1.15rem); }
   .portrait-label-line { height: clamp(40px, 3.2vw, 68px); }
   .hero-graphic { height: clamp(70px, 4.8vw, 110px); }
@@ -1601,9 +1612,9 @@ body.nav-menu-open #themeToggle {
   .portrait-icons-row { gap: clamp(16px, 1.1vw, 28px); margin-bottom: clamp(12px, 0.9vw, 22px); }
   .social-icons { gap: clamp(8px, 0.55vw, 14px); margin-top: 0; }
 
-  /* ── Viewport-scaled keyboard: use container width to fill the column ── */
+  /* ── Viewport-scaled keyboard: scale with both width and height ── */
   .kb-layout-desktop {
-    font-size: clamp(10px, 0.68vw, 15.5px);
+    font-size: clamp(7px, 0.58vw, 15.5px);
   }
   .kb-layout-desktop .keyboard {
     padding: 1.4em 1.6em;
