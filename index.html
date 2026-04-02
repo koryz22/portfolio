@@ -791,6 +791,8 @@ body.nav-menu-open #themeToggle {
 .kb-section { margin-bottom: 0; flex-shrink: 1; min-height: 0; }
 /* Fade only — same duration/easing as .anim-rise (profile), same stagger base as .anim-seq-profile */
 .kb-section.anim { transition: opacity 0.7s ease var(--td); }
+.kb-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 12px; overflow: hidden; }
+.kb-header-left { flex: 1 1 auto; min-width: 0; }
 .kb-label {
   font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-size: 11px;
@@ -798,9 +800,9 @@ body.nav-menu-open #themeToggle {
   color: #aaa;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
-.legend { display: flex; gap: 16px; margin-bottom: 12px; flex-wrap: wrap; }
+.legend { display: flex; gap: 16px; flex-wrap: wrap; }
 .legend-item {
   display: flex;
   align-items: center;
@@ -868,7 +870,7 @@ body.nav-menu-open #themeToggle {
   border-bottom-color: #161616;
 }
 .key-lit-mod:hover { background: #3a3a3a; color: #fff; }
-.key-lit-mod .subtext { color: #a0a0a0; }
+.key.key-lit-mod .subtext { color: #d0d0d0; }
 .key-lit-mod.active {
   box-shadow: 0 0 0 2px rgba(255,255,255,0.2);
   background: #454545;
@@ -1054,6 +1056,8 @@ body.nav-menu-open #themeToggle {
 @media (max-width: 924px) {
   .kb-layout-desktop { display: none !important; }
   .kb-layout-mobile { display: block; }
+  .kb-header { flex-direction: column; align-items: stretch; }
+  .info-panel { flex: none; width: 100%; }
 }
 
 /* Light: cream keycaps — outers = title text on cap; esc = rose; space = blue-grey */
@@ -1182,17 +1186,19 @@ body.nav-menu-open #themeToggle {
 }
 
 .info-panel {
-  margin-top: 14px;
+  flex: 0 0 auto;
+  width: 45%;
+  min-width: 0;
   background: #080808;
   border: 1px solid #262626;
   border-radius: 14px;
-  padding: 16px 18px;
-  min-height: 64px;
+  padding: 12px 16px;
   font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-weight: 400;
   color: #b8b8b8;
   font-size: 13px;
   line-height: 1.6;
+  overflow: hidden;
   transition: background 0.15s, border-color 0.15s;
 }
 .info-panel .tag {
@@ -1201,9 +1207,24 @@ body.nav-menu-open #themeToggle {
   color: #7a7a8a;
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.info-panel .val { color: #e4e4e4; font-size: 14px; font-weight: 600; }
+.info-panel .val {
+  color: #e4e4e4; font-size: 14px; font-weight: 600;
+  white-space: nowrap; display: inline-block;
+  position: absolute; left: 0; top: 0;
+  will-change: transform;
+}
+.info-panel .val-wrap {
+  position: relative;
+  overflow: hidden;
+  height: 1.6em;
+  mask-image: linear-gradient(to right, black 0%, black 88%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, black 0%, black 88%, transparent 100%);
+}
 .info-panel .desc { color: #8a8a9a; font-size: 11px; margin-top: 6px; }
 
 /* ═══════════════════════ FOOTER (full-width HTML) ═══════════════════════ */
@@ -1562,13 +1583,13 @@ body.nav-menu-open #themeToggle {
     border-right: 1px solid var(--border);
     padding-right: clamp(48px, 3.2vw, 72px);
     padding-top: clamp(16px, 1.4vw, 32px);
-    padding-bottom: clamp(16px, 1.4vw, 32px);
+    padding-bottom: clamp(28px, 2.4vw, 52px);
     justify-content: space-between;
   }
   .home-right {
     padding-left: clamp(48px, 3.2vw, 72px);
     padding-top: clamp(16px, 1.4vw, 32px);
-    padding-bottom: clamp(16px, 1.4vw, 32px);
+    padding-bottom: clamp(28px, 2.4vw, 52px);
     justify-content: space-between;
   }
   .home-left-top {
@@ -1598,6 +1619,7 @@ body.nav-menu-open #themeToggle {
   .exp-meta i { font-size: clamp(0.75rem, 0.66vw, 1rem); }
   .exp-tag { font-size: clamp(0.68rem, 0.58vw, 0.92rem); }
   .exp-grid { gap: clamp(8px, 0.6vw, 14px); margin-bottom: clamp(10px, 0.7vw, 16px); }
+  .kb-header { gap: clamp(12px, 1vw, 24px); }
   .kb-label { font-size: clamp(11px, 0.72vw, 16px); margin-top: clamp(12px, 1vw, 24px); }
   .legend-item { font-size: clamp(10px, 0.66vw, 15px); }
 
@@ -1639,12 +1661,10 @@ body.nav-menu-open #themeToggle {
   /* Info panel scales too */
   .info-panel {
     font-size: clamp(10px, 0.72vw, 16px);
-    padding: 1.2em 1.4em;
+    padding: 0.9em 1.2em;
     border-radius: 1em;
-    margin-top: 1.2em;
-    min-height: auto;
   }
-  .info-panel .tag { font-size: 0.8em; margin-bottom: 0.6em; }
+  .info-panel .tag { font-size: 0.8em; margin-bottom: 0.4em; }
   .info-panel .val { font-size: 1.1em; }
   .info-panel .desc { font-size: 0.85em; margin-top: 0.5em; }
 
@@ -1879,10 +1899,18 @@ body.nav-menu-open #themeToggle {
 
   <!-- ══════════ KEYBOARD (inlined) ══════════ -->
   <div class="kb-section anim anim-seq-profile">
-    <div class="kb-label">kory zhang // interactive stack</div>
-    <div class="legend">
-      <div class="legend-item legend-lang"><div class="legend-dot dot-lang"></div>languages</div>
-      <div class="legend-item legend-tools"><div class="legend-dot dot-tools"></div>tools, software, &amp; others</div>
+    <div class="kb-header">
+      <div class="kb-header-left">
+        <div class="kb-label">kory zhang // interactive stack</div>
+        <div class="legend">
+          <div class="legend-item legend-lang"><div class="legend-dot dot-lang"></div>languages</div>
+          <div class="legend-item legend-tools"><div class="legend-dot dot-tools"></div>tools, software, &amp; others</div>
+        </div>
+      </div>
+      <div class="info-panel" id="kbPanel">
+        <div class="tag">press any key (click or type)</div>
+        <div class="val-wrap"><div class="val">— my stack, mapped.</div></div>
+      </div>
     </div>
     <!-- Full-width keyboard — desktop / tablet -->
     <div class="kb-layout-desktop">
@@ -2050,10 +2078,6 @@ body.nav-menu-open #themeToggle {
       </div>
       </div>
     </div>
-    </div>
-    <div class="info-panel" id="kbPanel">
-      <div class="tag">press any key (click or type)</div>
-      <div class="val">— my stack, mapped.</div>
     </div>
   </div>
 
@@ -2452,7 +2476,7 @@ setTimeout(typewriterTick, 1800);
 /* ═══════════════════════ KEYBOARD (inline logic) ═══════════════════════ */
 const kbInfo = {
   esc:   { tag: "BIO",             val: "Kory Zhang",                       desc: "full-stack, building useful things" },
-  tab:   { tag: "currently listening to", val: 'Feel it in My<br><span class="desc">it\'s murph, Arlo, fkblnde</span>', desc: "" },
+  tab:   { tag: "currently listening to", val: "Feel it in My — it's murph, Arlo, fkblnde", desc: "" },
   caps:  { tag: "unmapped",        val: "—",  desc: "" },
   "shift-l": { tag: "unmapped",    val: "—",  desc: "" },
   "shift-r": { tag: "Spoken Languages", val: "English (Native Proficiency), Mandarin Chinese (Professional Proficiency)", desc: "" },
@@ -2467,16 +2491,16 @@ const kbInfo = {
   csh:   { tag: "language", val: "C#", desc: "" },
   jv:    { tag: "language", val: "Java", desc: "" },
   ts:    { tag: "language", val: "TypeScript", desc: "" },
-  h:     { tag: "language", val: "HTML / CSS / JavaScript", desc: "" },
+  h:     { tag: "language", val: "HTML, CSS, JavaScript", desc: "" },
   sq:    { tag: "language", val: "SQL", desc: "" },
   yaml:  { tag: "tool", val: "YAML", desc: "" },
   pypo:  { tag: "tool", val: "Postman", desc: "" },
   re:    { tag: "tool", val: "React", desc: "" },
   bs:    { tag: "tool", val: "Bootstrap", desc: "" },
-  lwc:   { tag: "tool", val: "Lucid / Lightning Web Components", desc: "" },
-  az:    { tag: "tool", val: "Azure / AWS", desc: "" },
-  sf:    { tag: "tool", val: "Salesforce / Splunk / Slack", desc: "" },
-  fg:    { tag: "tool", val: "Figma / Framer", desc: "" },
+  lwc:   { tag: "tool", val: "Lucid, Lightning Web Components", desc: "" },
+  az:    { tag: "tool", val: "Azure, AWS", desc: "" },
+  sf:    { tag: "tool", val: "Salesforce, Splunk, Slack", desc: "" },
+  fg:    { tag: "tool", val: "Figma, Framer", desc: "" },
   gi:    { tag: "tool", val: "Git", desc: "" },
   ji:    { tag: "tool", val: "Jira", desc: "" },
   cert:  { tag: "certifications", val: "Salesforce Platform Developer I (2025), Salesforce Agentforce Specialist (2025)", desc: "" },
@@ -2511,6 +2535,12 @@ function kbFirstVisibleKey(selector) {
   }
   return list[0] || null;
 }
+let kbMarqueeTimer = null;
+let kbMarqueeRaf = null;
+function kbMarqueeClear() {
+  if (kbMarqueeTimer) { clearTimeout(kbMarqueeTimer); kbMarqueeTimer = null; }
+  if (kbMarqueeRaf) { cancelAnimationFrame(kbMarqueeRaf); kbMarqueeRaf = null; }
+}
 function kbShow(el) {
   document.querySelectorAll('.key.active').forEach(k => k.classList.remove('active'));
   const dk = el.dataset.key;
@@ -2523,8 +2553,49 @@ function kbShow(el) {
   }
   kbCurrent = el;
   const k = el.dataset.key, d = kbInfo[k], p = document.getElementById('kbPanel');
-  if (!d || k === 'blank') { p.innerHTML = '<div class="tag">unmapped</div><div class="val">—</div>'; return; }
-  p.innerHTML = `<div class="tag">${d.tag}</div><div class="val">${d.val}</div>${k==='esc'?`<div class="desc">${d.desc}</div>`:''}`;
+  kbMarqueeClear();
+  if (!d || k === 'blank') { p.innerHTML = '<div class="tag">unmapped</div><div class="val-wrap"><div class="val">—</div></div>'; return; }
+  p.innerHTML = `<div class="tag">${d.tag}</div><div class="val-wrap"><div class="val">${d.val}</div></div>${k==='esc'?`<div class="desc">${d.desc}</div>`:''}`;
+  requestAnimationFrame(() => kbMarquee(p));
+}
+
+function kbMarquee(panel) {
+  const wrap = panel.querySelector('.val-wrap');
+  const val = panel.querySelector('.val');
+  if (!wrap || !val) return;
+  kbMarqueeClear();
+  val.style.transform = 'translateX(0)';
+  const text = val.textContent;
+  val.textContent = text;
+  const singleW = val.offsetWidth;
+  const wrapW = wrap.clientWidth;
+  if (singleW <= wrapW + 2) return;
+  // measure one copy + gap width before duplicating
+  const gap = '\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0';
+  val.textContent = text + gap;
+  const dist = val.offsetWidth;
+  // now add the second copy so the loop is seamless
+  val.textContent = text + gap + text;
+  const speed = 60; // px/s
+  const pauseMs = 1800;
+  function cycle() {
+    let start = null;
+    const durMs = (dist / speed) * 1000;
+    function step(ts) {
+      if (!start) start = ts;
+      const progress = Math.min((ts - start) / durMs, 1);
+      val.style.transform = `translateX(-${progress * dist}px)`;
+      if (progress < 1) {
+        kbMarqueeRaf = requestAnimationFrame(step);
+      } else {
+        // at this point the second copy is exactly where the first started
+        val.style.transform = 'translateX(0)';
+        kbMarqueeTimer = setTimeout(cycle, pauseMs);
+      }
+    }
+    kbMarqueeRaf = requestAnimationFrame(step);
+  }
+  kbMarqueeTimer = setTimeout(cycle, pauseMs);
 }
 
 document.querySelectorAll('.key').forEach(k => k.addEventListener('click', () => kbShow(k)));
