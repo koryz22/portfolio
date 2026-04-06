@@ -506,7 +506,7 @@ body.nav-menu-open #themeToggle {
   align-items: center;
 }
 .page.active:not(#page-home) > * {
-  width: min(42rem, 100%);
+  width: min(52rem, 100%);
 }
 
 /* ═══════════════════════ HOME TWO-COLUMN ═══════════════════════ */
@@ -1410,7 +1410,7 @@ body.nav-menu-open #themeToggle {
 }
 
 /* ═══════════════════════ PROJECTS ═══════════════════════ */
-.page-title { font-size: 2.2rem; font-weight: 700; margin-bottom: 36px; color: #fff; }
+.page-title { font-size: 2.85rem; font-weight: 700; margin-bottom: 36px; color: #fff; }
 .page-title span { color: #fff; }
 .project-list { display: flex; flex-direction: column; gap: 14px; }
 .project-card {
@@ -1552,7 +1552,7 @@ body.nav-menu-open #themeToggle {
   margin-top: -20px;
   margin-bottom: 18px;
 }
-.testimony-text p:last-child { margin-bottom: 0; }
+.testimony-text p:last-of-type { margin-bottom: 0; }
 .testimony-scroll-section {
   position: relative;
   min-height: 300vh;
@@ -1589,22 +1589,22 @@ body.nav-menu-open #themeToggle {
   .testimony-scroll-sticky { position: static; transform: none; }
 }
 .testimony-yt {
-  display: inline;
-  margin-left: 0.35em;
-  vertical-align: -0.12em;
+  display: block;
+  text-align: right;
+  margin-top: -3px;
   color: var(--text-dim);
   text-decoration: none;
-  font-size: 0.82em;
-  line-height: 0;
+  font-size: 1.85rem;
+  line-height: 1;
   transition: color 0.2s;
 }
 .testimony-yt:hover { color: var(--text); }
-.testimony-yt .basicons { display: inline-block; }
+.testimony-yt .basicons { display: inline-block; vertical-align: middle; }
 
 /* ═══════════════════════ CONTACT ═══════════════════════ */
 .contact-section { margin-top: 0; text-align: left; }
 .contact-intro {
-  font-size: 0.88rem; color: var(--text-dim); font-weight: 300; line-height: 1.7;
+  font-size: 0.95rem; color: var(--text-dim); font-weight: 300; line-height: 1.7;
   margin-bottom: 32px;
 }
 .contact-grid {
@@ -1617,11 +1617,12 @@ body.nav-menu-open #themeToggle {
 }
 .contact-row:last-child { border-bottom: none; }
 .contact-row-label {
-  font-size: 0.82rem; color: var(--text-dimmer); font-weight: 400;
+  font-size: 0.92rem; color: var(--text-dimmer); font-weight: 400;
   text-transform: lowercase; letter-spacing: 0.03em;
+  flex-shrink: 0;
 }
 .contact-row-value {
-  font-size: 0.9rem; color: var(--text-dim); font-weight: 300;
+  font-size: 0.95rem; color: var(--text-dim); font-weight: 300;
   transition: color 0.2s;
 }
 .contact-row-value:hover { color: var(--text); }
@@ -1941,9 +1942,9 @@ body.nav-menu-open #themeToggle {
     padding: clamp(80px, 5.5vw, 120px) clamp(48px, 4.2vw, 80px) clamp(56px, 4vw, 88px);
   }
   .page.active:not(#page-home) > * {
-    width: min(clamp(42rem, 46vw, 64rem), 100%);
+    width: min(clamp(52rem, 50vw, 68rem), 100%);
   }
-  .page-title { font-size: clamp(2.2rem, 2.2vw, 3.6rem); margin-bottom: clamp(36px, 2.4vw, 60px); }
+  .page-title { font-size: clamp(2.85rem, 3.4vw, 4.25rem); margin-bottom: clamp(36px, 2.4vw, 60px); }
 
   /* Projects */
   .project-list { gap: clamp(14px, 1vw, 20px); }
@@ -1971,6 +1972,10 @@ body.nav-menu-open #themeToggle {
     font-size: clamp(0.9rem, 0.82vw, 1.2rem);
     padding: clamp(22px, 1.5vw, 36px) clamp(28px, 2vw, 44px);
   }
+  .testimony-yt {
+    font-size: clamp(1.85rem, 2.2vw, 2.5rem);
+    margin-top: clamp(-4px, -0.15vw, 0px);
+  }
   .testimony-text::before,
   .testimony-text::after {
     width: clamp(20px, 1.4vw, 28px);
@@ -1980,9 +1985,9 @@ body.nav-menu-open #themeToggle {
   .testimony-scroll-section { margin-bottom: clamp(18px, 1.2vw, 30px); }
 
   /* Contact */
-  .contact-intro { font-size: clamp(0.88rem, 0.82vw, 1.2rem); margin-bottom: clamp(32px, 2.2vw, 52px); }
+  .contact-intro { font-size: clamp(0.95rem, 0.85vw, 1.3rem); margin-bottom: clamp(32px, 2.2vw, 52px); }
   .contact-row { padding: clamp(18px, 1.2vw, 30px) 0; }
-  .contact-row-label { font-size: clamp(0.82rem, 0.72vw, 1.1rem); }
-  .contact-row-value { font-size: clamp(0.9rem, 0.82vw, 1.2rem); }
+  .contact-row-label { font-size: clamp(0.92rem, 0.82vw, 1.2rem); }
+  .contact-row-value { font-size: clamp(0.95rem, 0.85vw, 1.3rem); }
   .contact-note { margin-top: clamp(36px, 2.4vw, 58px); font-size: clamp(0.78rem, 0.68vw, 1rem); }
 }
