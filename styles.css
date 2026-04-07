@@ -1509,15 +1509,15 @@ body.nav-menu-open #themeToggle {
 .values-list::before {
   top: 0;
   left: 0;
-  border-left: 1.5px solid var(--border);
-  border-top: 1.5px solid var(--border);
+  border-left: 1.5px solid #aaa;
+  border-top: 1.5px solid #aaa;
 }
 /* Bottom-right corner bracket */
 .values-list::after {
   bottom: 0;
   right: 0;
-  border-right: 1.5px solid var(--border);
-  border-bottom: 1.5px solid var(--border);
+  border-right: 1.5px solid #aaa;
+  border-bottom: 1.5px solid #aaa;
 }
 .value-item { font-size: 0.95rem; line-height: 1.7; font-weight: 300; color: var(--text-dim); }
 .value-num { font-weight: 600; margin-right: 4px; }
@@ -1539,13 +1539,13 @@ body.nav-menu-open #themeToggle {
 }
 .testimony-text::before {
   top: 0; left: 0;
-  border-left: 1.5px solid var(--border);
-  border-top: 1.5px solid var(--border);
+  border-left: 1.5px solid #aaa;
+  border-top: 1.5px solid #aaa;
 }
 .testimony-text::after {
   bottom: 0; right: 0;
-  border-right: 1.5px solid var(--border);
-  border-bottom: 1.5px solid var(--border);
+  border-right: 1.5px solid #aaa;
+  border-bottom: 1.5px solid #aaa;
 }
 /* Match projects: no extra gap above first line (browser p margins); space only from .page-title */
 .testimony-text p {
@@ -1582,7 +1582,12 @@ body.nav-menu-open #themeToggle {
 [data-theme="light"] .testimony-text em .testimony-hover-sentence:hover,
 [data-theme="light"] .testimony-text em .testimony-hover-sentence.scroll-lit {
   color: var(--text);
+  text-decoration: underline;
 }
+[data-theme="light"] .values-list::before,
+[data-theme="light"] .values-list::after { border-color: #222; }
+[data-theme="light"] .testimony-text::before,
+[data-theme="light"] .testimony-text::after { border-color: #222; }
 @media (prefers-reduced-motion: reduce) {
   .testimony-scroll-section { min-height: auto; }
   .testimony-scroll-sticky { position: static; transform: none; }
