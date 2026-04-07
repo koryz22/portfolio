@@ -1558,6 +1558,7 @@ body.nav-menu-open #themeToggle {
   min-height: 300vh;
   margin-top: -20px;
   margin-bottom: 18px;
+  white-space: normal;
 }
 .testimony-scroll-section p {
   margin-top: 0;
@@ -1566,11 +1567,9 @@ body.nav-menu-open #themeToggle {
 .testimony-scroll-sticky {
   position: sticky;
   top: 50vh;
-  transform: translateY(-50%);
 }
 @media (max-width: 640px) {
   .testimony-scroll-section { min-height: 200vh; }
-  .testimony-scroll-sticky { top: 25vh; transform: none; }
 }
 .testimony-text em .testimony-hover-sentence {
   transition: color 0.35s ease;
@@ -1983,6 +1982,7 @@ body.nav-menu-open #themeToggle {
   }
   .testimony-text p { margin-bottom: clamp(18px, 1.2vw, 30px); }
   .testimony-scroll-section { margin-bottom: clamp(18px, 1.2vw, 30px); }
+  .testimony-scroll-section p { margin: 0; }
 
   /* Contact */
   .contact-intro { font-size: clamp(0.95rem, 0.85vw, 1.3rem); margin-bottom: clamp(32px, 2.2vw, 52px); }
