@@ -673,6 +673,26 @@ document.addEventListener('keydown', function(e) {
   if (!section) return;
   var sentences = section.querySelectorAll('.testimony-hover-sentence');
   if (!sentences.length) return;
+  var stickyEl = section.querySelector('.testimony-scroll-sticky');
+
+  /* Set top so the text centres at 50vh on all screen sizes */
+  function centerSticky() {
+    if (!stickyEl) return;
+    var h = stickyEl.offsetHeight;
+    if (h > 0) stickyEl.style.top = 'calc(50vh - ' + (h / 2) + 'px)';
+  }
+  centerSticky();
+  window.addEventListener('resize', centerSticky);
+
+  /* Re-run when the testimony page becomes visible (display:none → flex) */
+  var page = section.closest('.page');
+  if (page) {
+    new MutationObserver(function () {
+      if (page.classList.contains('active')) {
+        requestAnimationFrame(centerSticky);
+      }
+    }).observe(page, { attributes: true, attributeFilter: ['class'] });
+  }
 
   function update() {
     if (!section.offsetParent && getComputedStyle(section).display === 'none') return;
