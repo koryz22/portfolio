@@ -1585,9 +1585,9 @@ body.nav-menu-open #themeToggle {
   text-decoration: underline;
 }
 [data-theme="light"] .values-list::before,
-[data-theme="light"] .values-list::after { border-color: #222; }
+[data-theme="light"] .values-list::after { border-color: #111; }
 [data-theme="light"] .testimony-text::before,
-[data-theme="light"] .testimony-text::after { border-color: #222; }
+[data-theme="light"] .testimony-text::after { border-color: #111; }
 @media (prefers-reduced-motion: reduce) {
   .testimony-scroll-section { min-height: auto; }
   .testimony-scroll-sticky { position: static; transform: none; }
@@ -1602,6 +1602,7 @@ body.nav-menu-open #themeToggle {
   line-height: 1;
   transition: color 0.2s;
 }
+[data-theme="light"] .testimony-yt { color: #222; }
 .testimony-yt:hover { color: var(--text); }
 .testimony-yt .basicons { display: inline-block; vertical-align: middle; }
 
