@@ -382,21 +382,40 @@ document.addEventListener('keydown', function(e) {
 
   /* ── Build data model ── */
   var VB_W = 180, VB_H = 140;
-  // Map blue-gray base fills to peach equivalents for light mode
+  // Map blue-gray base fills to light-mode equivalents
   var fillDarkToLight = {
-    '#e6e8f0': '#f0f0f0', // bright star → near white
+    '#e6e8f0': '#f0f0f0', // bright star → near white (default)
     '#8d98ac': '#e8c4b6', // mid star → peach
     '#4a5568': '#c49a8a'  // dim star → dimmer peach
   };
+  // Inner stars that stay white in light mode — everything else becomes salmon
+  var whiteLightStars = [
+    '120,60',  // center mid star
+    '130,90',  // star 4 (right-middle bright)
+    '155,110', // bottom-right outlier
+    '168,47',  // ambient dim star (right side)
+    '88,134'   // ambient dim star (bottom)
+  ];
   var starData = starEls.map(function(el) {
     var darkFill = el.getAttribute('fill');
+    var cx = +el.getAttribute('cx'), cy = +el.getAttribute('cy');
+    var key = cx + ',' + cy;
+    var lightFill = (whiteLightStars.indexOf(key) !== -1) ? '#f0f0f0' : '#e8c4b6';
+    // Mirror in dark mode: white-list stars → bright white, others → blue-gray mid
+    var isAmbient = el.classList.contains('orion-ambient');
+    if (whiteLightStars.indexOf(key) !== -1) {
+      darkFill = '#e6e8f0';
+    } else {
+      darkFill = isAmbient ? '#4a5568' : '#8d98ac';
+    }
+    el.setAttribute('fill', darkFill);
     return {
       el: el,
-      cx: +el.getAttribute('cx'),
-      cy: +el.getAttribute('cy'),
+      cx: cx,
+      cy: cy,
       r: +el.getAttribute('r'),
       darkFill: darkFill,
-      lightFill: fillDarkToLight[darkFill] || darkFill,
+      lightFill: lightFill,
       baseFill: darkFill,
       // current animated state (lerped each frame)
       scale: 1, glow: 0, tx: 0, ty: 0,
@@ -406,21 +425,63 @@ document.addEventListener('keydown', function(e) {
   });
 
   var VB_EPS = 1.5;
-  var lineData = lines.map(function(el) {
+
+  // Create <defs> for line gradients
+  var defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+  svg.insertBefore(defs, svg.firstChild);
+
+  var lineData = lines.map(function(el, idx) {
     var x1 = +el.getAttribute('x1'), y1 = +el.getAttribute('y1');
     var x2 = +el.getAttribute('x2'), y2 = +el.getAttribute('y2');
     var baseStroke = el.getAttribute('stroke');
     var baseWidth = +el.getAttribute('stroke-width') || 0.7;
-    // find which stars are endpoints
-    var endStars = starData.filter(function(s) {
-      return Math.hypot(s.cx - x1, s.cy - y1) < VB_EPS ||
-             Math.hypot(s.cx - x2, s.cy - y2) < VB_EPS;
-    });
+
+    // find endpoint stars — star1 near (x1,y1), star2 near (x2,y2)
+    var star1 = null, star2 = null;
+    for (var si = 0; si < starData.length; si++) {
+      var s = starData[si];
+      if (!star1 && Math.hypot(s.cx - x1, s.cy - y1) < VB_EPS) star1 = s;
+      if (!star2 && Math.hypot(s.cx - x2, s.cy - y2) < VB_EPS) star2 = s;
+    }
+
+    // create a 5-stop linear gradient: endpoint, fade-before, center, fade-after, endpoint
+    var lineLen = Math.hypot(x2 - x1, y2 - y1) || 1;
+    var grad = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+    grad.id = 'orion-lg-' + idx;
+    grad.setAttribute('gradientUnits', 'userSpaceOnUse');
+    grad.setAttribute('x1', x1); grad.setAttribute('y1', y1);
+    grad.setAttribute('x2', x2); grad.setAttribute('y2', y2);
+    var stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+    stop1.setAttribute('offset', '0%');
+    stop1.setAttribute('stop-color', baseStroke);
+    var fadeA = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+    fadeA.setAttribute('offset', '25%');
+    fadeA.setAttribute('stop-color', baseStroke);
+    var center = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+    center.setAttribute('offset', '50%');
+    center.setAttribute('stop-color', baseStroke);
+    var fadeB = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+    fadeB.setAttribute('offset', '75%');
+    fadeB.setAttribute('stop-color', baseStroke);
+    var stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+    stop2.setAttribute('offset', '100%');
+    stop2.setAttribute('stop-color', baseStroke);
+    grad.appendChild(stop1); grad.appendChild(fadeA);
+    grad.appendChild(center); grad.appendChild(fadeB);
+    grad.appendChild(stop2);
+    defs.appendChild(grad);
+
+    el.setAttribute('stroke', 'url(#orion-lg-' + idx + ')');
+
     return {
       el: el, darkStroke: baseStroke, lightStroke: '#808080',
       baseStroke: baseStroke, baseWidth: baseWidth,
-      endStars: endStars,
-      glow: 0, tGlow: 0
+      star1: star1, star2: star2,
+      stop1: stop1, fadeA: fadeA, center: center, fadeB: fadeB, stop2: stop2, grad: grad,
+      x1: x1, y1: y1, x2: x2, y2: y2, lineLen: lineLen,
+      glow1: 0, tGlow1: 0,
+      glow2: 0, tGlow2: 0,
+      glowMid: 0, tGlowMid: 0, tMidT: 0.5
     };
   });
 
@@ -436,12 +497,12 @@ document.addEventListener('keydown', function(e) {
   }
 
   /* ── Interaction constants ── */
-  var GLOW_RADIUS = 80;      // vb units — how far the glow reaches
-  var PUSH_RADIUS = 55;      // vb units — how far the knock push reaches
+  var GLOW_RADIUS = 45;      // vb units — how far the glow reaches
+  var PUSH_RADIUS = 30;      // vb units — how far the knock push reaches
   var PUSH_STRENGTH = 8;     // max push in vb units
   var MAX_SCALE = 2.0;
-  var LERP_IN = 0.10;        // smoothing toward target (approach)
-  var LERP_OUT = 0.03;       // smoothing toward rest (retreat — very slow for seamless fade)
+  var LERP_IN = 0.17;        // smoothing toward target (approach)
+  var LERP_OUT = 0.12;       // smoothing toward rest (retreat)
 
   /* ── Per-frame update ── */
   var running = false;
@@ -488,14 +549,24 @@ document.addEventListener('keydown', function(e) {
       s.tTy = (dy / dist) * mag;
     }
 
-    // line glow: max glow of either endpoint star
+    // line glow: per-endpoint + mouse projection for seamless glow along line
     for (var j = 0; j < lineData.length; j++) {
       var l = lineData[j];
-      var maxG = 0;
-      for (var k = 0; k < l.endStars.length; k++) {
-        if (l.endStars[k].tGlow > maxG) maxG = l.endStars[k].tGlow;
+      l.tGlow1 = l.star1 ? l.star1.tGlow : 0;
+      l.tGlow2 = l.star2 ? l.star2.tGlow : 0;
+      if (p) {
+        // project mouse onto line segment → parameter t (0–1) and perp distance
+        var ldx = l.x2 - l.x1, ldy = l.y2 - l.y1;
+        var t = ((p.x - l.x1) * ldx + (p.y - l.y1) * ldy) / (l.lineLen * l.lineLen);
+        t = Math.max(0, Math.min(1, t));
+        var projX = l.x1 + t * ldx, projY = l.y1 + t * ldy;
+        var perpDist = Math.hypot(p.x - projX, p.y - projY);
+        var midGlow = Math.max(0, 1 - perpDist / GLOW_RADIUS);
+        l.tGlowMid = midGlow * midGlow;
+        l.tMidT = t;
+      } else {
+        l.tGlowMid = 0;
       }
-      l.tGlow = maxG;
     }
   }
 
@@ -538,20 +609,67 @@ document.addEventListener('keydown', function(e) {
           Math.abs(s.ty - s.tTy) > 0.01) settled = false;
     }
 
-    // animate lines
+    // animate lines — 5-stop gradient: endpoint, fade-before, center, fade-after, endpoint
+    var GLOW_SPREAD = 0.20; // how far the glow spreads along the line (0–0.5)
     for (var j = 0; j < lineData.length; j++) {
       var l = lineData[j];
-      var lRate = (l.tGlow > l.glow) ? LERP_IN : LERP_OUT;
-      l.glow = lerp(l.glow, l.tGlow, lRate);
-
       var baseRgb = hexToRgb(l.baseStroke);
-      var lr = lerp(baseRgb[0], GLOW_COLOR[0], l.glow);
-      var lg = lerp(baseRgb[1], GLOW_COLOR[1], l.glow);
-      var lb = lerp(baseRgb[2], GLOW_COLOR[2], l.glow);
-      l.el.setAttribute('stroke', rgbStr(lr, lg, lb));
-      l.el.setAttribute('stroke-width', (l.baseWidth + 0.6 * l.glow).toFixed(2));
 
-      if (Math.abs(l.glow - l.tGlow) > 0.0005) settled = false;
+      // lerp each endpoint + center independently
+      var rate1 = (l.tGlow1 > l.glow1) ? LERP_IN : LERP_OUT;
+      l.glow1 = lerp(l.glow1, l.tGlow1, rate1);
+      var rate2 = (l.tGlow2 > l.glow2) ? LERP_IN : LERP_OUT;
+      l.glow2 = lerp(l.glow2, l.tGlow2, rate2);
+      var rateMid = (l.tGlowMid > l.glowMid) ? LERP_IN : LERP_OUT;
+      l.glowMid = lerp(l.glowMid, l.tGlowMid, rateMid);
+
+      // position center stop at mouse projection, with fade stops on either side
+      var midT = l.tMidT;
+      var fadeAT = Math.max(0.01, midT - GLOW_SPREAD);
+      var fadeBT = Math.min(0.99, midT + GLOW_SPREAD);
+      l.fadeA.setAttribute('offset', (fadeAT * 100).toFixed(1) + '%');
+      l.center.setAttribute('offset', (midT * 100).toFixed(1) + '%');
+      l.fadeB.setAttribute('offset', (fadeBT * 100).toFixed(1) + '%');
+
+      // endpoint colors
+      var boost1 = Math.min(l.glow1 * 1.6, 1);
+      l.stop1.setAttribute('stop-color', rgbStr(
+        lerp(baseRgb[0], GLOW_COLOR[0], boost1),
+        lerp(baseRgb[1], GLOW_COLOR[1], boost1),
+        lerp(baseRgb[2], GLOW_COLOR[2], boost1)));
+
+      var boost2 = Math.min(l.glow2 * 1.6, 1);
+      l.stop2.setAttribute('stop-color', rgbStr(
+        lerp(baseRgb[0], GLOW_COLOR[0], boost2),
+        lerp(baseRgb[1], GLOW_COLOR[1], boost2),
+        lerp(baseRgb[2], GLOW_COLOR[2], boost2)));
+
+      // center + fade stops: glow based on perpendicular distance to line
+      var boostMid = Math.min(l.glowMid * 1.6, 1);
+      var midColor = rgbStr(
+        lerp(baseRgb[0], GLOW_COLOR[0], boostMid),
+        lerp(baseRgb[1], GLOW_COLOR[1], boostMid),
+        lerp(baseRgb[2], GLOW_COLOR[2], boostMid));
+      l.center.setAttribute('stop-color', midColor);
+      // fade stops: solid between star and mouse when both glow, otherwise fade to base
+      var fadeAGlow = Math.min(Math.max(boost1, boostMid), 1);
+      l.fadeA.setAttribute('stop-color', rgbStr(
+        lerp(baseRgb[0], GLOW_COLOR[0], fadeAGlow),
+        lerp(baseRgb[1], GLOW_COLOR[1], fadeAGlow),
+        lerp(baseRgb[2], GLOW_COLOR[2], fadeAGlow)));
+      var fadeBGlow = Math.min(Math.max(boost2, boostMid), 1);
+      l.fadeB.setAttribute('stop-color', rgbStr(
+        lerp(baseRgb[0], GLOW_COLOR[0], fadeBGlow),
+        lerp(baseRgb[1], GLOW_COLOR[1], fadeBGlow),
+        lerp(baseRgb[2], GLOW_COLOR[2], fadeBGlow)));
+
+      // stroke-width: use the brightest glow
+      var maxGlow = Math.max(l.glow1, l.glow2, l.glowMid);
+      l.el.setAttribute('stroke-width', (l.baseWidth + 1.0 * maxGlow).toFixed(2));
+
+      if (Math.abs(l.glow1 - l.tGlow1) > 0.0005 ||
+          Math.abs(l.glow2 - l.tGlow2) > 0.0005 ||
+          Math.abs(l.glowMid - l.tGlowMid) > 0.0005) settled = false;
     }
 
     if (!settled) {
@@ -586,7 +704,13 @@ document.addEventListener('keydown', function(e) {
     for (var j = 0; j < lineData.length; j++) {
       var l = lineData[j];
       l.baseStroke = isLight ? l.lightStroke : l.darkStroke;
-      if (l.glow < 0.01) l.el.setAttribute('stroke', l.baseStroke);
+      if (l.glow1 < 0.01 && l.glow2 < 0.01 && l.glowMid < 0.01) {
+        l.stop1.setAttribute('stop-color', l.baseStroke);
+        l.fadeA.setAttribute('stop-color', l.baseStroke);
+        l.center.setAttribute('stop-color', l.baseStroke);
+        l.fadeB.setAttribute('stop-color', l.baseStroke);
+        l.stop2.setAttribute('stop-color', l.baseStroke);
+      }
     }
   }
   syncConstellationTheme();
