@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,12 +8,22 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@500;600;700&display=swap" rel="stylesheet" />
 <link href="https://basicons.gitlab.io/i/@/icons.css" rel="stylesheet" crossorigin />
-<link rel="stylesheet" href="styles.css?v=contactsep">
+<link rel="stylesheet" href="styles.css?v=valuesref6">
+<script>
+  (function () {
+    try {
+      var saved = localStorage.getItem('theme');
+      if (saved === 'light' || saved === 'dark') {
+        document.documentElement.setAttribute('data-theme', saved);
+      }
+    } catch (e) {}
+  })();
+</script>
 </head>
 <body>
 
 <!-- ═══════════════════════ SPLASH ═══════════════════════ -->
-<div id="splash"><div class="splash-name">kory zhang!</div></div>
+<div id="splash"><div class="splash-name">loading<span class="splash-dot splash-dot-1">.</span><span class="splash-dot splash-dot-2">.</span><span class="splash-dot splash-dot-3">.</span></div></div>
 
 <!-- ═══════════════════════ TOPBAR ═══════════════════════ -->
 <nav class="topbar">
@@ -35,8 +45,8 @@
       <span class="topbar-clock-sub"><span class="js-widget-date">—</span><span class="topbar-clock-sep" aria-hidden="true">·</span><span class="topbar-clock-temp js-widget-temp">—°</span></span>
     </time>
     <div class="theme-toggle" id="themeToggle">
-      [<span class="active-theme" data-mode="dark">dark</span>
-       <span class="inactive-theme" data-mode="light">light</span>]
+      [<span class="active-theme" data-mode="light">light</span>
+       <span class="inactive-theme" data-mode="dark">dark</span>]
     </div>
   </div>
 </nav>
@@ -68,8 +78,8 @@
         </time>
       </div>
       <div class="theme-toggle" id="themeToggleMenu">
-        [<span class="active-theme" data-mode="dark">dark</span>
-         <span class="inactive-theme" data-mode="light">light</span>]
+        [<span class="active-theme" data-mode="light">light</span>
+         <span class="inactive-theme" data-mode="dark">dark</span>]
       </div>
     </div>
   </div>
@@ -103,7 +113,7 @@
 
   <p class="bio anim anim-rise anim-seq-profile anim-delay-3">my name is kory! i'm from the east bay and i work full-time as a software engineer at JPF Capital. on a day to day basis, i design and build modern SaaS systems with an eye toward practicality — doing thoughtful, yet simple and effective work</p>
 
-  <p class="bio-secondary anim anim-rise anim-seq-profile anim-delay-4">outside of work, i'm always building. i love to produce melodic house, refine my wardrobe, and collect thule stickers //</p>
+  <p class="bio-secondary anim anim-rise anim-seq-profile anim-delay-4">outside of work, i'm always building. i love to produce melodic house, go thrifting, or travel and collect thule stickers! //</p>
 
   <div class="anim anim-rise anim-seq-profile anim-delay-5">
     <button class="explore-btn" id="exploreProjBtn">explore projects <span class="arrow">⇒</span></button>
@@ -163,7 +173,7 @@
       <div class="exp-meta">
         <span><i class="basicons" icon-name="calendar"></i> 2025 - Now</span><span><i class="basicons" icon-name="building"></i> JPF Capital</span><span><i class="basicons" icon-name="map-pin"></i> Danville, CA</span>
       </div>
-      <p class="exp-desc">Leading the design, architecture, and engineering of a next-generation all-in-one CRM, financial, and accounting software platform for family offices</p>
+      <p class="exp-desc">Leading the engineering, architecture, and design of a next-generation all-in-one CRM, financial, and accounting software platform for family offices</p>
     </div>
     <div class="exp-card anim anim-exp anim-seq-exp">
       <div class="exp-header">
@@ -480,11 +490,24 @@
 <div class="page" id="page-values">
   <div class="page-title anim"><span>// </span>values</div>
   <div class="values-list">
-    <div class="value-item anim"><span class="value-num">1.</span> visit and take care of your family often, for your time is short, and theirs is shorter</div>
-    <div class="value-item anim"><span class="value-num">2.</span> live with joy; for the world is fleeting, but it is also a gift from God (Ecclesiastes 3:12–13)</div>
-    <div class="value-item anim"><span class="value-num">3.</span> imperfect action > overthinking</div>
-    <div class="value-item anim"><span class="value-num">4.</span> keep your head up when you fail — there is no better option</div>
-    <div class="value-item anim"><span class="value-num">5.</span> humility and gladness in the Lord yields true confidence</div>
+    <div class="value-item anim">
+      <span class="value-num">01</span>
+      <span class="value-text">visit and take care of your family often, for your time is short, and theirs is shorter</span>
+    </div>
+    <div class="value-item anim">
+      <span class="value-num">02</span>
+      <span class="value-text">live with joy; happiness is fleeting, but it&rsquo;s also a gift!<sup class="value-sup">1</sup></span>
+    </div>
+    <div class="value-item anim">
+      <span class="value-num">03</span>
+      <span class="value-text">imperfect action &gt; overthinking</span>
+    </div>
+  </div>
+  <div class="value-refs anim">
+    <div class="value-ref-item">
+      <sup class="value-sup">1</sup>
+      <span class="psalm-tip-wrap value-ref">Ecclesiastes 3:12&ndash;13<span class="psalm-tip">"I perceived that there is nothing better for them than to be joyful and to do good as long as they live; also that everyone should eat and drink and take pleasure in all his toil&mdash;this is God's gift to man."</span></span>
+    </div>
   </div>
 </div>
 
@@ -624,8 +647,8 @@
   <div class="footer-divider"></div>
   <div class="footer-bottom">
     <span>© 2026 KORY ZHANG.</span>
-    <span class="footer-tagline psalm-tip-wrap">STRIVING IN FAITH. PSALM 117:2
-      <span class="psalm-tip">"For great is his steadfast love toward us, and the faithfulness of the LORD endures forever. Praise the LORD!"</span>
+    <span class="footer-tagline psalm-tip-wrap">STRIVING IN FAITH. PSALM 118:24
+      <span class="psalm-tip">"This is the day that the LORD has made; let us rejoice and be glad in it."</span>
     </span>
   </div>
 </footer>
