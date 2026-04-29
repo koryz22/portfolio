@@ -176,6 +176,7 @@ function setupThemeToggle(c) {
     span.addEventListener('click', () => {
       const m = span.dataset.mode;
       document.documentElement.setAttribute('data-theme', m);
+      try { localStorage.setItem('theme', m); } catch (e) {}
       document.querySelectorAll('.theme-toggle span').forEach(s => {
         s.className = s.dataset.mode === m ? 'active-theme' : 'inactive-theme';
       });
@@ -183,6 +184,12 @@ function setupThemeToggle(c) {
   });
 }
 document.querySelectorAll('.theme-toggle').forEach(setupThemeToggle);
+(function syncToggleToCurrentTheme() {
+  const current = document.documentElement.getAttribute('data-theme') || 'light';
+  document.querySelectorAll('.theme-toggle span').forEach(s => {
+    s.className = s.dataset.mode === current ? 'active-theme' : 'inactive-theme';
+  });
+})();
 
 /* ═══════════════════════ TYPEWRITER ═══════════════════════ */
 const titles = ['software engineer', 'keyboard enthusiast', 'part-time dog sitter'];
