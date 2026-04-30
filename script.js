@@ -212,9 +212,9 @@ setTimeout(typewriterTick, 1800);
 /* ═══════════════════════ KEYBOARD (inline logic) ═══════════════════════ */
 const kbInfo = {
   esc:   { tag: "BIO",             val: "Kory Zhang",                       desc: "full-stack, architect, designer" },
-  tab:   { tag: "currently listening to", val: "Feel it in My — it's murph, Arlo, fkblnde", desc: "" },
+  tab:   { tag: "currently listening to", val: "Get Your Wish - Porter Robinson", desc: "" },
   caps:  { tag: "unmapped",        val: "—",  desc: "" },
-  "shift-l": { tag: "unmapped",    val: "—",  desc: "" },
+  "shift-l": { tag: "currently playing", val: "Red Dead Redemption 2", desc: "" },
   "shift-r": { tag: "Spoken Languages", val: "English (Native Proficiency), Mandarin Chinese (Professional Proficiency)", desc: "" },
   ctrl:  { tag: "currently reading", val: "Shoe Dog — Phil Knight", desc: "" },
   opt:   { tag: "unmapped",        val: "—",  desc: "" },
