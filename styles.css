@@ -1380,50 +1380,55 @@ body.nav-menu-open #themeToggle {
   font-size: 0.7rem; color: #9eb0c4;
   letter-spacing: 0.04em; font-weight: 300;
 }
-.psalm-tip-wrap {
+/* Verse hover popup — single source of truth for both values & footer.
+   !important on the visual-identity props to defeat any ancestor selectors
+   (e.g. `.footer-bottom span { font-size: 0.7rem; color: #9eb0c4 }`) that would
+   otherwise win on specificity and make the two popups render differently. */
+.verse-pop-wrap {
   position: relative;
   cursor: pointer;
 }
-.psalm-tip {
+.verse-pop {
   position: absolute;
-  bottom: calc(100% + 12px);
-  right: 0;
+  bottom: calc(100% + 10px);
   width: max-content;
-  max-width: min(380px, calc(100vw - 48px));
-  background: #1a1a1a;
+  max-width: min(360px, calc(100vw - 32px));
+  background: #1a1a1a !important;
   color: #fff !important;
-  font-size: clamp(0.72rem, 0.55rem + 1vw, 0.92rem);
-  font-weight: 400;
-  letter-spacing: 0.02em;
-  line-height: 1.55;
-  padding: clamp(8px, 0.4rem + 0.5vw, 12px) clamp(10px, 0.5rem + 0.7vw, 16px);
+  font-family: 'Inter', sans-serif !important;
+  font-size: clamp(0.72rem, 0.55rem + 0.6vw, 0.88rem) !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+  letter-spacing: 0.02em !important;
+  line-height: 1.55 !important;
+  text-transform: none !important;
+  padding: 10px 14px !important;
   border-radius: 8px;
   border: 1px solid #555;
+  white-space: normal;
   pointer-events: none;
   opacity: 0;
   transform: translateY(4px);
-  transition: opacity 0.2s, transform 0.2s;
-  white-space: normal;
-  text-transform: none;
+  transition: opacity 0.18s ease, transform 0.18s ease;
   z-index: 10;
 }
-.psalm-tip::before {
+.verse-pop-right { right: 0; }
+.verse-pop-left  { left: 0; }
+.verse-pop::before,
+.verse-pop::after {
   content: '';
   position: absolute;
   top: 100%;
-  right: 23px;
-  border: 7px solid transparent;
-  border-top-color: #555;
-}
-.psalm-tip::after {
-  content: '';
-  position: absolute;
-  top: 100%;
-  right: 24px;
   border: 6px solid transparent;
-  border-top-color: #1a1a1a;
 }
-.psalm-tip-wrap:hover .psalm-tip {
+.verse-pop::before { border-top-color: #555; }
+.verse-pop::after  { border-top-color: #1a1a1a; margin-top: -1px; }
+.verse-pop-right::before,
+.verse-pop-right::after { right: 18px; }
+.verse-pop-left::before,
+.verse-pop-left::after  { left: 18px; }
+.verse-pop-wrap:hover .verse-pop,
+.verse-pop-wrap:focus-within .verse-pop {
   opacity: 1;
   transform: translateY(0);
 }
@@ -1567,22 +1572,6 @@ body.nav-menu-open #themeToggle {
   font-size: 0.85em;
   vertical-align: baseline;
   margin-left: 0;
-}
-.value-ref-item .psalm-tip {
-  right: auto;
-  left: 0;
-  max-width: min(380px, calc(100vw - 48px));
-  font-size: clamp(0.72rem, 0.55rem + 1vw, 0.92rem);
-  padding: clamp(8px, 0.4rem + 0.5vw, 12px) clamp(10px, 0.5rem + 0.7vw, 16px);
-  line-height: 1.55;
-}
-.value-ref-item .psalm-tip::before {
-  right: auto;
-  left: 23px;
-}
-.value-ref-item .psalm-tip::after {
-  right: auto;
-  left: 24px;
 }
 .value-ref {
   font-size: inherit;
