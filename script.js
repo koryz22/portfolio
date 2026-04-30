@@ -125,7 +125,8 @@ document.querySelectorAll('[data-nav]').forEach(el => {
 });
 
 /* ═══════════════════════ PAGE NAV ═══════════════════════ */
-let isTransitioning = false;
+let txOutTimer = null;
+let txInTimer = null;
 function scrollPageToTop() {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     window.scrollTo(0, 0);
@@ -134,29 +135,36 @@ function scrollPageToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 function navigateTo(pageId) {
-  const cur = document.querySelector('.page.active');
   const next = document.getElementById('page-' + pageId);
-  if (!next || isTransitioning) return;
+  if (!next) return;
+  const cur = document.querySelector('.page.active');
   if (next === cur) {
     scrollPageToTop();
     return;
   }
-  isTransitioning = true;
-  const OUT_MS = 280;
-  const IN_MS = 400;
+  // Cancel any in-flight transition so rapid clicks feel instant.
+  if (txOutTimer) { clearTimeout(txOutTimer); txOutTimer = null; }
+  if (txInTimer)  { clearTimeout(txInTimer);  txInTimer = null; }
+  document.querySelectorAll('.page.tx-out, .page.tx-in').forEach(p => {
+    p.classList.remove('tx-out', 'tx-in');
+  });
+
+  const OUT_MS = 150;
+  const IN_MS = 220;
 
   cur.classList.add('tx-out');
 
-  setTimeout(() => {
+  txOutTimer = setTimeout(() => {
+    txOutTimer = null;
     cur.classList.remove('active', 'tx-out');
     next.classList.add('active', 'tx-in');
     window.scrollTo(0, 0);
     next.querySelectorAll('.anim').forEach(el => el.classList.remove('visible'));
 
-    setTimeout(() => {
+    txInTimer = setTimeout(() => {
+      txInTimer = null;
       next.classList.remove('tx-in');
       initScrollObserver();
-      isTransitioning = false;
     }, IN_MS);
   }, OUT_MS);
 }

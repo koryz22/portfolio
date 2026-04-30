@@ -120,7 +120,7 @@ a { color: inherit; text-decoration: none; }
 #splash.hidden { opacity: 0; }
 #splash.hidden .splash-dot { animation: none !important; opacity: 1; }
 #splash .splash-name {
-  font-size: 1.8rem; font-weight: 300; letter-spacing: 0.15em;
+  font-size: clamp(1rem, 4.5vw, 1.8rem); font-weight: 300; letter-spacing: 0.15em;
   color: var(--text-dim); opacity: 0;
   animation: splashFade 1s ease forwards;
 }
@@ -154,10 +154,10 @@ a { color: inherit; text-decoration: none; }
 
 /* ── Title: swipe out left / in from right ── */
 .page.tx-out .page-title {
-  animation: titleOut 0.28s cubic-bezier(0.4, 0, 1, 1) forwards;
+  animation: titleOut 0.15s cubic-bezier(0.4, 0, 1, 1) forwards;
 }
 .page.tx-in .page-title {
-  animation: titleIn 0.32s cubic-bezier(0, 0, 0.2, 1) forwards;
+  animation: titleIn 0.22s cubic-bezier(0, 0, 0.2, 1) forwards;
 }
 @keyframes titleOut {
   from { opacity: 1; transform: translateX(0); }
@@ -170,10 +170,10 @@ a { color: inherit; text-decoration: none; }
 
 /* ── Content (everything after title): fade + rise ── */
 .page.tx-out > *:not(.page-title) {
-  animation: contentOut 0.22s cubic-bezier(0.4, 0, 1, 1) forwards;
+  animation: contentOut 0.15s cubic-bezier(0.4, 0, 1, 1) forwards;
 }
 .page.tx-in > *:not(.page-title) {
-  animation: contentIn 0.38s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
+  animation: contentIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 @keyframes contentOut {
   from { opacity: 1; transform: translateY(0); }
@@ -185,8 +185,8 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* ── Home page: keep the simple fade (no title swipe) ── */
-#page-home.tx-out { animation: pageTxOut 0.2s ease-out forwards; }
-#page-home.tx-in  { animation: pageTxIn 0.24s ease-out forwards; }
+#page-home.tx-out { animation: pageTxOut 0.15s ease-out forwards; }
+#page-home.tx-in  { animation: pageTxIn 0.22s ease-out forwards; }
 #page-home.tx-out .page-title,
 #page-home.tx-out > *:not(.page-title),
 #page-home.tx-in .page-title,
