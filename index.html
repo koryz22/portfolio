@@ -536,39 +536,37 @@
 
 <!-- ═══════════════════════ CONTACT PAGE ═══════════════════════ -->
 <div class="page" id="page-contact">
+  <div class="page-title anim"><span>// </span>contact</div>
   <div class="contact-split">
-    <div class="contact-left">
-      <div class="page-title anim"><span>// </span>contact</div>
-      <div class="contact-row anim anim-delay-1">
-        <span class="contact-row-label">email</span>
-        <a href="mailto:koryy.zhang@gmail.com" class="contact-row-value"><i class="basicons" icon-name="mail"></i> koryy.zhang@gmail.com</a>
-      </div>
-      <div class="contact-row anim anim-delay-2">
-        <span class="contact-row-label">linkedin</span>
-        <a href="https://www.linkedin.com/in/koryz/" target="_blank" rel="noopener noreferrer" class="contact-row-value"><i class="basicons" icon-name="linkedin"></i> /in/koryz</a>
-      </div>
-      <div class="contact-row anim anim-delay-3">
-        <span class="contact-row-label">instagram</span>
-        <a href="https://www.instagram.com/k.oryy/" target="_blank" rel="noopener noreferrer" class="contact-row-value"><i class="basicons" icon-name="instagram"></i> @k.oryy</a>
-      </div>
-      <div class="contact-row anim anim-delay-4">
-        <span class="contact-row-label">x</span>
-        <a href="https://x.com/koryzhangg" target="_blank" rel="noopener noreferrer" class="contact-row-value"><svg style="display:inline-block;width:0.8em;height:0.8em;vertical-align:-0.05em;margin-right:6px" viewBox="0 0 24 24"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>@koryzhangg</a>
-      </div>
-      <div class="contact-row anim anim-delay-5">
-        <span class="contact-row-label">tiktok</span>
-        <a href="https://www.tiktok.com/@kordawgg" target="_blank" rel="noopener noreferrer" class="contact-row-value"><i class="basicons" icon-name="tiktok"></i> @kordawgg</a>
-      </div>
-      <p class="contact-note anim anim-delay-5"><span class="contact-note-icons"><svg class="contact-note-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="currentColor" stroke="none"/></svg><i class="basicons contact-note-icon" icon-name="snowflake"></i><i class="basicons contact-note-icon" icon-name="music-note"></i></span><span class="contact-note-dot">●</span> bay area, ca</p>
+    <form class="contact-form anim anim-delay-2" action="mailto:koryy.zhang@gmail.com" method="POST" enctype="text/plain">
+      <input type="text" name="name" placeholder="name" autocomplete="name" required />
+      <input type="email" name="email" placeholder="email" autocomplete="email" required />
+      <textarea name="message" placeholder="message" rows="5" required></textarea>
+      <button type="submit">send</button>
+    </form>
+    <div class="contact-handles">
+      <a href="mailto:koryy.zhang@gmail.com" class="contact-row anim anim-delay-1">
+        <span class="contact-row-icon"><i class="basicons" icon-name="mail"></i></span>
+        <span class="contact-row-value">koryy.zhang@gmail.com</span>
+      </a>
+      <a href="https://www.linkedin.com/in/koryz/" target="_blank" rel="noopener noreferrer" class="contact-row anim anim-delay-2">
+        <span class="contact-row-icon"><i class="basicons" icon-name="linkedin"></i></span>
+        <span class="contact-row-value">/in/koryz</span>
+      </a>
+      <a href="https://www.instagram.com/k.oryy/" target="_blank" rel="noopener noreferrer" class="contact-row anim anim-delay-3">
+        <span class="contact-row-icon"><i class="basicons" icon-name="instagram"></i></span>
+        <span class="contact-row-value">@k.oryy</span>
+      </a>
+      <a href="https://x.com/koryzhangg" target="_blank" rel="noopener noreferrer" class="contact-row anim anim-delay-4">
+        <span class="contact-row-icon"><svg viewBox="0 0 24 24" width="1em" height="1em"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></span>
+        <span class="contact-row-value">@koryzhangg</span>
+      </a>
+      <a href="https://www.tiktok.com/@kordawgg" target="_blank" rel="noopener noreferrer" class="contact-row anim anim-delay-5">
+        <span class="contact-row-icon"><i class="basicons" icon-name="tiktok"></i></span>
+        <span class="contact-row-value">@kordawgg</span>
+      </a>
     </div>
-    <div class="contact-right">
-      <form class="contact-form anim anim-delay-2" action="mailto:koryy.zhang@gmail.com" method="POST" enctype="text/plain">
-        <input type="text" name="name" placeholder="name" autocomplete="name" required />
-        <input type="email" name="email" placeholder="email" autocomplete="email" required />
-        <textarea name="message" placeholder="message" rows="5" required></textarea>
-        <button type="submit">send</button>
-      </form>
-    </div>
+    <p class="contact-footer anim anim-delay-1"><span class="contact-note-icons"><svg class="contact-note-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="currentColor" stroke="none"/></svg><i class="basicons contact-note-icon" icon-name="snowflake"></i><i class="basicons contact-note-icon" icon-name="music-note"></i></span><span class="contact-note-dot">●</span> bay area, ca</p>
   </div>
 </div>
 
