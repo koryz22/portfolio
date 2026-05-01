@@ -124,6 +124,45 @@ document.querySelectorAll('[data-nav]').forEach(el => {
   });
 });
 
+/* ═══════════════════════ URL ROUTING ═══════════════════════ */
+const PAGES = ['home', 'projects', 'values', 'testimony', 'contact'];
+// History API path rewriting only works on http(s); file:// opaque origin throws SecurityError.
+const ROUTING_ENABLED = location.protocol === 'http:' || location.protocol === 'https:';
+
+function pageToPath(pageId) {
+  return pageId === 'home' ? '/' : '/' + pageId;
+}
+function pathToPage(path) {
+  const seg = (path || '/').replace(/^\/+|\/+$/g, '').toLowerCase();
+  if (!seg) return 'home';
+  return PAGES.includes(seg) ? seg : 'home';
+}
+
+// Sync initial active page with the URL (runs synchronously, before splash hides)
+(function initRouteFromUrl() {
+  if (!ROUTING_ENABLED) return;
+  const pageId = pathToPage(location.pathname);
+  if (pageId !== 'home') {
+    const next = document.getElementById('page-' + pageId);
+    const cur = document.querySelector('.page.active');
+    if (next && cur && next !== cur) {
+      cur.classList.remove('active');
+      next.classList.add('active');
+    }
+  }
+  // Seed history state so popstate always has a known page to fall back to.
+  try {
+    history.replaceState({ page: pageId }, '', pageToPath(pageId));
+  } catch (e) { /* non-http origin — routing disabled */ }
+})();
+
+if (ROUTING_ENABLED) {
+  window.addEventListener('popstate', (e) => {
+    const pageId = (e.state && e.state.page) || pathToPage(location.pathname);
+    navigateTo(pageId, { updateHistory: false });
+  });
+}
+
 /* ═══════════════════════ PAGE NAV ═══════════════════════ */
 let txOutTimer = null;
 let txInTimer = null;
@@ -134,13 +173,22 @@ function scrollPageToTop() {
   }
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-function navigateTo(pageId) {
+function navigateTo(pageId, opts) {
+  opts = opts || {};
   const next = document.getElementById('page-' + pageId);
   if (!next) return;
   const cur = document.querySelector('.page.active');
   if (next === cur) {
     scrollPageToTop();
     return;
+  }
+  if (opts.updateHistory !== false && ROUTING_ENABLED) {
+    const path = pageToPath(pageId);
+    if (location.pathname !== path) {
+      try {
+        history.pushState({ page: pageId }, '', path);
+      } catch (e) { /* non-http origin — skip URL update */ }
+    }
   }
   // Cancel any in-flight transition so rapid clicks feel instant.
   if (txOutTimer) { clearTimeout(txOutTimer); txOutTimer = null; }
