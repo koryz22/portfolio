@@ -2,8 +2,11 @@
 <html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" id="metaThemeColor" content="#ebe4d9" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
 <title>Kory Zhang</title>
+<link rel="icon" type="image/svg+xml" id="favicon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23000'><ellipse cx='5' cy='18' rx='3.2' ry='2.4'/><rect x='7.4' y='5' width='1.4' height='13.5'/><ellipse cx='17' cy='18' rx='3.2' ry='2.4'/><rect x='19.4' y='5' width='1.4' height='13.5'/><rect x='7.4' y='3.5' width='13.4' height='3'/></svg>" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@500;600;700&display=swap" rel="stylesheet" />
@@ -12,12 +15,17 @@
 <link rel="stylesheet" href="styles.css?v=valuesref6">
 <script>
   (function () {
+    var theme = 'light';
     try {
       var saved = localStorage.getItem('theme');
       if (saved === 'light' || saved === 'dark') {
+        theme = saved;
         document.documentElement.setAttribute('data-theme', saved);
       }
     } catch (e) {}
+    var meta = document.getElementById('metaThemeColor');
+    if (meta) meta.setAttribute('content', theme === 'dark' ? '#1b1d2a' : '#ebe4d9');
+
   })();
 </script>
 </head>
