@@ -1533,7 +1533,7 @@ body.nav-menu-open #themeToggle {
 }
 .value-item {
   display: grid;
-  grid-template-columns: 80px 1fr;
+  grid-template-columns: 80px 1fr auto;
   align-items: baseline;
   gap: 32px;
   padding: 26px 12px;
@@ -1553,8 +1553,23 @@ body.nav-menu-open #themeToggle {
   justify-self: start;
   margin-right: 0;
 }
+/* basicons.xyz SVG sizing — embed.js injects raw <svg> into the host element */
+[class*="bsc-"] > svg {
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+  display: inline-block;
+}
 .value-text { color: var(--text-dim); }
 .value-text strong { color: var(--text); font-weight: 600; }
+.value-icon {
+  justify-self: end;
+  color: var(--text-dimmer);
+  font-size: 1.1rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+}
 .value-sup {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.55em;
@@ -1595,7 +1610,7 @@ body.nav-menu-open #themeToggle {
 [data-theme="light"] .value-ref:hover { color: var(--text); }
 @media (max-width: 640px) {
   .value-item {
-    grid-template-columns: 48px 1fr;
+    grid-template-columns: 48px 1fr auto;
     gap: 18px;
     padding: 20px 4px;
     font-size: 0.95rem;
@@ -2225,7 +2240,7 @@ svg.contact-note-icon {
     padding: 0 clamp(8px, 0.8vw, 18px);
   }
   .value-item {
-    grid-template-columns: clamp(70px, 5vw, 110px) 1fr;
+    grid-template-columns: clamp(70px, 5vw, 110px) 1fr auto;
     gap: clamp(28px, 2vw, 48px);
     padding: clamp(24px, 1.7vw, 38px) clamp(8px, 0.8vw, 18px);
     font-size: clamp(0.95rem, 0.85vw, 1.35rem);
