@@ -1728,7 +1728,7 @@ body.nav-menu-open #themeToggle {
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 480px;
+  max-width: 365px;
 }
 .contact-row {
   display: flex;
@@ -2271,7 +2271,7 @@ svg.contact-note-icon {
 
   /* Contact */
   .contact-split { column-gap: clamp(72px, 6vw, 144px); }
-  .contact-handles { max-width: clamp(360px, 30vw, 540px); }
+  .contact-handles { max-width: clamp(285px, 23vw, 425px); }
   .contact-footer { font-size: clamp(0.78rem, 0.68vw, 1rem); }
   .contact-row { padding: clamp(18px, 1.2vw, 30px) 0; font-size: clamp(0.95rem, 0.85vw, 1.3rem); gap: clamp(18px, 1.2vw, 28px); }
   .contact-row-icon { width: clamp(22px, 1.6vw, 32px); }
