@@ -84,6 +84,10 @@
 html {
   height: 100%;
   scroll-behavior: smooth;
+  color-scheme: dark;
+}
+[data-theme="light"] {
+  color-scheme: light;
 }
 body {
   min-height: 100%;
@@ -1709,7 +1713,7 @@ body.nav-menu-open #themeToggle {
 }
 .contact-split {
   display: grid;
-  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 2fr) minmax(360px, 1.4fr);
   grid-template-areas:
     "form handles"
     "form footer";
@@ -1724,7 +1728,7 @@ body.nav-menu-open #themeToggle {
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 320px;
+  max-width: 480px;
 }
 .contact-row {
   display: flex;
@@ -2267,7 +2271,7 @@ svg.contact-note-icon {
 
   /* Contact */
   .contact-split { column-gap: clamp(72px, 6vw, 144px); }
-  .contact-handles { max-width: clamp(280px, 22vw, 380px); }
+  .contact-handles { max-width: clamp(360px, 30vw, 540px); }
   .contact-footer { font-size: clamp(0.78rem, 0.68vw, 1rem); }
   .contact-row { padding: clamp(18px, 1.2vw, 30px) 0; font-size: clamp(0.95rem, 0.85vw, 1.3rem); gap: clamp(18px, 1.2vw, 28px); }
   .contact-row-icon { width: clamp(22px, 1.6vw, 32px); }
