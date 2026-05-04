@@ -236,6 +236,14 @@ function setupThemeToggle(c) {
       document.querySelectorAll('.theme-toggle span').forEach(s => {
         s.className = s.dataset.mode === m ? 'active-theme' : 'inactive-theme';
       });
+      const newColor = m === 'dark' ? '#1b1d2a' : '#ebe4d9';
+      const oldMeta = document.getElementById('metaThemeColor');
+      if (oldMeta) oldMeta.parentNode.removeChild(oldMeta);
+      const fresh = document.createElement('meta');
+      fresh.name = 'theme-color';
+      fresh.id = 'metaThemeColor';
+      fresh.content = newColor;
+      document.head.appendChild(fresh);
     });
   });
 }
