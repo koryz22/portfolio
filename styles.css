@@ -561,6 +561,7 @@ body.nav-menu-open #themeToggle {
 .anim-delay-5 { --d: 0.5s; }
 .anim-seq-profile { --tier: 0s; }
 .anim-seq-exp { --tier: 0.38s; }
+.anim-seq-kb { --tier: 0.55s; }
 /* Profile / hero — lift up + fade */
 .anim.anim-rise {
   transform: translateY(24px);
@@ -572,32 +573,32 @@ body.nav-menu-open #themeToggle {
   opacity: 1;
   transform: translateY(0);
 }
-/* Keyboard — quicker, different feel: subtle zoom + settle (not the same as profile) */
+/* Keyboard — rises in from below, matching the hero's rise feel */
 .anim.anim-kb {
-  transform: scale(0.97) translateY(10px);
+  transform: translateY(24px);
   transition:
-    opacity 0.48s cubic-bezier(0.22, 1, 0.36, 1) var(--td),
-    transform 0.48s cubic-bezier(0.22, 1, 0.36, 1) var(--td);
+    opacity 0.7s ease var(--td),
+    transform 0.7s ease var(--td);
 }
 .anim.anim-kb.visible {
   opacity: 1;
-  transform: scale(1) translateY(0);
+  transform: translateY(0);
 }
-/* Experiences — slide in from the right, one after another */
+/* Experiences — smooth fade + glide in from the right, one after another */
 .anim.anim-exp {
-  transform: translateX(28px);
+  transform: translateX(24px);
   transition:
-    opacity 0.72s cubic-bezier(0.22, 1, 0.36, 1) var(--td),
-    transform 0.72s cubic-bezier(0.22, 1, 0.36, 1) var(--td);
+    opacity 0.7s ease var(--td),
+    transform 0.7s ease var(--td);
 }
 .anim.anim-exp.visible {
   opacity: 1;
   transform: translateX(0);
 }
-.exp-grid > .exp-card:nth-child(1) { --d: 0.08s; }
-.exp-grid > .exp-card:nth-child(2) { --d: 0.2s; }
-.exp-grid > .exp-card:nth-child(3) { --d: 0.34s; }
-.exp-grid > .exp-card:nth-child(4) { --d: 0.48s; }
+.exp-grid > .exp-card:nth-child(1) { --d: 0s; }
+.exp-grid > .exp-card:nth-child(2) { --d: 0.1s; }
+.exp-grid > .exp-card:nth-child(3) { --d: 0.2s; }
+.exp-grid > .exp-card:nth-child(4) { --d: 0.3s; }
 @media (prefers-reduced-motion: reduce) {
   .anim {
     opacity: 1;
@@ -606,7 +607,9 @@ body.nav-menu-open #themeToggle {
   .anim.anim-rise,
   .anim.anim-rise.visible,
   .anim.anim-exp,
-  .anim.anim-exp.visible {
+  .anim.anim-exp.visible,
+  .anim.anim-kb,
+  .anim.anim-kb.visible {
     transform: none;
   }
 }
@@ -822,7 +825,7 @@ body.nav-menu-open #themeToggle {
 /* ═══════════════════════ KEYBOARD (inline) ═══════════════════════ */
 .kb-section { margin-bottom: 0; flex-shrink: 1; min-height: 0; min-width: 0; }
 /* Fade only — same duration/easing as .anim-rise (profile), same stagger base as .anim-seq-profile */
-.kb-section.anim { transition: opacity 0.7s ease var(--td); }
+.kb-section.anim { transition: opacity 0.7s ease var(--td), transform 0.7s ease var(--td); }
 .kb-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-bottom: 6px; overflow: hidden; }
 .kb-header-left { flex: 1 1 auto; min-width: 0; }
 .kb-label {
@@ -1089,7 +1092,7 @@ body.nav-menu-open #themeToggle {
 }
 
 .info-panel-mobile { display: none; margin-top: 14px; width: 100%; max-width: 100%; flex: none; }
-@media (max-width: 924px) {
+@media (max-width: 824px) {
   .kb-layout-desktop { display: none !important; }
   .kb-layout-mobile {
     display: block;
