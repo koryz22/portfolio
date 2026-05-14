@@ -12,7 +12,19 @@ let animObserver = null;
 function initScrollObserver() {
   if (animObserver) animObserver.disconnect();
   animObserver = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      // Experience cards reveal as a group so the sequence plays in one smooth
+      // staircase, instead of triggering one-by-one as the user scrolls past each card.
+      if (e.target.classList.contains('exp-card')) {
+        const grid = e.target.closest('.exp-grid');
+        if (grid) {
+          grid.querySelectorAll('.exp-card.anim').forEach(c => c.classList.add('visible'));
+          return;
+        }
+      }
+      e.target.classList.add('visible');
+    });
   }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
   document.querySelectorAll('.anim').forEach(el => animObserver.observe(el));
 }
